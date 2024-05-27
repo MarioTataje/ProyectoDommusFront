@@ -1,58 +1,127 @@
 <template>
-    <span class="login100-form-title p-b-41">
-		Seguridad Antares
-	</span>
-	<form class="login100-form validate-form p-b-33 p-t-5" @submit.prevent="onSubmit">
-		<div class="wrap-input100 validate-input" data-validate = "Ingrese correo">
-			<input v-model="useForm.email" class="input100" type="text" placeholder="Correo" required>
-			<span class="focus-input100" data-placeholder="&#xe82a;"></span>
-		</div>
-
-		<div class="wrap-input100 validate-input" data-validate="Ingrese contraseña">
-			<input v-model="useForm.password" class="input100" type="password" placeholder="Contraseña" required>
-			<span class="focus-input100" data-placeholder="&#xe80f;"></span>
-		</div>
-
-		<div class="container-login100-form-btn m-t-32">
-			<button class="login100-form-btn">
-				Login
-			</button>
-		</div>
-
-        <div class="container-login100-form-btn m-t-32">
-            <router-link :to="{ name: 'register' }">¿No tienes cuenta?</router-link>
+  <div class="login">
+    <div class="login-box">
+      <img src="@/assets/logo.png" alt="Dommus Logo" class="logo" />
+      <h1 class="title">Login</h1>
+      <form @submit.prevent="login">
+        <input type="text" placeholder="Email" v-model="email" required />
+        <div class="password-container">
+          <input :type="showPassword ? 'text' : 'password'" placeholder="Contraseña" v-model="password" required />
+          <span class="toggle-password" @click="showPassword = !showPassword">
+            <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+          </span>
         </div>
-	</form>
+        <button type="submit" class="btn">Iniciar Sesión</button>
+      </form>
+      <p class="register-link">¿Aún no tienes una cuenta? <router-link to="/register">Regístrate</router-link></p>
+    </div>
+  </div>
 </template>
 
 <script>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import useAuth from '../composables/useAuth';
-import Swal from 'sweetalert2';
-
 export default {
-	setup(){
-		const router = useRouter()
-		const { loginUser } = useAuth()
-		const useForm = ref({
-			email: '',
-			password: ''
-		})
-
-		return {
-			useForm,
-
-			onSubmit: async() => {
-				const { ok, message } = await loginUser(useForm.value)
-				if (!ok) Swal.fire('Error', message, 'error')
-				else router.push({ name: 'home' })
-			}
-		}
-	}
-}
+  name: 'Login',
+  data() {
+    return {
+      email: '',
+      password: '',
+      showPassword: false,
+    };
+  },
+  methods: {
+    login() {
+      // Lógica de inicio de sesión
+      console.log('Iniciando sesión con', this.email, this.password);
+    },
+  },
+};
 </script>
 
 <style>
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  background: 
+    url('@/assets/background.png') no-repeat center center, 
+    url('@/assets/background2.png') no-repeat center center;
+  background-size: cover, cover;
+  position: relative;
+  overflow: hidden;
+}
 
+.login-box {
+  background-color: #BB9FFF;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+  z-index: 2;
+}
+
+.logo {
+  max-width: 150px;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #4b4b4b;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.password-container {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.toggle-password i {
+  font-size: 16px;
+  color: #888;
+}
+
+.btn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #7f3fbf;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #6a32a5;
+}
+
+.register-link {
+  margin-top: 20px;
+  color: #888;
+}
+
+.register-link a {
+  color: #7f3fbf;
+  text-decoration: none;
+}
 </style>

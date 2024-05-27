@@ -1,64 +1,64 @@
+<!--eslint-disable-->
 <template>
-    <span class="login100-form-title p-b-41">
-		Registre una cuenta
-	</span>
-	<form class="login100-form validate-form p-b-33 p-t-5" @submit.prevent="onSubmit">
-		<div class="wrap-input100 validate-input" data-validate = "Ingrese su nombre">
-			<input v-model="useForm.name" class="input100" type="text" placeholder="Nombre" required>
-			<span class="focus-input100" data-placeholder="&#xe82a;"></span>
-		</div>
-
-		<div class="wrap-input100 validate-input" data-validate = "Ingrese correo">
-			<input v-model="useForm.email" class="input100" type="text" placeholder="Correo" required>
-			<span class="focus-input100" data-placeholder="&#xe82a;"></span>
-		</div>
-
-		<div class="wrap-input100 validate-input" data-validate="Ingrese contraseña">
-			<input v-model="useForm.password" class="input100" type="password" placeholder="Contraseña" required>
-			<span class="focus-input100" data-placeholder="&#xe80f;"></span>
-		</div>
-
-		<div class="container-login100-form-btn m-t-32">
-			<button class="login100-form-btn">
-				Crear cuenta
-			</button>
-		</div>
-
-        <div class="container-login100-form-btn m-t-32">
-            <router-link :to="{ name: 'login' }">Ya tienes cuenta</router-link>
-        </div>
-	</form>
+	<div class="register-container">
+	  <SideBar :activeStep="steps[currentStep].label"/>
+    <component :is="steps[currentStep].component" @goToNextPhase="toNextPhase"/>
+  </div>
 </template>
-
+  
 <script>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import useAuth from '../composables/useAuth';
-import Swal from 'sweetalert2';
-
-export default {
-	setup(){
-		const router = useRouter()
-		const { createUser } = useAuth()
-		const useForm = ref({
-			name: '',
-			email: '',
-			password: ''
-		})
-
-		return {
-			useForm,
-
-			onSubmit: async() => {
-				const { ok, message } = await createUser(useForm.value)
-				if (!ok) Swal.fire('Error', message, 'error')
-				else router.push({ name: 'home' })
-			}
-		}
-	}
-}
+  import SideBar from './SideBar.vue';
+  import Phase1 from './phases/Phase1.vue';
+  import Phase2 from './phases/Phase2.vue';
+  import Phase3 from './phases/Phase3.vue';
+  import Phase4 from './phases/Phase4.vue';
+  import Phase5 from './phases/Phase5.vue';
+  
+  export default {
+	name: 'Register',
+	components: {
+		SideBar,
+		Phase1,
+    Phase2,
+    Phase3,
+    Phase4,
+    Phase5
+	},
+  data() {
+    return {
+      steps: [
+        { label: 'Detalles de cuenta', component: 'Phase1' },
+        { label: 'Editar Perfil', component: 'Phase2' },
+        { label: 'Test de Personalidad', component: 'Phase3' },
+        { label: 'Vivienda', component: 'Phase4' },
+        { label: 'Hábitos', component: 'Phase5' },
+      ],
+      currentStep: 0,
+    };
+  },
+  methods: {
+    toNextPhase() {
+      if (this.currentStep < this.steps.length - 1) {
+        this.currentStep++;
+      }
+    },
+  },
+  };
 </script>
-
-<style>
-
+  
+<style scoped>
+.register-container {
+  display: flex;
+  height: 100vh; /* Ensure the container takes the full viewport height */
+  width: 100vw;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background-color: #f4f4f9;
+  background: 
+    url('@/assets/background.png') no-repeat center center, 
+    url('@/assets/background2.png') no-repeat center center;
+  background-size: cover, cover;
+  background-position: center;
+}
 </style>
+  

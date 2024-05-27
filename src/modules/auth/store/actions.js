@@ -1,12 +1,12 @@
-import authApi from '@/api/authApi';
+import dommusApi from '@/api/dommusApi';
 
 export const createUser = async ({ commit }, user ) => {
     const { name, email, password } = user;
 
     try {
-        const { data } = await authApi.post(':signUp', { email, password, returnSecureToken: true });
+        const { data } = await dommusApi.post(':signUp', { email, password, returnSecureToken: true });
         const { idToken, refreshToken } = data;
-        await authApi.post(':update', { displayName: name, idToken });
+        await dommusApi.post(':update', { displayName: name, idToken });
         
         delete user.password;
         commit('loginUser', { user, idToken, refreshToken });
@@ -21,7 +21,7 @@ export const signInUser = async ({ commit }, user ) => {
     const { email, password } = user;
 
     try {
-        const { data } = await authApi.post(':signInWithPassword', { email, password, returnSecureToken: true });
+        const { data } = await dommusApi.post(':signInWithPassword', { email, password, returnSecureToken: true });
         const { displayName, idToken, refreshToken } = data;
 
         user.name = displayName;
@@ -44,7 +44,7 @@ export const checkAuthentication = async({ commit }) => {
     }
 
     try {
-        const { data } = await authApi.post(':lookup', { idToken });
+        const { data } = await  dommusApi.post(':lookup', { idToken });
         const { displayName, email } = data.users[0];
 
         const user = {

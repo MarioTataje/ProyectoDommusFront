@@ -1,0 +1,164 @@
+<template>
+  <div class="phase2-container">
+    <h2 class="centered-title">Editar Perfil</h2>
+    <div class="profile-header">
+      <img src="@/assets/logo.png" alt="Profile Logo" class="profile-logo" />
+      <div class="profile-info">
+        <p><strong>Alonso Sebastian Jimenez Wong</strong></p>
+        <p>18</p>
+        <p>Ingeniería de Sistemas de Información</p>
+        <p>Universidad Peruana de Ciencias Aplicadas</p>
+      </div>
+    </div>
+    <div class="profile-description">
+      <label for="description">Mi Descripción</label>
+      <textarea id="description" v-model="description"></textarea>
+    </div>
+    <div class="budget-container">
+      <div class="budget-input">
+        <label for="min-budget">Presupuesto Mínimo</label>
+        <input type="number" id="min-budget" v-model="minBudget" placeholder="Min" />
+      </div>
+      <div class="budget-input">
+        <label for="max-budget">Presupuesto Máximo</label>
+        <input type="number" id="max-budget" v-model="maxBudget" placeholder="Max" />
+      </div>
+    </div>
+    <div class="button-container">
+      <button @click="$emit('goToNextPhase')">Continuar</button>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'Phase2',
+  data() {
+    return {
+      description: '',
+      minBudget: '',
+      maxBudget: ''
+    };
+  },
+};
+</script>
+
+<style scoped>
+.phase2-container {
+  background-color: #fff;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: calc(100vw - 400px);
+  padding: 20px;
+  border-radius: 15px;
+  box-sizing: border-box;
+}
+
+
+.centered-title {
+  color: #7e57c2;
+  text-align: center;
+  width: 100%;
+  margin-top: 60px;
+  margin-bottom: 40px;
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.profile-logo {
+  width: 150px;
+  height: 150px;
+  margin-bottom: 20px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+}
+
+.profile-info p {
+  margin: 0;
+  color: #333;
+  font-size: 18px; 
+  text-align: center; 
+}
+
+.profile-description {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.profile-description label {
+  display: block;
+  margin-bottom: 10px;
+  color: #333;
+  font-weight: bold;
+}
+
+.profile-description textarea {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  box-sizing: border-box;
+  resize: none;
+}
+
+.budget-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.budget-input {
+  display: flex;
+  flex-direction: column;
+  width: 48%;
+}
+
+.budget-input label {
+  margin-bottom: 5px;
+  color: #333;
+  font-weight: bold;
+}
+
+.budget-input input {
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+button {
+  background-color: #7e57c2;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  text-decoration: underline;
+  width: 100px;
+}
+
+button:hover {
+  background-color: #5e35b1;
+}
+</style>
