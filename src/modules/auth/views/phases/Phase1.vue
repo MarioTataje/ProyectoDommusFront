@@ -5,65 +5,96 @@
     </div>
     <form @submit.prevent="handleSubmit" class="phase1-content">
       <div class="phase1-group">
-        <input type="text" placeholder="Nombres *" v-model="firstName" required />
-        <input type="text" placeholder="Apellidos *" v-model="lastName" required />
+        <input type="text" placeholder="Nombres *" v-model="user.names" required />
+        <input type="text" placeholder="Apellidos *" v-model="user.lastnames" required />
       </div>
       <div class="phase1-group">
-        <input type="email" placeholder="Correo Universitario *" v-model="email" required />
-        <input type="tel" placeholder="Número de Celular *" v-model="phoneNumber" required />
+        <input type="email" placeholder="Correo Universitario *" v-model="user.email" required />
+        <input type="tel" placeholder="Número de Celular *" v-model="user.phone" required />
       </div>
       <div class="phase1-group">
-        <input type="password" placeholder="Ingrese su contraseña *" v-model="password" required />
-        <input type="password" placeholder="Confirme su contraseña *" v-model="confirmPassword" required />
+        <input type="password" placeholder="Ingrese su contraseña *" v-model="user.password" required />
+        <input type="password" placeholder="Confirme su contraseña *" required />
       </div>
       <div class="phase1-group">
-        <input type="text" placeholder="Ingrese su Universidad *" v-model="university" required />
-        <input type="text" placeholder="Ingrese su Carrera Universitaria *" v-model="career" required />
-      </div>
-      <div class="phase1-group">
-        <input type="date" placeholder="Fecha de Nacimiento *" v-model="birthDate" required />
-        <select v-model="gender" required style="height: 52px;">
-          <option value="">Sexo</option>
-          <option value="male">Masculino</option>
-          <option value="female">Femenino</option>
-          <option value="other">Otro</option>
+        <select v-model="selectedUniversity" @change="onUniversityChange" required style="height: 52px;">
+          <option v-for="university in universities" :key="university.id" :value="university">{{ university.name }}</option>
+        </select>
+        <select v-model="selectedDegree" required style="height: 52px;">
+          <option v-for="degree in degrees" :key="degree.id" :value="degree">{{ degree.name }}</option>
         </select>
       </div>
-      <p >¿Ya tienes una cuenta? <router-link to="/login">Inicia Sesión</router-link></p>
+      <div class="phase1-group">
+        <input type="date" placeholder="Fecha de Nacimiento *" v-model="user.birth_date" required />
+        <select v-model="user.genre" required style="height: 52px;">
+          <option value="">Sexo</option>
+          <option v-for="g in genders" :key="g.value" :value="g.value">{{ g.name }}</option>
+        </select>
+      </div>
+      <p>¿Ya tienes una cuenta? <router-link to="/login">Inicia Sesión</router-link></p>
       <div class="button-container">
-        <button type="submit" class="submit-button" @click="$emit('goToNextPhase')">Continuar</button>
+        <button type="submit" class="submit-button">Continuar</button>
       </div>    
     </form>
   </div>
 </template>
 
 <script>
+import { ref, onMounted, getCurrentInstance } from 'vue';
+import usePhase from '../../composables/usePhase';
+
 export default {
   name: 'Phase1',
-  data() {
-    return {
-      firstName: '',
-      lastName: '',
+  setup() {
+    const { universities, degrees, getUniversities, getDegrees, updateUser } = usePhase();
+    const user = ref({
+      names: '',
+      lastnames: '',
       email: '',
-      phoneNumber: '',
+      phone: '',
       password: '',
-      confirmPassword: '',
-      university: '',
-      career: '',
-      birthDate: '',
-      gender: ''
-    };
-  },
-  methods: {
-    handleSubmit() {
-      // Handle form submission
-      console.log('Form submitted');
-    },
+      university: null,
+      degree: null,
+      birth_date: '',
+      genre: ''
+    });
 
-    toPhase2() {
-      console.log('Navigating to phase 2');
-      this.$router.push('/phase2');
-    }
+    const selectedUniversity = ref(null);
+    const selectedDegree = ref(null);
+    const { ctx } = getCurrentInstance();
+
+    const genders = [
+      { name: 'Masculino', value: 'M' },
+      { name: 'Femenino', value: 'F' }
+    ];
+
+    const onUniversityChange = () => {
+      const university = selectedUniversity.value;
+      getDegrees(university.id);
+    };
+
+    const handleSubmit = async () => {
+      user.value.university = selectedUniversity.value;
+      user.value.degree = selectedDegree.value;
+      updateUser(user.value);
+      console.log(user.value);
+      ctx.$emit('goToNextPhase');
+    };
+
+    onMounted(() => {
+      getUniversities();
+    });
+
+    return {
+      user,
+      selectedUniversity,
+      selectedDegree,
+      genders,
+      universities,
+      degrees,
+      handleSubmit,
+      onUniversityChange
+    };
   }
 };
 </script>
@@ -71,6 +102,7 @@ export default {
 <style scoped>
 .phase1-container {
   background-color: #BB9FFF;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -156,4 +188,3 @@ a:hover {
   color: #f0f0f0; /* Cambia el color al pasar el mouse */
 }
 </style>
-

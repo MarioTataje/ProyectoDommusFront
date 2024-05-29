@@ -5,48 +5,60 @@
     <div v-for="(question, index) in questions" :key="index" class="question">
       <p class="question-text">{{ question.text }}</p>
       <div class="response">
-        <label v-for="i in 5" :key="i" class="radio-label">
-          <input
-            type="radio"
-            :name="'question' + index"
-            :value="i"
-            v-model="answers[index]"
-          />
-          <span class="radio-custom">{{ i }}</span>
-        </label>
+        <span class="percentage">{{ answers[index] }}%</span>
+        <div class="progress-container">
+          <span class="progress-text">Introvertido</span>
+          <input type="range" min="0" max="100"
+            v-model="answers[index]" class="slider" />
+          <span class="progress-text">Extrovertido</span>
+        </div>
       </div>
-    </div>  
+    </div>
     <div class="button-container">
-      <button @click="$emit('goToNextPhase')">Continuar</button>
+      <button @click="handleSubmit">Continuar</button>
     </div>
   </div>
 </template>
 
 <script>
+import { ref, getCurrentInstance } from 'vue';
+import usePhase from '../../composables/usePhase';
+
 export default {
   name: 'Phase3',
-  data() {
-    return {
-      questions: [
-        {
-          text: 'Mente',
-        },
-        {
-          text: 'Energía',
-        },
-        {
-          text: 'Naturaleza',
-        },
-        {
-          text: 'Tácticas',
-        }
-      ],
-      answers: Array(4).fill(null),
-    };
-  },
-  methods: {
+  setup() {
+    const { updateUser } = usePhase();
+    const questions = [
+      { text: 'Mente' },
+      { text: 'Energía' },
+      { text: 'Naturaleza' },
+      { text: 'Tácticas' }
+    ];
+    const answers = ref([0, 0, 0, 0]);
+    const user = ref(null);
+    const { ctx } = getCurrentInstance();
 
-  },
+    const handleSubmit = () => {
+      user.value.self_personality = {
+        tag: 'Esta es mi personalidad',
+        mind: parseInt(answers.value[0]),
+        energy: parseInt(answers.value[1]),
+        nature: parseInt(answers.value[2]),
+        tactics: parseInt(answers.value[3])
+      };
+      updateUser(user.value);
+      console.log(user.value);
+      ctx.$emit('goToNextPhase');
+    };
+
+
+    return {
+      questions, 
+      answers,
+      user,
+      handleSubmit    
+    };
+  }
 };
 </script>
 
@@ -78,7 +90,7 @@ export default {
 }
 
 .question {
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .question-text {
@@ -89,39 +101,32 @@ export default {
 
 .response {
   display: flex;
-  justify-content: space-around;
-}
-
-.radio-label {
-  display: flex;
+  flex-direction: column;
   align-items: center;
 }
 
-.radio-label input {
-  display: none;
-}
-
-.radio-custom {
+.progress-container {
+  margin-left: 30px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 2px solid #8F6EE0;
+  width: 100%;
+}
+
+.progress-text {
+  margin-right: 10px;
   color: #8F6EE0;
   font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
 }
 
-.radio-label input:checked + .radio-custom {
-  background-color: #8F6EE0;
-  color: #fff;
+.percentage {
+  margin-bottom: 5px;
+  color: #8F6EE0;
+  font-weight: bold;
 }
 
-.radio-label input:focus + .radio-custom {
-  box-shadow: 0 0 0 3px rgba(143, 110, 224, 0.5);
+.slider {
+  margin: 0 15px;
+  width: 70%;
 }
 
 .button-container {

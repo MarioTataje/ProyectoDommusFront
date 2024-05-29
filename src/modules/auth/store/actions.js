@@ -1,61 +1,66 @@
-import dommusApi from '@/api/dommusApi';
+import StudiesService from '@/api/studiesService';
+import LocationsService from '@/api/locationsService';
 
-export const createUser = async ({ commit }, user ) => {
-    const { name, email, password } = user;
-
+export const getUniversities = async({ commit }) => {
+    commit('setLoading', true);
     try {
-        const { data } = await dommusApi.post(':signUp', { email, password, returnSecureToken: true });
-        const { idToken, refreshToken } = data;
-        await dommusApi.post(':update', { displayName: name, idToken });
-        
-        delete user.password;
-        commit('loginUser', { user, idToken, refreshToken });
-
-        return { ok: true }
-    } catch(error){
-        return { ok: false, message: error.response.data.error.message }
+        const response = await StudiesService.getUniversities();
+        commit('setUniversities', response.data);
+    } catch (error) {
+        commit('setError', error.message || 'Error al obtener las universidades');
+    } finally {
+        commit('setLoading', false);
     }
 }
 
-export const signInUser = async ({ commit }, user ) => {
-    const { email, password } = user;
-
+export const getDegrees = async({ commit }, universityId ) => {
+    commit('setLoading', true);
     try {
-        const { data } = await dommusApi.post(':signInWithPassword', { email, password, returnSecureToken: true });
-        const { displayName, idToken, refreshToken } = data;
-
-        user.name = displayName;
-
-        commit('loginUser', { user, idToken, refreshToken });
-
-        return { ok: true }
-    } catch(error){
-        return { ok: false, message: error.response.data.error.message }
+        const response = await StudiesService.getDegrees(universityId);
+        commit('setDegrees', response.data);
+    } catch (error) {
+        commit('setError', error.message || 'Error al obtener las carreras');
+    } finally {
+        commit('setLoading', false);
     }
 }
 
-export const checkAuthentication = async({ commit }) => {
-    const idToken = localStorage.getItem('idToken');
-    const refreshToken = localStorage.getItem('refreshToken');
-
-    if (!idToken){
-        commit('logout')
-        return { ok: false, message: 'No hay token' }
-    }
-
+export const getRegions = async ({ commit }) => {
+    commit('setLoading', true);
     try {
-        const { data } = await  dommusApi.post(':lookup', { idToken });
-        const { displayName, email } = data.users[0];
-
-        const user = {
-            name: displayName,
-            email
-        };
-        commit('loginUser', { user, idToken, refreshToken });
-        return { ok: true }
-
-    } catch(error){
-        commit('logout')
-        return { ok: false, message: error.response.data.error.message }
+        const response = await LocationsService.getRegions();
+        commit('setRegions', response.data);
+    } catch (error) {
+        commit('setError', error.message || 'Error al obtener las regiones');
+    } finally {
+        commit('setLoading', false);
     }
+};
+
+export const getProvinces = async ({ commit }, regionId) => {
+    commit('setLoading', true);
+    try {
+        const response = await LocationsService.getProvinces(regionId);
+        commit('setProvinces', response.data);
+    } catch (error) {
+        commit('setError', error.message || 'Error al obtener las provincias');
+    } finally {
+        commit('setLoading', false);
+    }
+};
+
+export const getDistricts = async ({ commit }, provinceId) => {
+    commit('setLoading', true);
+    try {
+        const response = await LocationsService.getDistricts(provinceId);
+        commit('setDistricts', response.data);
+    } catch (error) {
+        commit('setError', error.message || 'Error al obtener los distritos');
+    } finally {
+        commit('setLoading', false);
+    }
+};
+
+export const updatePhaseUser = async ({ commit }, updatePhaseUser) => {
+    commit('updatePhaseUser', updatePhaseUser);
 }

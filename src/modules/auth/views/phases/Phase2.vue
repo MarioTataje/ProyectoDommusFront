@@ -4,42 +4,72 @@
     <div class="profile-header">
       <img src="@/assets/logo.png" alt="Profile Logo" class="profile-logo" />
       <div class="profile-info">
-        <p><strong>Alonso Sebastian Jimenez Wong</strong></p>
-        <p>18</p>
-        <p>Ingeniería de Sistemas de Información</p>
-        <p>Universidad Peruana de Ciencias Aplicadas</p>
+        <p><strong>{{ user.names }} {{ user.lastnames }}</strong></p>
+        <p>{{ userAge }}</p>
+        <p>{{ user.degree?.name }}</p>
+        <p>{{ user.university?.name }}</p>
       </div>
     </div>
     <div class="profile-description">
       <label for="description">Mi Descripción</label>
-      <textarea id="description" v-model="description"></textarea>
+      <textarea id="description" v-model="user.description"></textarea>
     </div>
     <div class="budget-container">
       <div class="budget-input">
         <label for="min-budget">Presupuesto Mínimo</label>
-        <input type="number" id="min-budget" v-model="minBudget" placeholder="Min" />
+        <input type="number" id="min-budget" v-model="user.min_budget" placeholder="Min" />
       </div>
       <div class="budget-input">
         <label for="max-budget">Presupuesto Máximo</label>
-        <input type="number" id="max-budget" v-model="maxBudget" placeholder="Max" />
+        <input type="number" id="max-budget" v-model="user.max_budget" placeholder="Max" />
       </div>
     </div>
     <div class="button-container">
-      <button @click="$emit('goToNextPhase')">Continuar</button>
+      <button @click="handleSubmit">Continuar</button>
     </div>
   </div>
 </template>
 
 <script>
+import { ref, onMounted, computed, getCurrentInstance } from 'vue';
+import usePhase from '../../composables/usePhase';
+
 export default {
   name: 'Phase2',
-  data() {
-    return {
-      description: '',
-      minBudget: '',
-      maxBudget: ''
+  setup() {
+    const { user: userInfo, updateUser } = usePhase();
+    const user = ref({});
+
+    const { ctx } = getCurrentInstance();
+
+    const handleSubmit = () => {
+      updateUser(user.value);
+      console.log(user.value);
+      ctx.$emit('goToNextPhase');
     };
-  },
+
+    onMounted(() => {
+      user.value = { ...userInfo.value };
+    });
+
+    const userAge = computed(() => {
+      if (!user.value.birth_date) return '';
+      const birthDate = new Date(user.value.birth_date);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age;
+    });
+
+    return {
+      user,
+      handleSubmit,
+      userAge
+    };
+  }
 };
 </script>
 

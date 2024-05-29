@@ -33,7 +33,7 @@
         { label: 'Vivienda', component: 'Phase4' },
         { label: 'Hábitos', component: 'Phase5' },
       ],
-      currentStep: 0,
+      currentStep: 4,
     };
   },
   methods: {

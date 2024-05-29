@@ -14,7 +14,7 @@
   
 <script>
   export default {
-    name: 'Home',
+    name: 'LockScreen',
     methods: {
       login() {
         this.$router.push('/login');
@@ -66,13 +66,16 @@
   }
   
   .btn {
-    background-color: #7f3fbf; /* Botón morado */
+    background-color: #7f3fbf; 
     color: white;
     border: none;
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s;
+    min-width: 150px;
+    text-align: center;
+    border-radius: 8px;
   }
   
   .btn:hover {

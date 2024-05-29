@@ -2,52 +2,13 @@
   <div class="phase5-container">
     <h2 class="centered-title">Hábitos</h2>
     <div class="centered-content">
-      <div class="question">
-        <p>“Me gusta vivir en un ...”</p>
+      <div v-for="(question, qIndex) in questions" :key="qIndex" class="question">
+        <p>{{ question.text }}</p>
         <div class="options">
-          <label><input type="radio" name="livingSpace" value="limpio"> Espacio Limpio</label>
-          <label><input type="radio" name="livingSpace" value="desarreglado"> Espacio desarreglado</label>
-          <label><input type="radio" name="livingSpace" value="indiferente"> Indiferente</label>
-        </div>
-      </div>
-      <div class="question">
-        <p>“Me voy a dormir ...”</p>
-        <div class="options">
-          <label><input type="radio" name="sleepTime" value="antes9"> Antes de las 9pm</label>
-          <label><input type="radio" name="sleepTime" value="antesMedianoche"> Antes de media noche</label>
-          <label><input type="radio" name="sleepTime" value="despuesMedianoche"> Después de media noche</label>
-        </div>
-      </div>
-      <div class="question">
-        <p>“Me levanto ...”</p>
-        <div class="options">
-          <label><input type="radio" name="wakeUpTime" value="antes8"> Antes de las 8am</label>
-          <label><input type="radio" name="wakeUpTime" value="8-10am"> 8-10am</label>
-          <label><input type="radio" name="wakeUpTime" value="10-12pm"> 10am - 12pm</label>
-          <label><input type="radio" name="wakeUpTime" value="despues12"> Después de las 12pm</label>
-        </div>
-      </div>
-      <div class="question">
-        <p>“Me gusta que mi cuarto sea ...”</p>
-        <div class="options">
-          <label><input type="radio" name="roomPreference" value="tranquilo"> Tranquilo para estudiar</label>
-          <label><input type="radio" name="roomPreference" value="social"> Un espacio para estar con mis amigos</label>
-          <label><input type="radio" name="roomPreference" value="combinacion"> Una combinación de tranquilo y social</label>
-        </div>
-      </div>
-      <div class="question">
-        <p>“¿Eres fumador? & ¿Estas cómodo con un roommate fumador?”</p>
-        <div class="options">
-          <label><input type="radio" name="smoker" value="yes"> Yes</label>
-          <label><input type="radio" name="smoker" value="no"> No</label>
-        </div>
-      </div>
-      <div class="question">
-        <p>“Espero estudiar en...?”</p>
-        <div class="options">
-          <label><input type="radio" name="studyPreference" value="miCuarto"> Mi cuarto</label>
-          <label><input type="radio" name="studyPreference" value="fueraCuarto"> Fuera de mi cuarto</label>
-          <label><input type="radio" name="studyPreference" value="ambos"> Ambos, fuera o dentro de mi cuarto</label>
+          <label v-for="(option, oIndex) in question.options" :key="oIndex">
+            <input type="radio" :name="question.name" :value="option.value" v-model="answers[qIndex]" />
+            {{ option.label }}
+          </label>
         </div>
       </div>
       <button @click="handleContinue">Continuar</button>
@@ -56,12 +17,89 @@
 </template>
 
 <script>
+import { ref, onMounted } from 'vue';
+import usePhase from '../../composables/usePhase';
+
 export default {
   name: 'Phase5',
-  methods: {
-    handleContinue() {
-      // Handle the continue action
-    }
+  setup() {
+    const { user: userInfo } = usePhase();
+    const user = ref(null);
+
+    const questions = ref([
+      {
+        text: '“Me gusta vivir en un ...”',
+        name: 'livingSpace',
+        options: [
+          { label: 'Espacio Limpio', value: 'limpio' },
+          { label: 'Espacio desarreglado', value: 'desarreglado' },
+          { label: 'Indiferente', value: 'indiferente' }
+        ]
+      },
+      {
+        text: '“Me voy a dormir ...”',
+        name: 'sleepTime',
+        options: [
+          { label: 'Antes de las 9pm', value: 'antes9' },
+          { label: 'Antes de media noche', value: 'antesMedianoche' },
+          { label: 'Después de media noche', value: 'despuesMedianoche' }
+        ]
+      },
+      {
+        text: '“Me levanto ...”',
+        name: 'wakeUpTime',
+        options: [
+          { label: 'Antes de las 8am', value: 'antes8' },
+          { label: '8-10am', value: '8-10am' },
+          { label: '10am - 12pm', value: '10-12pm' },
+          { label: 'Después de las 12pm', value: 'despues12' }
+        ]
+      },
+      {
+        text: '“Me gusta que mi cuarto sea ...”',
+        name: 'roomPreference',
+        options: [
+          { label: 'Tranquilo para estudiar', value: 'tranquilo' },
+          { label: 'Un espacio para estar con mis amigos', value: 'social' },
+          { label: 'Una combinación de tranquilo y social', value: 'combinacion' }
+        ]
+      },
+      {
+        text: '“¿Eres fumador? & ¿Estas cómodo con un roommate fumador?”',
+        name: 'smoker',
+        options: [
+          { label: 'Yes', value: 'yes' },
+          { label: 'No', value: 'no' }
+        ]
+      },
+      {
+        text: '“Espero estudiar en...?”',
+        name: 'studyPreference',
+        options: [
+          { label: 'Mi cuarto', value: 'miCuarto' },
+          { label: 'Fuera de mi cuarto', value: 'fueraCuarto' },
+          { label: 'Ambos, fuera o dentro de mi cuarto', value: 'ambos' }
+        ]
+      }
+    ]);
+
+    const answers = ref(Array(questions.value.length).fill(''));
+
+    const handleContinue = () => {
+      user.value.habits = [ ...answers.value ];
+      console.log(user.value);
+    };
+
+    onMounted(() => {
+      user.value = { ...userInfo.value };
+    });
+
+    return {
+      questions,
+      answers,
+      user,
+      handleContinue    
+    };
   }
 }
 </script>
@@ -118,6 +156,9 @@ label {
   border-radius: 5px;
   transition: background-color 0.3s, border-color 0.3s;
   cursor: pointer;
+
+  white-space: normal;
+  word-wrap: break-word;
 }
 
 label:hover {

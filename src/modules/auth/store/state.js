@@ -1,6 +1,11 @@
+
 export default () => ({
-    status: 'authenticating',
     user: null,
-    idToken: null,
-    refreshToken: null
+    universities: [],
+    degrees: [],
+    regions: [],
+    provinces: [],
+    districts: [],
+    loading: false,
+    error: null,
 })

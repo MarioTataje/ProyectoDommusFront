@@ -2,31 +2,31 @@
   <div class="phase4-container">
     <h2 class="centered-title">Vivienda</h2>
     <div class="centered-content">
-      <form @submit.prevent="submitForm" class="centered-form">
+      <form @submit.prevent="handleSubmit" class="centered-form">
         <div class="form-group">
           <label for="departamento">Departamento</label>
-          <select v-model="region" id="departamento" required>
+          <select v-model="selectedRegion" @change="onRegionChange" id="departamento" required>
             <option disabled value="">Departamento</option>
-            <option v-for="region in regions" :key="region" :value="region">
-              {{ region }}
+            <option v-for="region in regions" :key="region.id" :value="region">
+              {{ region.name }}
             </option>
           </select>
         </div>
         <div class="form-group">
           <label for="provincia">Provincia</label>
-          <select v-model="province" id="provincia" required>
+          <select v-model="selectedProvince" @change="onProvinceChange" id="provincia" required>
             <option disabled value="">Provincia</option>
-            <option v-for="province in provinces" :key="province" :value="province">
-              {{ province }}
+            <option v-for="province in provinces" :key="province.id" :value="province">
+              {{ province.name }}
             </option>
           </select>
         </div>
         <div class="form-group">
           <label for="distrito">Distrito</label>
-          <select v-model="district" id="distrito" required>
+          <select v-model="selectedDistrict" id="distrito" required>
             <option disabled value="">Distrito</option>
-            <option v-for="district in districts" :key="district" :value="district">
-              {{ district }}
+            <option v-for="district in districts" :key="district.id" :value="district">
+              {{ district.name }}
             </option>
           </select>
         </div>
@@ -34,7 +34,7 @@
           <img src="@/assets/ubigeo.png" alt="Mapa" />
         </div>
         <div class="button-container">
-          <button type="submit" @click="$emit('goToNextPhase')">Continuar</button>
+          <button type="submit">Continuar</button>
         </div>
       </form>
     </div>
@@ -42,24 +42,52 @@
 </template>
 
 <script>
+import { ref, onMounted, getCurrentInstance } from 'vue';
+import usePhase from '../../composables/usePhase';
+
 export default {
   name: 'Phase4',
-  data() {
-    return {
-      region: '',
-      province: '',
-      district: '',
-      regions: ['Lima', 'Cuzco', 'Cajamarca'],
-      provinces: ['Lima', 'Huaral', 'Huacho'],
-      districts: ['San Miguel', 'Pueblo Libre', 'Jesus Maria']
+  setup() {
+    const { regions, provinces, districts, getRegions, getProvinces, getDistricts, updateUser } = usePhase();
+    const user = ref({});
+
+    const selectedRegion = ref(null);
+    const selectedProvince = ref(null);
+    const selectedDistrict = ref(null);
+    const { ctx } = getCurrentInstance();
+
+    const onRegionChange = () => {
+      const region = selectedRegion.value;
+      getProvinces(region.id);
     };
-  },
-  methods: {
-    submitForm() {
-      console.log('Region:', this.region);
-      console.log('Provincia:', this.provincia);
-      console.log('Distrito:', this.distrito);
-    }
+
+    const onProvinceChange = () => {
+      const province = selectedProvince.value;
+      getDistricts(province.id);
+    };
+
+    const handleSubmit = async () => {
+      user.value.district = selectedDistrict.value;
+      updateUser(user.value);
+      console.log(user.value);
+      ctx.$emit('goToNextPhase');
+    };
+
+    onMounted(() => {
+      getRegions();
+    });
+
+    return {
+      selectedRegion,
+      selectedProvince,
+      selectedDistrict,
+      regions,
+      provinces,
+      districts,
+      handleSubmit,
+      onRegionChange,
+      onProvinceChange
+    };
   }
 };
 </script>

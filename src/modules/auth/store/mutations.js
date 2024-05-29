@@ -1,25 +1,31 @@
-export const loginUser = ( state, { user, idToken, refreshToken } ) => {
-    if ( idToken ){
-        localStorage.setItem( 'idToken', idToken );
-        state.idToken = idToken;
-    }
-
-    if ( refreshToken ){
-        localStorage.setItem( 'refreshToken', refreshToken );
-        state.refreshToken = refreshToken;
-    }
-
-    state.user = user;
-    state.status = 'authenticated';
+export const setUniversities = ( state, universities ) => {
+    state.universities = universities;
 }
 
-export const logout = (state) => {
-    state.user = null;
-    state.idToken = null;
-    state.refreshToken = null;
-    state.status = 'not-authenticated';
-
-    localStorage.removeItem('idToken');
-    localStorage.removeItem('refreshToken');
+export const setDegrees = ( state, degrees ) => {
+    state.degrees = degrees;
 }
 
+export const setRegions = (state, regions) => {
+    state.regions = regions;
+};
+
+export const setProvinces = (state, provinces) => {
+    state.provinces = provinces;
+};
+
+export const setDistricts = (state, districts) => {
+    state.districts = districts;
+};
+
+export const updatePhaseUser = (state, updatedUser) => {
+    state.user = { ...state.user, ...updatedUser };
+}
+
+export const setLoading = ( state, loading ) => {
+    state.loading = loading;
+}
+
+export const setError = ( state, error ) => {
+    state.error = error;
+}
