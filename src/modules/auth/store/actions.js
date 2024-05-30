@@ -1,5 +1,7 @@
 import StudiesService from '@/api/studiesService';
 import LocationsService from '@/api/locationsService';
+import AuthenticationService from '@/api/authenticationService';
+import PersonalityService from '@/api/personalityService';
 
 export const getUniversities = async({ commit }) => {
     commit('setLoading', true);
@@ -63,4 +65,42 @@ export const getDistricts = async ({ commit }, provinceId) => {
 
 export const updatePhaseUser = async ({ commit }, updatePhaseUser) => {
     commit('updatePhaseUser', updatePhaseUser);
+}
+
+export const createUser = async ({ commit }, user ) => {
+    commit('setLoading', true);
+    try {
+        const response = await AuthenticationService.register(user);
+        console.log(response);
+        const { data, error } = response;
+        if (data) {
+            await PersonalityService.createSelfPersonality(user.self_personality, data.id);
+        }
+        if (error) {
+            console.log(error);
+        }
+    } catch (error) {
+        commit('setError', error.message || 'Error al al crear el usuario');
+    } finally {
+        commit('setLoading', false);
+    }
+}
+
+export const loginUser = async ({ commit }, user ) => {
+    commit('setLoading', true);
+    try {
+        const response = await AuthenticationService.login(user);
+        const { data, error } = response;
+
+        if (data) {
+            console.log(data);
+        }
+        if (error) {
+            console.log(error);
+        }
+    } catch (error) {
+        commit('setError', error.message || 'Error al al crear el usuario');
+    } finally {
+        commit('setLoading', false);
+    }
 }

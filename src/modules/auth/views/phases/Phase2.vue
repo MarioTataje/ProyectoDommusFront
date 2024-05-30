@@ -17,11 +17,11 @@
     <div class="budget-container">
       <div class="budget-input">
         <label for="min-budget">Presupuesto Mínimo</label>
-        <input type="number" id="min-budget" v-model="user.min_budget" placeholder="Min" />
+        <input type="number" id="min-budget" v-model.number="user.min_budget" step="0.1" @change="formatBudget('min_budget')" placeholder="Min" />
       </div>
       <div class="budget-input">
         <label for="max-budget">Presupuesto Máximo</label>
-        <input type="number" id="max-budget" v-model="user.max_budget" placeholder="Max" />
+        <input type="number" id="max-budget" v-model.number="user.max_budget" step="0.1" @change="formatBudget('max_budget')" placeholder="Max" />
       </div>
     </div>
     <div class="button-container">
@@ -38,7 +38,10 @@ export default {
   name: 'Phase2',
   setup() {
     const { user: userInfo, updateUser } = usePhase();
-    const user = ref({});
+    const user = ref({
+      min_budget: 0.0,
+      max_budget: 0.0
+    });
 
     const { ctx } = getCurrentInstance();
 
@@ -49,8 +52,14 @@ export default {
     };
 
     onMounted(() => {
-      user.value = { ...userInfo.value };
+      user.value = { ...user.value, ...userInfo.value };
     });
+
+    const formatBudget = (key) => {
+      if (user.value[key] !== null && user.value[key] !== undefined) {
+        user.value[key] = parseFloat(user.value[key]).toFixed(1);
+      }
+    };
 
     const userAge = computed(() => {
       if (!user.value.birth_date) return '';
@@ -67,7 +76,8 @@ export default {
     return {
       user,
       handleSubmit,
-      userAge
+      userAge,
+      formatBudget
     };
   }
 };

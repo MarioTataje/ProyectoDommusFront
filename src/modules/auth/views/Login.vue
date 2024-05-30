@@ -3,10 +3,10 @@
     <div class="login-box">
       <img src="@/assets/logo.png" alt="Dommus Logo" class="logo" />
       <h1 class="title">Login</h1>
-      <form @submit.prevent="login">
-        <input type="text" placeholder="Email" v-model="email" required />
+      <form @submit.prevent="handleSubmit">
+        <input type="text" placeholder="Email" v-model="user.email" required />
         <div class="password-container">
-          <input :type="showPassword ? 'text' : 'password'" placeholder="Contraseña" v-model="password" required />
+          <input :type="showPassword ? 'text' : 'password'" placeholder="Contraseña" v-model="user.password" required />
           <span class="toggle-password" @click="showPassword = !showPassword">
             <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
           </span>
@@ -19,21 +19,34 @@
 </template>
 
 <script>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import usePhase from '../composables/usePhase';
+
 export default {
   name: 'Login',
-  data() {
-    return {
+  setup() {
+    const { loginUser } = usePhase();
+    const router = useRouter();
+
+    const user = ref({
       email: '',
-      password: '',
-      showPassword: false,
+      password: ''
+    });
+    const showPassword = false;
+
+    const handleSubmit = async () => {
+      console.log(user.value);
+      await loginUser(user.value);
+      router.push({ name: 'home' });
     };
-  },
-  methods: {
-    login() {
-      // Lógica de inicio de sesión
-      console.log('Iniciando sesión con', this.email, this.password);
-    },
-  },
+
+    return {
+      user,
+      showPassword,
+      handleSubmit
+    };
+  }
 };
 </script>
 

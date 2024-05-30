@@ -73,9 +73,16 @@ export default {
       getDegrees(university.id);
     };
 
+    const formatDateToISO = (date) => {
+      const d = new Date(date);
+      const formattedDate = d.toISOString().split('.')[0];
+      return formattedDate;
+    };
+
     const handleSubmit = async () => {
       user.value.university = selectedUniversity.value;
       user.value.degree = selectedDegree.value;
+      user.value.birth_date = formatDateToISO(user.value.birth_date);
       updateUser(user.value);
       console.log(user.value);
       ctx.$emit('goToNextPhase');

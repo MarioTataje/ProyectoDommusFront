@@ -28,6 +28,14 @@ const usePhase = () => {
     await store.dispatch('auth/updatePhaseUser', data);
   };
 
+  const createUser = async(data) => {
+    await store.dispatch('auth/createUser', data);
+  };
+  
+  const loginUser = async(data) => {
+    await store.dispatch('auth/loginUser', data);
+  };
+
   return {
     getUniversities,
     getDegrees,
@@ -35,6 +43,8 @@ const usePhase = () => {
     getProvinces,
     getDistricts,
     updateUser,
+    createUser,
+    loginUser,
     universities: computed(() => store.getters['auth/universities']),
     degrees: computed(() => store.getters['auth/degrees']),
     regions: computed(() => store.getters['auth/regions']),

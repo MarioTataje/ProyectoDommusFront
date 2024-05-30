@@ -18,13 +18,15 @@
 
 <script>
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import usePhase from '../../composables/usePhase';
 
 export default {
   name: 'Phase5',
   setup() {
-    const { user: userInfo } = usePhase();
-    const user = ref(null);
+    const { user: userInfo, createUser } = usePhase();
+    const router = useRouter()
+    const user = ref({});
 
     const questions = ref([
       {
@@ -85,9 +87,10 @@ export default {
 
     const answers = ref(Array(questions.value.length).fill(''));
 
-    const handleContinue = () => {
-      user.value.habits = [ ...answers.value ];
-      console.log(user.value);
+    const handleContinue = async() => {
+      user.value.habits = answers.value.join(',');
+      await createUser(user.value);
+      router.push({ name: 'login' });
     };
 
     onMounted(() => {

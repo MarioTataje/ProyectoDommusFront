@@ -35,16 +35,19 @@ export default {
       { text: 'Tácticas' }
     ];
     const answers = ref([0, 0, 0, 0]);
-    const user = ref(null);
+    const user = ref({});
     const { ctx } = getCurrentInstance();
 
     const handleSubmit = () => {
+      const convertedAnswers = answers.value.map(value => parseFloat((parseInt(value) * 5 / 100).toFixed(1)));
+
       user.value.self_personality = {
-        tag: 'Esta es mi personalidad',
-        mind: parseInt(answers.value[0]),
-        energy: parseInt(answers.value[1]),
-        nature: parseInt(answers.value[2]),
-        tactics: parseInt(answers.value[3])
+        tag: 'positivo',
+        mind: convertedAnswers[0],
+        energy: convertedAnswers[1],
+        nature: convertedAnswers[2],
+        tactics: convertedAnswers[3],
+        identity: 0.1
       };
       updateUser(user.value);
       console.log(user.value);
