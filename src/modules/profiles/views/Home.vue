@@ -1,29 +1,33 @@
 <template>
-    <div class="home">
-
-    </div>
+  <div class="home-container">
+  </div>
 </template>
-  
+
 <script>
-  export default {
-    name: 'Home',
-  };
-</script>
-  
-<style scoped>
-  .home {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100vh;
-    background: 
-      url('@/assets/background.png') no-repeat center center,
-      url('@/assets/background2.png') no-repeat center center;
-  
-    background-size: cover, cover;
-    overflow: hidden;
+import { ref } from 'vue';
+
+export default {
+  name: 'Home',
+  setup() {
+    const user = ref({});
+
+    return {
+      user
+    };
   }
+};
+</script>
+
+<style scoped>
+.home-container {
+  background-color: #fff;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: calc(100vw - 400px);
+  padding: 20px;
+  border-radius: 15px;
+  box-sizing: border-box;
+}
+
 </style>
-  

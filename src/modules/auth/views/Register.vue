@@ -24,32 +24,34 @@
     Phase4,
     Phase5
 	},
-  data() {
-    return {
-      steps: [
-        { label: 'Detalles de cuenta', component: 'Phase1' },
-        { label: 'Editar Perfil', component: 'Phase2' },
-        { label: 'Test de Personalidad', component: 'Phase3' },
-        { label: 'Vivienda', component: 'Phase4' },
-        { label: 'Hábitos', component: 'Phase5' },
-      ],
-      currentStep: 0,
-    };
-  },
-  methods: {
-    toNextPhase() {
+  setup(){
+    const steps = [
+      { label: 'Detalles de cuenta', component: 'Phase1' },
+      { label: 'Editar Perfil', component: 'Phase2' },
+      { label: 'Test de Personalidad', component: 'Phase3' },
+      { label: 'Vivienda', component: 'Phase4' },
+      { label: 'Hábitos', component: 'Phase5' },
+    ];
+    const currentStep = 0;
+
+    const toNextPhase = () => {
       if (this.currentStep < this.steps.length - 1) {
         this.currentStep++;
       }
-    },
-  },
+    };
+    return {
+      steps,
+      currentStep,
+      toNextPhase
+    };
+  }
   };
 </script>
   
 <style scoped>
 .register-container {
   display: flex;
-  height: 100vh; /* Ensure the container takes the full viewport height */
+  height: 100vh;
   width: 100vw;
   font-family: Arial, sans-serif;
   margin: 0;

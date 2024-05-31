@@ -87,7 +87,7 @@ export default {
 .line {
   width: 100%;
   border: none;
-  border-top: 8px solid #8F6EE0; /* Color y grosor de la línea */
+  border-top: 8px solid #8F6EE0;
   margin-top: 10px;
   margin-bottom: 20px;
 }

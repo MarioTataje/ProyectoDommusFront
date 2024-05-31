@@ -129,26 +129,26 @@ export default {
 .logo {
   width: 250px;
   height: auto;
-  margin-bottom: 10px; /* Ajusta el margen inferior del logo */
+  margin-bottom: 10px; 
 }
 
 .phase1-content {
   margin-left: 110px;
-  width: 80%; /* Ajusta el ancho del formulario */
+  width: 80%;
 }
 
 .phase1-group {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px; /* Aumenta el margen inferior entre grupos */
+  margin-bottom: 20px;
 }
 
 .phase1-group input,
 .phase1-group select {
-  background-color: #d7d7d7; /* Color de fondo gris */
+  background-color: #d7d7d7;
   color: #fff;
   width: 45%;
-  padding: 17px; /* Aumenta el espacio interno */
+  padding: 17px;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-sizing: border-box;
@@ -156,12 +156,12 @@ export default {
 
 .phase1-group input::placeholder,
 .phase1-group select::placeholder {
-  color: #fff; /* Cambia el color del placeholder a gris */
+  color: #fff;
 }
 
 .button-container {
   display: flex;
-  justify-content: flex-end; /* Alinea el botón a la derecha */
+  justify-content: flex-end;
   width: 100%;
 }
 
@@ -183,15 +183,15 @@ button:hover {
 }
 
 p {
-  color: white; /* Color blanco para la frase "Ya tienes una cuenta?" */
+  color: white;
 }
 
 a {
-  color: white; /* Color blanco para el enlace */
-  text-decoration: underline; /* Subrayado para el enlace */
+  color: white;
+  text-decoration: underline; 
 }
 
 a:hover {
-  color: #f0f0f0; /* Cambia el color al pasar el mouse */
+  color: #f0f0f0;
 }
 </style>

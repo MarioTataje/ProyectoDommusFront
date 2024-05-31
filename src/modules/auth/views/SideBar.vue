@@ -26,22 +26,22 @@ export default {
 <style scoped>
 .sidebar {
   color: #fff;
-  padding: 30px; /* Ajuste del padding para más espacio alrededor */
-  width: 400px; /* Aumentado el ancho a 400px */
+  padding: 30px; 
+  width: 400px;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centrando horizontalmente */
-  justify-content: center; /* Centrando verticalmente */
-  height: 100vh; /* Ocupa toda la altura del viewport */
-  box-sizing: border-box; /* Asegura que el padding se incluya en el ancho total */
+  align-items: center;
+  justify-content: center; 
+  height: 100vh;
+  box-sizing: border-box;
 }
 
 .sidebar h2 {
   margin-top: 0;
-  margin-bottom: 40px; /* Añadido espacio debajo del título */
-  font-size: 24px; /* Ajuste del tamaño de fuente para mayor legibilidad */
-  text-align: left; /* Alinea el texto del título a la izquierda */
-  width: 100%; /* Asegura que el texto se alinee a la izquierda del contenedor */
+  margin-bottom: 40px; 
+  font-size: 24px; 
+  text-align: left; 
+  width: 100%; 
 }
 
 .sidebar ul {
@@ -51,17 +51,17 @@ export default {
 }
 
 .sidebar ul li {
-  padding: 15px 0; /* Ajuste del padding para más espacio entre elementos */
+  padding: 15px 0;
   cursor: pointer;
-  font-size: 18px; /* Ajuste del tamaño de fuente para mayor legibilidad */
+  font-size: 18px;
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* Alinea el texto a la izquierda */
+  justify-content: flex-start;
 }
 
 .sidebar ul li.active {
   background-color: #5e35b1;
-  border-radius: 25px; /* Añadir bordes redondeados para que coincida con el diseño de la imagen */
+  border-radius: 25px;
 }
 
 .sidebar ul li::before {
@@ -71,7 +71,7 @@ export default {
   height: 20px;
   border: 2px solid #fff;
   border-radius: 50%;
-  margin-right: 15px; /* Espacio entre el círculo y el texto */
+  margin-right: 15px;
 }
 
 .sidebar ul li.active::before {

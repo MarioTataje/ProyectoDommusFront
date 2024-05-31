@@ -1,9 +1,9 @@
-import Home from './../views/Home.vue'
+import UserLayout from '../views/UserLayout.vue'
 
 export default [
     {
         path: "/",
         name: "home",
-        component: Home
+        component: UserLayout
     },
 ]
