@@ -44,11 +44,14 @@
 <script>
 import { ref, onMounted, getCurrentInstance } from 'vue';
 import usePhase from '../../composables/usePhase';
+import useLocations from '../../composables/useLocations';
 
 export default {
   name: 'Phase4',
   setup() {
-    const { regions, provinces, districts, getRegions, getProvinces, getDistricts, updateUser } = usePhase();
+    const { updateUser } = usePhase();
+    const { regions, provinces, districts, getRegions, getProvinces, getDistricts } = useLocations();
+
     const user = ref({});
 
     const selectedRegion = ref(null);
@@ -69,7 +72,6 @@ export default {
     const handleSubmit = async () => {
       user.value.district = selectedDistrict.value;
       updateUser(user.value);
-      console.log(user.value);
       ctx.$emit('goToNextPhase');
     };
 

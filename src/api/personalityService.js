@@ -12,7 +12,6 @@ class PersonalityService {
 
     async createSelfPersonality(data, userId) {
         try {
-            console.log(data);
             const response = await dommusApi.post(`users/${userId}/self-personalities/`, data);
             return response;
         } catch (error) {

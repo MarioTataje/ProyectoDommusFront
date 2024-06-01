@@ -1,6 +1,7 @@
 
 export default () => ({
     user: null,
+    userId: null,
     universities: [],
     degrees: [],
     regions: [],

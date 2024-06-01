@@ -29,3 +29,7 @@ export const setLoading = ( state, loading ) => {
 export const setError = ( state, error ) => {
     state.error = error;
 }
+
+export const setUserId = ( state, userId ) => {
+    state.userId = userId;
+}

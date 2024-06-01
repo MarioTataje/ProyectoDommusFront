@@ -1,10 +1,10 @@
 import {createRouter, createWebHashHistory} from 'vue-router';
 import authRouter from '../modules/auth/router';
-import profilesRouter from '../modules/profiles/router';
+import studentRouter from '../modules/student/router';
 
 const routes = [
     ...authRouter,
-    ...profilesRouter,
+    ...studentRouter,
     /*{
         path: "/home",
         beforeEnter: [ isAuthenticatedGuard ],

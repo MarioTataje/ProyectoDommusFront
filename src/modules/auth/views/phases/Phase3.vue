@@ -50,7 +50,6 @@ export default {
         identity: 0.1
       };
       updateUser(user.value);
-      console.log(user.value);
       ctx.$emit('goToNextPhase');
     };
 

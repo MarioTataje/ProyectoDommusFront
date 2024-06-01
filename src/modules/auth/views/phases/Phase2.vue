@@ -47,7 +47,6 @@ export default {
 
     const handleSubmit = () => {
       updateUser(user.value);
-      console.log(user.value);
       ctx.$emit('goToNextPhase');
     };
 

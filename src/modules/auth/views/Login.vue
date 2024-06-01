@@ -36,7 +36,6 @@ export default {
     const showPassword = false;
 
     const handleSubmit = async () => {
-      console.log(user.value);
       await loginUser(user.value);
       router.push({ name: 'home' });
     };

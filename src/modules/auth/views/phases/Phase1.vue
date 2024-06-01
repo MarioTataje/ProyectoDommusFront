@@ -42,11 +42,13 @@
 <script>
 import { ref, onMounted, getCurrentInstance } from 'vue';
 import usePhase from '../../composables/usePhase';
+import useStudies from '../../composables/useStudies';
 
 export default {
   name: 'Phase1',
   setup() {
-    const { universities, degrees, getUniversities, getDegrees, updateUser } = usePhase();
+    const { updateUser } = usePhase();
+    const { universities, degrees, getUniversities, getDegrees } = useStudies();
     const user = ref({
       names: '',
       lastnames: '',
@@ -84,7 +86,6 @@ export default {
       user.value.degree = selectedDegree.value;
       user.value.birth_date = formatDateToISO(user.value.birth_date);
       updateUser(user.value);
-      console.log(user.value);
       ctx.$emit('goToNextPhase');
     };
 

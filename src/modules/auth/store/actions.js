@@ -2,6 +2,7 @@ import StudiesService from '@/api/studiesService';
 import LocationsService from '@/api/locationsService';
 import AuthenticationService from '@/api/authenticationService';
 import PersonalityService from '@/api/personalityService';
+import { jwtDecode } from 'jwt-decode';
 
 export const getUniversities = async({ commit }) => {
     commit('setLoading', true);
@@ -90,13 +91,14 @@ export const loginUser = async ({ commit }, user ) => {
     commit('setLoading', true);
     try {
         const response = await AuthenticationService.login(user);
-        const { data, error } = response;
-
+        const { data } = response;
         if (data) {
-            console.log(data);
-        }
-        if (error) {
-            console.log(error);
+            const { access } = data;
+            if (access){
+                sessionStorage.setItem('token', access);
+                const { user_id } = jwtDecode(access);
+                commit('setUserId', user_id);
+            }
         }
     } catch (error) {
         commit('setError', error.message || 'Error al al crear el usuario');
