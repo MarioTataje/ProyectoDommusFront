@@ -49,6 +49,7 @@ export default {
         tactics: convertedAnswers[3],
         identity: 0.1
       };
+      console.log('AKI');
       updateUser(user.value);
       ctx.$emit('goToNextPhase');
     };

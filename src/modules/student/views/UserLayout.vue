@@ -1,33 +1,52 @@
 <!--eslint-disable-->
 <template>
   <div class="layout">
-	  <Menu :activeOption="options[currentOption].label"/>
-    <component :is="options[currentOption].component"/>
+    <Menu :activeOption="activeOption" :options="options" @updateOption="updateOption"/>
+    <component :is="currentComponent"/>
   </div>
 </template>
   
 <script>
+  import { ref } from 'vue';
   import Menu from './Menu.vue';
+  import Profile from './Profile.vue';
   import Home from './Home.vue';
+  import Notifications from './Notifications.vue';
   
+  import profileIcon from '@/assets/profile_icon.png';
+  import homeIcon from '@/assets/home_icon.png';
+  import notificationsIcon from '@/assets/notifications_icon.png';
+  import logoutIcon from '@/assets/logout_icon.png';
+
   export default {
 	name: 'UserLayout',
 	components: {
+    Profile,
 		Menu,
 		Home,
+    Notifications,
 	},
   setup(){
     const options = [
-      { label: 'Profiles', component: 'Profiles' },
-      { label: 'Home', component: 'Home' },
-      { label: 'Notifications', component: 'Notifications' },
-      { label: 'Blog', component: 'Blog' }
+      { label: 'Profiles', component: 'Profile', icon: profileIcon },
+      { label: 'Home', component: 'Home', icon: homeIcon },
+      { label: 'Notifications', component: 'Notifications', icon: notificationsIcon },
+      { label: 'Blog', component: 'Blog', icon: logoutIcon }
     ];
-    const currentOption = 1;
+
+    const activeOption = ref(options[1].label);
+    const currentComponent = ref(options[1].component);
+
+    const updateOption = (label) => {
+      activeOption.value = label;
+      currentComponent.value = options.find(option => option.label === label).component;
+    };
 
     return {
       options,
-      currentOption    
+      activeOption,
+      currentComponent,
+      updateOption
     };
   }
   };

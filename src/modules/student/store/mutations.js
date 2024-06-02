@@ -6,8 +6,12 @@ export const setMatches = ( state, matches ) => {
     state.matches = matches;
 }
 
-export const setReceivedLikes = ( state, setReceivedLikes ) => {
-    state.setReceivedLikes = setReceivedLikes;
+export const setReceivedLikes = ( state, receivedLikes ) => {
+    state.receivedLikes = receivedLikes;
+}
+
+export const setProfile = ( state, profile ) => {
+    state.profile = profile;
 }
 
 export const setLoading = ( state, loading ) => {

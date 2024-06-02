@@ -4,17 +4,13 @@
       <img src="@/assets/logo.png" alt="Logo" class="logo" />
     </div>
     <ul>
-      <li :class="{ active: activeOption === 'Profiles' }">
-        <img src="@/assets/profile_icon.png" alt="Profile" />
-      </li>
-      <li :class="{ active: activeOption === 'Home' }">
-        <img src="@/assets/home_icon.png" alt="Home" />
-      </li>
-      <li :class="{ active: activeOption === 'Notifications' }">
-        <img src="@/assets/notifications_icon.png" alt="Notifications" />
-      </li>
-      <li :class="{ active: activeOption === 'Blog' }">
-        <img src="@/assets/logout_icon.png" alt="Blog" />
+      <li 
+        v-for="option in options" 
+        :key="option.label" 
+        :class="{ active: activeOption === option.label }"
+        @click="$emit('updateOption', option.label)"
+      >
+        <img :src="option.icon" :alt="option.label" />
       </li>
     </ul>
   </div>
@@ -27,6 +23,10 @@ export default {
     activeOption: {
       type: String,
       required: true
+    },
+    options: {
+      type: Array,
+      required: true
     }
   }
 };
@@ -37,6 +37,7 @@ export default {
   color: #fff;
   padding: 30px;
   width: 400px;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;

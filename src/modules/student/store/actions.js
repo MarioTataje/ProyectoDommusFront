@@ -1,3 +1,4 @@
+import UserService from '@/api/userService';
 import IdealProfileService from '@/api/idealProfileService';
 import MatchService from '@/api/matchService';
 
@@ -17,7 +18,7 @@ export const getMatches = async({ commit }, userId ) => {
     commit('setLoading', true);
     try {
         const response = await MatchService.getMatches(userId);
-        commit('setProfiles', response.data);
+        commit('setMatches', response.data);
     } catch (error) {
         commit('setError', error.message || 'Error al obtener los matches');
     } finally {
@@ -32,6 +33,19 @@ export const getReceivedLikes = async({ commit }, userId ) => {
         commit('setReceivedLikes', response.data);
     } catch (error) {
         commit('setError', error.message || 'Error al obtener los likes');
+    } finally {
+        commit('setLoading', false);
+    }
+}
+
+export const getUserProfile = async({ commit }, userId ) => {
+    commit('setLoading', true);
+    try {
+        console.log('AKI');
+        const response = await UserService.getUser(userId);
+        commit('setProfile', response.data);
+    } catch (error) {
+        commit('setError', error.message || 'Error al obtener el perfil');
     } finally {
         commit('setLoading', false);
     }
