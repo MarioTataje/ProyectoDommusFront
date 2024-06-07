@@ -20,6 +20,7 @@ class AuthenticationService {
                 birth_date: data.birth_date,
                 district_id: data.district.id,
                 degree_id: data.degree.id,
+                university_id: data.university.id,
                 genre: data.genre,
                 description: data.description,
                 budget_min: data.min_budget,

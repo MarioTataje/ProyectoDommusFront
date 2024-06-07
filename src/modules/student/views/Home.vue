@@ -3,15 +3,15 @@
     <h1 class="home-title">Roommies</h1>
     <div class="profiles">
       <div v-for="profile in profiles" :key="profile.id" class="profile-card">
-        <img :src="profile.genre === 'M' ? require('@/assets/men_profile.png') : require('@/assets/women_profile.png')" 
+        <img :src="profile.genre === 'M' ? require('@/assets/profiles/men_profile.png') : require('@/assets/profiles/women_profile.png')" 
           alt="User Image" 
           class="profile-img"
         />
         <div class="profile-info">
           <h2>{{ profile.names }}</h2>
+          <p v-if="profile.personality">{{ profile.personality.tag }}</p>
           <p>{{ profile.district_name }}</p>
           <p v-if="profile.degree_name">{{ profile.degree_name }}</p>
-          <p v-else>No degree information</p>
         </div>
         <div class="profile-actions">
           <button class="accept-btn" @click="acceptProfile(profile.id)">
@@ -29,6 +29,7 @@
 <script>
   import { onMounted } from 'vue';
   import useProfile from '../composables/useProfile';
+  import useMatch from '../composables/useMatch';
   import usePhase from '@/modules/auth/composables/usePhase';
 
   export default {
@@ -36,19 +37,22 @@
     setup() {
       const { profiles, getProfiles } = useProfile();
       const { userId } = usePhase();
+      const { sendLike, sendDislike } = useMatch();
 
       onMounted(() => {
         getProfiles(userId.value);
       });
 
-      const acceptProfile = (id) => {
-        console.log(`Accepted profile with ID: ${id}`);
-        // Aquí puedes agregar la lógica para manejar la aceptación del perfil
+      const acceptProfile = async (receiverId) => {
+        const senderId = userId.value;
+        await sendLike(senderId, receiverId);
+        await getProfiles(senderId);
       };
 
-      const rejectProfile = (id) => {
-        console.log(`Rejected profile with ID: ${id}`);
-        // Aquí puedes agregar la lógica para manejar el rechazo del perfil
+      const rejectProfile = async (receiverId) => {
+        const senderId = userId.value;
+        await sendDislike(senderId, receiverId);
+        await getProfiles(senderId);
       };
 
       return {

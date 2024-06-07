@@ -1,7 +1,7 @@
 <!--eslint-disable-->
 <template>
   <div class="layout">
-    <Menu :activeOption="activeOption" :options="options" @updateOption="updateOption"/>
+    <Menu :activeOption="activeOption" :options="options" @updateOption="updateOption" logout="logout"/>
     <component :is="currentComponent"/>
   </div>
 </template>
@@ -13,10 +13,12 @@
   import Home from './Home.vue';
   import Notifications from './Notifications.vue';
   
-  import profileIcon from '@/assets/profile_icon.png';
-  import homeIcon from '@/assets/home_icon.png';
-  import notificationsIcon from '@/assets/notifications_icon.png';
-  import logoutIcon from '@/assets/logout_icon.png';
+  import profileIcon from '@/assets/icons/profile_icon.png';
+  import homeIcon from '@/assets/icons/home_icon.png';
+  import notificationsIcon from '@/assets/icons/notifications_icon.png';
+  import logoutIcon from '@/assets/icons/logout_icon.png';
+
+  import { useRouter } from 'vue-router';
 
   export default {
 	name: 'UserLayout',
@@ -27,11 +29,12 @@
     Notifications,
 	},
   setup(){
+    const router = useRouter(); 
     const options = [
       { label: 'Profiles', component: 'Profile', icon: profileIcon },
       { label: 'Home', component: 'Home', icon: homeIcon },
       { label: 'Notifications', component: 'Notifications', icon: notificationsIcon },
-      { label: 'Blog', component: 'Blog', icon: logoutIcon }
+      { label: 'Logout', component: 'Logout', icon: logoutIcon }
     ];
 
     const activeOption = ref(options[1].label);
@@ -42,11 +45,17 @@
       currentComponent.value = options.find(option => option.label === label).component;
     };
 
+    const logout = () => {
+      router.push('/login');
+      sessionStorage.removeItem('access');
+    };
+
     return {
       options,
       activeOption,
       currentComponent,
-      updateOption
+      updateOption,
+      logout
     };
   }
   };

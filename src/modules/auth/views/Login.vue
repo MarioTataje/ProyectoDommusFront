@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div class="login-box">
-      <img src="@/assets/logo.png" alt="Dommus Logo" class="logo" />
+      <img src="@/assets/logos/logo.png" alt="Dommus Logo" class="logo" />
       <h1 class="title">Login</h1>
       <form @submit.prevent="handleSubmit">
         <input type="text" placeholder="Email" v-model="user.email" required />

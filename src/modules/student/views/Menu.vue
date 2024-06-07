@@ -1,7 +1,7 @@
 <template>
   <div class="menu">
     <div class="logo-container">
-      <img src="@/assets/logo.png" alt="Logo" class="logo" />
+      <img src="@/assets/logos/logo.png" alt="Logo" class="logo" />
     </div>
     <ul>
       <li 
@@ -10,8 +10,8 @@
         :class="{ active: activeOption === option.label }"
         @click="$emit('updateOption', option.label)"
       >
-        <img :src="option.icon" :alt="option.label" />
-      </li>
+      <img v-if="option.label !== 'Logout'" :src="option.icon" :alt="option.label" />
+      <img v-else @click="logout" :src="option.icon" :alt="option.label" />      </li>
     </ul>
   </div>
 </template>
@@ -26,6 +26,10 @@ export default {
     },
     options: {
       type: Array,
+      required: true
+    },
+    logout: {
+      type: Function,
       required: true
     }
   }

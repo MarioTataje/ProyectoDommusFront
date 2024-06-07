@@ -1,7 +1,7 @@
 <template>
   <div class="phase1-container">
     <div class="phase1-header">
-      <img src="@/assets/logo.png" alt="Dommus Logo" class="logo" />
+      <img src="@/assets/logos/logo.png" alt="Dommus Logo" class="logo" />
     </div>
     <form @submit.prevent="handleSubmit" class="phase1-content">
       <div class="phase1-group">

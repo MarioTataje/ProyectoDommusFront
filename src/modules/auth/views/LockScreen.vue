@@ -2,7 +2,7 @@
     <div class="home">
       <div class="overlay"></div>
       <div class="content">
-        <img src="@/assets/logo.png" alt="Dommus Logo" class="logo" />
+        <img src="@/assets/logos/logo.png" alt="Dommus Logo" class="logo" />
         <h1 class="slogan">"Emparejamiento inteligente, para tu vida universitaria"</h1>
         <div class="buttons">
           <button @click="login" class="btn">Iniciar Sesión</button>

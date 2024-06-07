@@ -33,54 +33,54 @@ export default {
         text: '“Me gusta vivir en un ...”',
         name: 'livingSpace',
         options: [
-          { label: 'Espacio Limpio', value: 'limpio' },
-          { label: 'Espacio desarreglado', value: 'desarreglado' },
-          { label: 'Indiferente', value: 'indiferente' }
+          { label: 'Espacio Limpio', value: 'Me gusta vivir en un espacio limpio' },
+          { label: 'Espacio desarreglado', value: 'Me gusta vivir en un espacio desarreglado' },
+          { label: 'Indiferente', value: 'Me gusta vivir en un espacio indiferente' }
         ]
       },
       {
         text: '“Me voy a dormir ...”',
         name: 'sleepTime',
         options: [
-          { label: 'Antes de las 9pm', value: 'antes9' },
-          { label: 'Antes de media noche', value: 'antesMedianoche' },
-          { label: 'Después de media noche', value: 'despuesMedianoche' }
+          { label: 'Antes de las 9pm', value: 'Me voy a dormir antes de las 9am' },
+          { label: 'Antes de media noche', value: 'Me voy a dormir antes de la media noche' },
+          { label: 'Después de media noche', value: 'Me voy a dormir despues de la media noche' }
         ]
       },
       {
         text: '“Me levanto ...”',
         name: 'wakeUpTime',
         options: [
-          { label: 'Antes de las 8am', value: 'antes8' },
-          { label: '8-10am', value: '8-10am' },
-          { label: '10am - 12pm', value: '10-12pm' },
-          { label: 'Después de las 12pm', value: 'despues12' }
+          { label: 'Antes de las 8am', value: 'Me levanto antes de las 8am' },
+          { label: '8-10am', value: 'Me levanto entre las 8-10am' },
+          { label: '10am - 12pm', value: 'Me levanto entre las 10am-12pm' },
+          { label: 'Después de las 12pm', value: 'Me levanto despues de las 12pm' }
         ]
       },
       {
         text: '“Me gusta que mi cuarto sea ...”',
         name: 'roomPreference',
         options: [
-          { label: 'Tranquilo para estudiar', value: 'tranquilo' },
-          { label: 'Un espacio para estar con mis amigos', value: 'social' },
-          { label: 'Una combinación de tranquilo y social', value: 'combinacion' }
+          { label: 'Tranquilo para estudiar', value: 'Me gusta que mi cuarto sea tranquilo para estudiar' },
+          { label: 'Un espacio para estar con mis amigos', value: 'Me gusta que mi cuarto sea un espacio para estar con mis amigos' },
+          { label: 'Una combinación de tranquilo y social', value: 'Me gusta que mi cuarto sea una combinación de tranquilo y social' }
         ]
       },
       {
         text: '“¿Eres fumador? & ¿Estas cómodo con un roommate fumador?”',
         name: 'smoker',
         options: [
-          { label: 'Yes', value: 'yes' },
-          { label: 'No', value: 'no' }
+          { label: 'Yes', value: 'Soy fumador' },
+          { label: 'No', value: 'No soy fumador' }
         ]
       },
       {
         text: '“Espero estudiar en...?”',
         name: 'studyPreference',
         options: [
-          { label: 'Mi cuarto', value: 'miCuarto' },
-          { label: 'Fuera de mi cuarto', value: 'fueraCuarto' },
-          { label: 'Ambos, fuera o dentro de mi cuarto', value: 'ambos' }
+          { label: 'Mi cuarto', value: 'Espero estudiar en mi cuarto' },
+          { label: 'Fuera de mi cuarto', value: 'Espero estudiar fuera de mi cuarto' },
+          { label: 'Ambos, fuera o dentro de mi cuarto', value: 'Espero estudiar en mi cuarto o fuera de mi cuarto' }
         ]
       }
     ]);

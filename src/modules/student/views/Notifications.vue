@@ -63,9 +63,10 @@
 
 .title {
   color: #7b4fe3;
-  font-size: 1.5em;
+  font-size: 2rem;
+  margin-top: 20px;
   margin-left: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .tabs {
@@ -73,8 +74,9 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
-  margin-bottom: 20px;
-  width: 100%;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  width: 98%;
 }
 
 .tabs button {

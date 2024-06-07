@@ -2,7 +2,7 @@
   <div class="phase2-container">
     <h2 class="centered-title">Editar Perfil</h2>
     <div class="profile-header">
-      <img src="@/assets/logo.png" alt="Profile Logo" class="profile-logo" />
+      <img src="@/assets/logos/logo.png" alt="Profile Logo" class="profile-logo" />
       <div class="profile-info">
         <p><strong>{{ user.names }} {{ user.lastnames }}</strong></p>
         <p>{{ userAge }}</p>

@@ -41,11 +41,36 @@ export const getReceivedLikes = async({ commit }, userId ) => {
 export const getUserProfile = async({ commit }, userId ) => {
     commit('setLoading', true);
     try {
-        console.log('AKI');
         const response = await UserService.getUser(userId);
         commit('setProfile', response.data);
     } catch (error) {
         commit('setError', error.message || 'Error al obtener el perfil');
+    } finally {
+        commit('setLoading', false);
+    }
+}
+
+export const sendLike = async({ commit }, data ) => {
+    commit('setLoading', true);
+    try {
+        const { senderId, receivedId } = data;
+        const response = await MatchService.sendLike(senderId, receivedId);
+        console.log(response);
+    } catch (error) {
+        commit('setError', error.message || 'Error al enviar el dislike');
+    } finally {
+        commit('setLoading', false);
+    }
+}
+
+export const sendDislike = async({ commit }, data ) => {
+    commit('setLoading', true);
+    try {
+        const { senderId, receivedId } = data;
+        const response = await MatchService.sendDislike(senderId, receivedId);
+        console.log(response);
+    } catch (error) {
+        commit('setError', error.message || 'Error al enviar el dislike');
     } finally {
         commit('setLoading', false);
     }

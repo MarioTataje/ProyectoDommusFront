@@ -31,7 +31,7 @@
           </select>
         </div>
         <div class="icon-container">
-          <img src="@/assets/ubigeo.png" alt="Mapa" />
+          <img src="@/assets/logos/ubigeo.png" alt="Mapa" />
         </div>
         <div class="button-container">
           <button type="submit">Continuar</button>
