@@ -84,7 +84,8 @@ export default {
 
 <style scoped>
 .phase2-container {
-  background-color: #fff;
+  background: url('@/assets/backgrounds/global-background.png') no-repeat center center;
+  background-size: cover;  
   flex-direction: column;
   justify-content: center;
   align-items: center;

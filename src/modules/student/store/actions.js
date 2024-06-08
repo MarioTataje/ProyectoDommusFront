@@ -1,6 +1,7 @@
 import UserService from '@/api/userService';
 import IdealProfileService from '@/api/idealProfileService';
 import MatchService from '@/api/matchService';
+import ContactService from '@/api/contactService';
 
 export const getProfiles = async({ commit }, userId ) => {
     commit('setLoading', true);
@@ -55,7 +56,7 @@ export const sendLike = async({ commit }, data ) => {
     try {
         const { senderId, receivedId } = data;
         const response = await MatchService.sendLike(senderId, receivedId);
-        console.log(response);
+        return response.data;
     } catch (error) {
         commit('setError', error.message || 'Error al enviar el dislike');
     } finally {
@@ -71,6 +72,18 @@ export const sendDislike = async({ commit }, data ) => {
         console.log(response);
     } catch (error) {
         commit('setError', error.message || 'Error al enviar el dislike');
+    } finally {
+        commit('setLoading', false);
+    }
+}
+
+export const getContacts = async({ commit }, userId ) => {
+    commit('setLoading', true);
+    try {
+        const response = await ContactService.getContacts(userId);
+        commit('setContacts', response.data);
+    } catch (error) {
+        commit('setError', error.message || 'Error al obtener los matches');
     } finally {
         commit('setLoading', false);
     }

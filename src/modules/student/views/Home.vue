@@ -1,6 +1,7 @@
 <template>
   <div class="home-container">
     <h1 class="home-title">Roommies</h1>
+    <Match :otherId="otherId" v-if="showModal"></Match>
     <div class="profiles">
       <div v-for="profile in profiles" :key="profile.id" class="profile-card">
         <img :src="profile.genre === 'M' ? require('@/assets/profiles/men_profile.png') : require('@/assets/profiles/women_profile.png')" 
@@ -27,17 +28,21 @@
 </template>
 
 <script>
-  import { onMounted } from 'vue';
+  import { onMounted, ref } from 'vue';
+  import Match from './modals/Match.vue'; 
   import useProfile from '../composables/useProfile';
   import useMatch from '../composables/useMatch';
   import usePhase from '@/modules/auth/composables/usePhase';
 
   export default {
     name: 'Home',
+    components: { Match },
     setup() {
       const { profiles, getProfiles } = useProfile();
       const { userId } = usePhase();
       const { sendLike, sendDislike } = useMatch();
+      const otherId = ref(null);
+      const showModal = ref(false);
 
       onMounted(() => {
         getProfiles(userId.value);
@@ -45,7 +50,12 @@
 
       const acceptProfile = async (receiverId) => {
         const senderId = userId.value;
-        await sendLike(senderId, receiverId);
+        const like = await sendLike(senderId, receiverId);
+        if (like.flag_match){
+          const id = like.sender.id !== senderId ? like.sender.id : like.receiver.id;
+          otherId.value = id;
+          showModal.value = true;
+        }
         await getProfiles(senderId);
       };
 
@@ -58,7 +68,9 @@
       return {
         profiles,
         acceptProfile,
-        rejectProfile
+        rejectProfile,
+        showModal,
+        otherId
       };
     }
   };

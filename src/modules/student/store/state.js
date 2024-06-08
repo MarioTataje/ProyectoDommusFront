@@ -4,6 +4,7 @@ export default () => ({
     matches: [],
     receivedLikes: [],
     profile: null,
+    contacts: [],
     loading: false,
     error: null,
 })

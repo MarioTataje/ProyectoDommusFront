@@ -56,18 +56,16 @@ export default {
   align-items: center;
   width: 100%;
   height: 100vh;
-  background: 
-    url('@/assets/background.png') no-repeat center center, 
-    url('@/assets/background2.png') no-repeat center center;
-  background-size: cover, cover;
+  background: url('@/assets/backgrounds/global-background.png') no-repeat center center;
+  background-size: cover;
   position: relative;
   overflow: hidden;
 }
 
 .login-box {
-  background-color: #BB9FFF;
   padding: 40px;
   border-radius: 10px;
+  border: 2px solid white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
   width: 100%;

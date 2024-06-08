@@ -34,11 +34,8 @@
     align-items: center;
     width: 100%;
     height: 100vh;
-    background: 
-      url('@/assets/background.png') no-repeat center center,
-      url('@/assets/background2.png') no-repeat center center;
-  
-    background-size: cover, cover;
+    background: url('@/assets/backgrounds/register-background.png') no-repeat center center;
+    background-size: cover;
     overflow: hidden;
   }
 

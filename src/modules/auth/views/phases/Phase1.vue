@@ -109,7 +109,8 @@ export default {
 
 <style scoped>
 .phase1-container {
-  background-color: #BB9FFF;
+  background: url('@/assets/backgrounds/global-background.png') no-repeat center center;
+  background-size: cover;  
   display: flex;
   flex-direction: column;
   justify-content: center;

@@ -5,7 +5,8 @@ const useMatch = () => {
   const store = useStore()
 
   const sendLike = async (senderId, receivedId) => {
-    await store.dispatch('student/sendLike', { senderId, receivedId });
+    const response = await store.dispatch('student/sendLike', { senderId, receivedId });
+    return response;
   };
 
   const sendDislike = async (senderId, receivedId) => {

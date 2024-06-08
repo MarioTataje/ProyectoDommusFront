@@ -14,6 +14,10 @@ export const setProfile = ( state, profile ) => {
     state.profile = profile;
 }
 
+export const setContacts = ( state, contacts ) => {
+    state.contacts = contacts;
+}
+
 export const setLoading = ( state, loading ) => {
     state.loading = loading;
 }

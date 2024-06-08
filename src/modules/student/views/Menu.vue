@@ -42,6 +42,8 @@ export default {
   padding: 30px;
   width: 400px;
   display: flex;
+  background: url('@/assets/backgrounds/menu-background.png') no-repeat center center;
+  background-size: cover;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;

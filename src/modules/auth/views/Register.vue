@@ -57,10 +57,8 @@ export default {
   font-family: Arial, sans-serif;
   margin: 0;
   background-color: #f4f4f9;
-  background: 
-    url('@/assets/background.png') no-repeat center center, 
-    url('@/assets/background2.png') no-repeat center center;
-  background-size: cover, cover;
+  background: url('@/assets/backgrounds/register-background.png') no-repeat center center;
+  background-size: cover;
   background-position: center;
 }
 </style>

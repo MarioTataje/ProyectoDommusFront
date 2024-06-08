@@ -12,11 +12,17 @@ const useProfile = () => {
     await store.dispatch('student/getProfiles', userId);
   };
 
+  const getContacts = async (userId) => {
+    await store.dispatch('student/getContacts', userId)
+  };
+
   return {
     getUserProfile,
     getProfiles,
+    getContacts,
     profile: computed(() => store.getters['student/profile']),
     profiles: computed(() => store.getters['student/profiles']),
+    contacts: computed(() => store.getters['student/contacts']),
   }
 }
 
