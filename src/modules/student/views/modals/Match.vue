@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, getCurrentInstance } from 'vue';
 import useProfile from '../../composables/useProfile';
 
 export default {
@@ -35,6 +35,7 @@ export default {
   },
   setup(props) {
     const { contacts, getContacts } = useProfile();
+    const { ctx } = getCurrentInstance();
     const isOpen = ref(false);
 
     const openModal = () => {
@@ -43,6 +44,7 @@ export default {
 
     const closeModal = () => {
       isOpen.value = false;
+      ctx.$emit('close');
     };
 
     const confirmAccept = () => {

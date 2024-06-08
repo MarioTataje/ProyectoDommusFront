@@ -1,18 +1,19 @@
 <template>
   <div class="home-container">
     <h1 class="home-title">Roommies</h1>
-    <Match :otherId="otherId" v-if="showModal"></Match>
+    <Match :otherId="otherId" v-if="showModal" @close="closeModal"></Match>
+    <OtherProfile :profileId="profileId" v-if="showProfile" @close="closeProfile"></OtherProfile>
     <div class="profiles">
-      <div v-for="profile in profiles" :key="profile.id" class="profile-card">
+      <div v-for="profile in profiles" :key="profile.id" class="profile-card" @click="openProfile(profile.id)">
         <img :src="profile.genre === 'M' ? require('@/assets/profiles/men_profile.png') : require('@/assets/profiles/women_profile.png')" 
           alt="User Image" 
           class="profile-img"
         />
         <div class="profile-info">
           <h2>{{ profile.names }}</h2>
-          <p v-if="profile.personality">{{ profile.personality.tag }}</p>
-          <p>{{ profile.district_name }}</p>
-          <p v-if="profile.degree_name">{{ profile.degree_name }}</p>
+          <p class="profile-tag1">{{ profile.personality.tag  }}</p>
+          <p class="profile-tag2">{{ profile.district_name }}</p>
+          <p class="profile-tag3">{{ profile.degree_name }}</p>
         </div>
         <div class="profile-actions">
           <button class="accept-btn" @click="acceptProfile(profile.id)">
@@ -29,6 +30,7 @@
 
 <script>
   import { onMounted, ref } from 'vue';
+  import OtherProfile from './modals/OtherProfile.vue'; 
   import Match from './modals/Match.vue'; 
   import useProfile from '../composables/useProfile';
   import useMatch from '../composables/useMatch';
@@ -36,17 +38,35 @@
 
   export default {
     name: 'Home',
-    components: { Match },
+    components: { 
+      Match, 
+      OtherProfile 
+    },
     setup() {
       const { profiles, getProfiles } = useProfile();
       const { userId } = usePhase();
       const { sendLike, sendDislike } = useMatch();
+      const profileId = ref(null);
       const otherId = ref(null);
+      const showProfile = ref(false);
       const showModal = ref(false);
 
       onMounted(() => {
         getProfiles(userId.value);
       });
+
+      const openProfile = (id) => {
+        profileId.value = id;
+        showProfile.value = true;
+      };
+
+      const closeProfile = () => {
+        showProfile.value = false;
+      };
+
+      const closeModal = () => {
+        showModal.value = false;
+      };
 
       const acceptProfile = async (receiverId) => {
         const senderId = userId.value;
@@ -69,7 +89,12 @@
         profiles,
         acceptProfile,
         rejectProfile,
+        openProfile,
+        closeProfile,
+        closeModal,
+        showProfile,
         showModal,
+        profileId,
         otherId
       };
     }
@@ -101,6 +126,11 @@ h1 {
   margin-bottom: 20px;
 }
 
+h2 {
+  color: #8C52FF;
+  font-weight: bold;
+}
+
 .profiles {
   display: flex;
   flex-direction: row;
@@ -116,11 +146,12 @@ h1 {
 }
 
 .profile-card {
-  background-color: #f0f0f0;
+  background-color: transparent;
   border-radius: 15px;
   padding: 20px;
   width: 250px;
   text-align: center;
+  border: 1px solid #8C52FF;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
   flex: 0 0 auto;
@@ -134,12 +165,19 @@ h1 {
   margin-bottom: 15px;
 }
 
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .profile-info h2 {
   font-size: 1.5em;
   margin-bottom: 10px;
 }
 
 .profile-info p {
+  color: white;
   font-size: 1em;
   margin: 5px 0;
 }
@@ -148,6 +186,27 @@ h1 {
   display: flex;
   justify-content: space-around;
   margin-top: 15px;
+}
+
+.profile-tag1,
+.profile-tag2,
+.profile-tag3 {
+  color: white;
+  width: 60%;
+  border-radius: 12px;
+  padding: 5px 10px;
+}
+
+.profile-tag1 {
+  background-color: #EDCE80;
+}
+
+.profile-tag2 {
+  background-color: #9AC5EC;
+}
+
+.profile-tag3 {
+  background-color: #FB7DEE;
 }
 
 .accept-btn,

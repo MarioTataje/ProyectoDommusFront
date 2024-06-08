@@ -1,7 +1,7 @@
 <!--eslint-disable-->
 <template>
   <div class="layout">
-    <Menu :activeOption="activeOption" :options="options" @updateOption="updateOption" logout="logout"/>
+    <Menu :activeOption="activeOption" :options="options" @updateOption="updateOption"/>
     <component :is="currentComponent"/>
   </div>
 </template>
@@ -18,8 +18,6 @@
   import notificationsIcon from '@/assets/icons/notifications_icon.png';
   import logoutIcon from '@/assets/icons/logout_icon.png';
 
-  import { useRouter } from 'vue-router';
-
   export default {
 	name: 'UserLayout',
 	components: {
@@ -29,7 +27,6 @@
     Notifications,
 	},
   setup(){
-    const router = useRouter(); 
     const options = [
       { label: 'Profiles', component: 'Profile', icon: profileIcon },
       { label: 'Home', component: 'Home', icon: homeIcon },
@@ -45,17 +42,11 @@
       currentComponent.value = options.find(option => option.label === label).component;
     };
 
-    const logout = () => {
-      router.push('/login');
-      sessionStorage.removeItem('access');
-    };
-
     return {
       options,
       activeOption,
       currentComponent,
-      updateOption,
-      logout
+      updateOption
     };
   }
   };

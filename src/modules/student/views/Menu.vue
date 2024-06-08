@@ -8,15 +8,17 @@
         v-for="option in options" 
         :key="option.label" 
         :class="{ active: activeOption === option.label }"
-        @click="$emit('updateOption', option.label)"
-      >
-      <img v-if="option.label !== 'Logout'" :src="option.icon" :alt="option.label" />
-      <img v-else @click="logout" :src="option.icon" :alt="option.label" />      </li>
+        @click="handleOptionClick(option.label)">
+        <img :src="option.icon" :alt="option.label" />      
+      </li>
     </ul>
   </div>
 </template>
 
 <script>
+import { getCurrentInstance } from 'vue';
+import { useRouter } from 'vue-router';
+
 export default {
   name: 'Menu',
   props: {
@@ -27,11 +29,28 @@ export default {
     options: {
       type: Array,
       required: true
-    },
-    logout: {
-      type: Function,
-      required: true
     }
+  },
+  setup() {
+    const { ctx } = getCurrentInstance();
+    const router = useRouter();
+
+    const logout = () => {
+      router.push('/login');
+      sessionStorage.removeItem('access');
+    };
+
+    const handleOptionClick = (label) => {
+      if (label === 'Logout') {
+        logout();
+      } else {
+        ctx.$emit('updateOption', label);
+      }
+    };
+
+    return {
+      handleOptionClick
+    };
   }
 };
 </script>
