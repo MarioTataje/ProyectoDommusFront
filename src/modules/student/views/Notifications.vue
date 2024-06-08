@@ -12,8 +12,8 @@
         </div>
       </div>
       <div v-if="activeTab === 'matches'">
-        <div v-for="match in matches" :key="match.id" class="item">
-          <span>{{ match.receiver.names }} {{ match.receiver.lastnames}} sigue pendiente!</span>
+        <div v-for="match in preparedMatches" :key="match.id" class="item">
+          <span>{{ match.names }} {{ match.lastnames}} sigue pendiente!</span>
         </div>
       </div>
     </div>
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, computed } from 'vue';
   import useMatch from '../composables/useMatch';
   import usePhase from '@/modules/auth/composables/usePhase';
 
@@ -38,10 +38,29 @@
         getReceivedLikes(id);
       });
 
+      const preparedMatches = computed(() => {
+        return matches.value.map(match => {
+          if (match.receiver.id === userId.value) {
+            return {
+              ...match,
+              names: match.sender.names,
+              lastnames: match.sender.lastnames
+            };
+          } else {
+            return {
+              ...match,
+              names: match.receiver.names,
+              lastnames: match.receiver.lastnames
+            };
+          }
+        });
+      });
+
       return {
         matches,
         receivedLikes,
-        activeTab
+        activeTab,
+        preparedMatches
       };
     }
   };
@@ -102,7 +121,7 @@
   padding-left: 20px;
   padding-right: 20px;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
 }
 
 .item {
@@ -112,10 +131,7 @@
   padding: 10px 20px;
   background-color: #e0e0e0;
   border-radius: 10px;
+  margin-bottom: 10px;
 }
 
-.item .arrow {
-  font-size: 1.5em;
-  color: #000;
-}
 </style>

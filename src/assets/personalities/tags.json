@@ -1,0 +1,102 @@
+{
+    "INTJ": {
+        "icon": "arquitecto",
+        "title": "Arquitecto",
+        "subtitle": "Eres un INTJ: estratégico, imaginativo y lógico.",
+        "description": "Te gusta planificar y organizar, siempre con una visión a largo plazo. Eres ingenioso y disfrutas encontrando soluciones innovadoras a problemas complejos. Trabajas mejor de manera independiente y eres perfeccionista en todo lo que haces. Sin embargo, tu fuerte enfoque en la lógica puede hacerte parecer distante o insensible a las emociones de los demás. A veces, puedes tener dificultades para expresar tus propios sentimientos y conectar emocionalmente con los demás."
+    },
+    "INTP": {
+        "icon": "logico",
+        "title": "Lógico",
+        "subtitle": "Eres un INTP: innovador, intelectualmente curioso y orientado al análisis.",
+        "description": "Te encanta comprender cómo funcionan las cosas y resolver enigmas complejos. Prefieres la flexibilidad y un enfoque menos estructurado, permitiendo que tu creatividad y pensamiento analítico florezcan. Aunque tu naturaleza introspectiva y reflexiva te hace un pensador profundo, a veces puedes parecer desorganizado o desinteresado en las tareas mundanas. Tu tendencia a perderte en tus pensamientos puede llevarte a descuidar tus responsabilidades cotidianas."
+    },
+    "ENTJ": {
+        "icon": "comandante",
+        "title": "Comandante",
+        "subtitle": "Eres un ENTJ: un líder nato, decidido y eficiente.",
+        "description": "Te encanta tomar decisiones y gestionar proyectos, siempre buscando la máxima productividad. Eres directo y disfrutas organizando, planificando y guiando a otros hacia el éxito. Sin embargo, tu fuerte personalidad y enfoque en los resultados pueden hacerte parecer autoritario o insensible a las necesidades emocionales de los demás. A veces, puedes tener dificultades para aceptar la falta de eficiencia o la incompetencia en otros."
+    },
+    "ENTP": {
+        "icon": "innovador",
+        "title": "Innovador",
+        "subtitle": "Eres un ENTP: ingenioso, sociable y lleno de energía.",
+        "description": "Disfrutas debatir ideas y desafiar el status quo. Siempre estás explorando nuevas posibilidades y conceptos, y prefieres un entorno flexible que permita la creatividad y la innovación. Aunque tu entusiasmo y mente rápida te hacen excelente en generar ideas, a veces puedes parecer argumentativo o desorganizado. Tu tendencia a cambiar de interés rápidamente puede dificultar la finalización de proyectos a largo plazo."
+    },
+
+    "INFJ": {
+        "icon": "abogado",
+        "title": "Abogado",
+        "subtitle": "Eres un INFJ: idealista, empático y reservado.",
+        "description": "Tienes una fuerte intuición y una profunda comprensión de los demás. Estás motivado por tus valores y sueñas con hacer del mundo un lugar mejor. Disfrutas de ayudar a las personas y buscar la armonía en tus relaciones. Sin embargo, tu naturaleza idealista puede hacerte sentir frustrado cuando la realidad no se ajusta a tus expectativas. A veces, puedes ser demasiado reservado y tener dificultades para compartir tus propios sentimientos y necesidades."
+    },
+    "INFP": {
+        "icon": "mediador",
+        "title": "Mediador",
+        "subtitle": "Eres un INFP: creativo, sensible y fiel a tus valores.",
+        "description": "Profundamente idealista, buscas la armonía y la autenticidad en tu vida. Disfrutas explorando tu creatividad y ayudando a otros, siempre con un enfoque en hacer lo correcto según tus principios. Aunque tu empatía y sensibilidad te hacen un amigo leal y compasivo, a veces puedes ser demasiado introspectivo y propenso a idealizar a los demás. Tu aversión al conflicto puede llevarte a evitar situaciones difíciles en lugar de enfrentarlas."
+    },
+    "ENFJ": {
+        "icon": "protagonista",
+        "title": "Protagonista",
+        "subtitle": "Eres un ENFJ: carismático, empático y un verdadero motivador.",
+        "description": "Como líder natural, inspiras y guías a otros con tus excepcionales habilidades interpersonales. Te esfuerzas por mejorar la vida de quienes te rodean y disfrutas conectando con la gente a un nivel profundo. Sin embargo, tu deseo de ayudar a los demás puede hacerte olvidar tus propias necesidades. A veces, puedes ser demasiado confiado y esperar que todos compartan tu nivel de compromiso y dedicación."
+    },
+    "ENFP": {
+        "icon": "activista",
+        "title": "Activista",
+        "subtitle": "Eres un ENFP: entusiasta, creativo y sociable.",
+        "description": "Te encanta explorar nuevas ideas y experiencias, y motivar a otros con tu energía y pasión. Valoras la autenticidad y la individualidad, tanto en ti mismo como en los demás. Aunque tu entusiasmo y creatividad te hacen una persona inspiradora, a veces puedes parecer desorganizado o poco práctico. Tu tendencia a cambiar de enfoque rápidamente puede dificultar la finalización de proyectos y compromisos a largo plazo."
+    },
+
+    "ISTJ": {
+        "icon": "logista",
+        "title": "Logista",
+        "subtitle": "Eres un ISTJ: práctico, confiable y meticuloso.",
+        "description": "Prefieres la estructura y el orden, destacándote en cumplir tus deberes y responsabilidades con precisión. Valoras la tradición y la estabilidad, y te enorgulleces de tu capacidad para mantener el control y la organización. Sin embargo, tu fuerte apego a las reglas y procedimientos puede hacerte inflexible. A veces, puedes tener dificultades para adaptarte a situaciones nuevas o inesperadas y para entender las perspectivas más emocionales o abstractas de los demás."
+    },
+    "ISFJ": {
+        "icon": "defensor",
+        "title": "Defensor",
+        "subtitle": "Eres un ISFJ: leal, cuidadoso y atento a los detalles.",
+        "description": "Dedicado a tus responsabilidades, disfrutas ayudar a los demás y crear un entorno armonioso. Buscas estabilidad en tus relaciones y valoras profundamente la cooperación y el cuidado mutuo. Aunque tu dedicación y fiabilidad te hacen un amigo y colega valioso, a veces puedes ser demasiado modesto y evitar buscar reconocimiento por tus esfuerzos. Tu aversión al conflicto puede llevarte a evitar enfrentar problemas directamente."
+    },
+    "ESTJ": {
+        "icon": "ejecutivo",
+        "title": "Ejecutivo",
+        "subtitle": "Eres un ESTJ: un organizador eficiente, directo y pragmático.",
+        "description": "Te encanta liderar y administrar proyectos, asegurándote de que se sigan las reglas y se cumplan los objetivos. Valoras la tradición y el orden, y trabajas duro para mantener la estabilidad en todos los aspectos de tu vida. Sin embargo, tu fuerte personalidad y enfoque en la eficiencia pueden hacerte parecer autoritario o inflexible. A veces, puedes tener dificultades para adaptarte a situaciones imprevistas y para ser sensible a las necesidades emocionales de los demás."
+    },
+    "ESFJ": {
+        "icon": "consul",
+        "title": "Cónsul",
+        "subtitle": "Eres un ESFJ: sociable, organizado y siempre atento a las necesidades de los demás.",
+        "description": "Disfrutas ayudar y cuidar de las personas a tu alrededor, y valoras la armonía y la cooperación en todas tus relaciones. Tu calidez y generosidad hacen que los demás se sientan apreciados y apoyados. Sin embargo, tu deseo de agradar a todos puede hacerte depender demasiado de la aprobación de los demás. A veces, puedes ser demasiado crítico con aquellos que no comparten tus valores o no cumplen con tus expectativas."
+    },
+
+    "ISTP": {
+        "icon": "virtuoso",
+        "title": "Virtuoso",
+        "subtitle": "Eres un ISTP: práctico, independiente y espontáneo.",
+        "description": "Te encanta resolver problemas prácticos y trabajar con tus manos. Prefieres la flexibilidad y la libertad, y disfrutas enfrentando desafíos y aventuras que te permiten usar tus habilidades técnicas y tu creatividad. Sin embargo, tu naturaleza reservada puede hacer que otros te vean como distante o desinteresado en las relaciones personales. A veces, puedes ser impulsivo y tomar decisiones arriesgadas sin considerar todas las consecuencias."
+    },
+    "ISFP": {
+        "icon": "aventurero",
+        "title": "Aventurero",
+        "subtitle": "Eres un ISFP: artístico, sensible y reservado.",
+        "description": "Prefieres la espontaneidad y disfrutas de experiencias sensoriales. Valoras la autenticidad y la exploración personal, y te sientes más vivo cuando puedes expresarte de manera creativa y libre. Aunque tu sensibilidad y creatividad te hacen un individuo único y inspirador, a veces puedes ser demasiado reservado y evitar compartir tus pensamientos y sentimientos más profundos. Tu aversión al conflicto puede llevarte a evitar situaciones difíciles en lugar de enfrentarlas."
+    },
+    "ESTP": {
+        "icon": "emprendedor",
+        "title": "Emprendedor",
+        "subtitle": "Eres un ESTP: enérgico, pragmático y audaz.",
+        "description": "Te encanta vivir en el momento y enfrentar desafíos. Eres excelente para tomar decisiones rápidas y resolver problemas prácticos, y disfrutas de la emoción de nuevas experiencias y oportunidades. Sin embargo, tu impulsividad puede llevarte a tomar riesgos innecesarios y a veces ignorar las consecuencias a largo plazo. A veces, puedes parecer insensible o descuidado con los sentimientos de los demás debido a tu enfoque en la acción y los resultados inmediatos."
+    },
+    "ESFP": {
+        "icon": "animador",
+        "title": "Animador",
+        "subtitle": "Eres un ESFP: alegre, sociable y espontáneo.",
+        "description": "Disfrutas ser el centro de atención y crear experiencias divertidas y memorables. Prefieres la flexibilidad y valoras la autenticidad y las relaciones personales, haciendo que los demás se sientan felices y entretenidos a tu alrededor. Aunque tu entusiasmo y energía te hacen una persona encantadora, a veces puedes ser superficial y descuidar la planificación a largo plazo. Tu deseo de evitar el conflicto y buscar el placer inmediato puede llevarte a evitar responsabilidades y problemas serios."
+    }
+}
+

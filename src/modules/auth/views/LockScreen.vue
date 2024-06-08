@@ -63,7 +63,7 @@
   }
   
   .btn {
-    background-color: #7f3fbf; 
+    background-color: #8F6EE0; 
     color: white;
     border: none;
     padding: 10px 20px;
@@ -76,7 +76,7 @@
   }
   
   .btn:hover {
-    background-color: #6a32a5;
+    background-color: #8F6EE0;
   }
   </style>
   

@@ -3,63 +3,97 @@
     <h2 class="title">Más sobre ti</h2>
     <hr class="line">
     <div v-for="(question, index) in questions" :key="index" class="question">
-      <p class="question-text">{{ question.text }}</p>
       <div class="response">
         <span class="percentage">{{ answers[index] }}%</span>
         <div class="progress-container">
-          <span class="progress-text">Introvertido</span>
-          <input type="range" min="0" max="100"
-            v-model="answers[index]" class="slider" />
-          <span class="progress-text">Extrovertido</span>
+          <span class="progress-text">{{ question.min }}</span>
+          <input type="range" min="0" max="100" v-model="answers[index]" class="slider" />
+          <span class="progress-text">{{ question.max }}</span>
         </div>
       </div>
     </div>
     <div class="button-container">
       <button @click="handleSubmit">Continuar</button>
     </div>
+    <InformationTest v-if="showModal"></InformationTest>
+    <Personality :tag="tag" v-if="showResult" @close="closeResult"></Personality>
   </div>
 </template>
 
 <script>
 import { ref, getCurrentInstance } from 'vue';
 import usePhase from '../../composables/usePhase';
+import InformationTest from './../modals/InformationTest.vue'; 
+import Personality from './../modals/Personality.vue'; 
 
 export default {
   name: 'Phase3',
+  components: { InformationTest, Personality },
   setup() {
     const { updateUser } = usePhase();
     const questions = [
-      { text: 'Mente' },
-      { text: 'Energía' },
-      { text: 'Naturaleza' },
-      { text: 'Tácticas' }
+      { min: 'Introvertido', max: 'Extrovertido' },
+      { min: 'Intuición', max: 'Sensación' },
+      { min: 'Pensamiento', max: 'Sentimiento' },
+      { min: 'Juicio', max: 'Percepción' }
     ];
     const answers = ref([0, 0, 0, 0]);
     const user = ref({});
     const { ctx } = getCurrentInstance();
+    const showModal = ref(true);
+    const showResult = ref(false);
+    const tag = ref(null);
 
     const handleSubmit = () => {
       const convertedAnswers = answers.value.map(value => parseFloat((parseInt(value) * 5 / 100).toFixed(1)));
-
+      const calculatedTag = calculateTag(answers);
       user.value.self_personality = {
-        tag: 'positivo',
+        tag: calculatedTag,
         mind: convertedAnswers[0],
         energy: convertedAnswers[1],
         nature: convertedAnswers[2],
         tactics: convertedAnswers[3],
         identity: 0.1
       };
-      console.log('AKI');
       updateUser(user.value);
-      ctx.$emit('goToNextPhase');
+      tag.value = calculatedTag;
+      showResult.value = true;
     };
 
+    const calculateTag = (answers) => {
+      const aspects = ['I', 'N', 'T', 'J'];
+      const aspect = aspects.map((aspect, index) => calculateAspect(answers[index], aspect)).join('');
+      return aspect;
+    };
+
+    const calculateAspect = (percentage, aspect) => {
+      return percentage <= 50 ? aspect : oppositeAspect(aspect);
+    };
+
+    const oppositeAspect = (aspect) => {
+      return aspect === 'I' ? 'E' :
+        aspect === 'N' ? 'S' :
+        aspect === 'T' ? 'F' :
+        aspect === 'J' ? 'P' :
+        null;
+    };
+
+    const closeResult = () => {
+      showModal.value = false;
+      showResult.value = false;
+      ctx.$emit('goToNextPhase');
+    };
 
     return {
       questions, 
       answers,
       user,
-      handleSubmit    
+      handleSubmit,
+
+      showModal,
+      showResult,
+      tag,
+      closeResult
     };
   }
 };
@@ -120,6 +154,7 @@ export default {
   margin-right: 10px;
   color: #8F6EE0;
   font-weight: bold;
+  width: 80px;
 }
 
 .percentage {

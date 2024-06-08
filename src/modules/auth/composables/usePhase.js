@@ -13,7 +13,8 @@ const usePhase = () => {
   };
   
   const loginUser = async(data) => {
-    await store.dispatch('auth/loginUser', data);
+    const response = await store.dispatch('auth/loginUser', data);
+    return response;
   };
 
   return {

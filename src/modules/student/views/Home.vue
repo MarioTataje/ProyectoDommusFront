@@ -83,11 +83,10 @@
   justify-content: center;
   align-items: center;
   width: calc(100vw - 400px);
-  height: 100vh;
+  height: 100%;
   padding: 20px;
   border-radius: 15px;
   box-sizing: border-box;
-  overflow: hidden;
 }
 
 .home-title {

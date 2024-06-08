@@ -100,6 +100,7 @@ export const loginUser = async ({ commit }, user ) => {
                 commit('setUserId', user_id);
             }
         }
+        return data;
     } catch (error) {
         commit('setError', error.message || 'Error al al crear el usuario');
     } finally {

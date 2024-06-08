@@ -15,6 +15,7 @@
       </form>
       <p class="register-link">¿Aún no tienes una cuenta? <router-link to="/register">Regístrate</router-link></p>
     </div>
+    <NoLogin v-if="showModal" @close="closeModal"></NoLogin>
   </div>
 </template>
 
@@ -22,12 +23,15 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import usePhase from '../composables/usePhase';
+import NoLogin from './modals/NoLogin.vue';
 
 export default {
   name: 'Login',
+  components: { NoLogin },
   setup() {
     const { loginUser } = usePhase();
     const router = useRouter();
+    const showModal = ref(false);
 
     const user = ref({
       email: '',
@@ -36,14 +40,24 @@ export default {
     const showPassword = false;
 
     const handleSubmit = async () => {
-      await loginUser(user.value);
-      router.push({ name: 'home' });
+      const authenticated = await loginUser(user.value);
+      if (authenticated) {
+        router.push({ name: 'home' });
+      } else {
+        showModal.value = true;
+      }
+    };
+
+    const closeModal = () => {
+      showModal.value = false;
     };
 
     return {
       user,
       showPassword,
-      handleSubmit
+      handleSubmit,
+      showModal,
+      closeModal
     };
   }
 };
@@ -81,7 +95,7 @@ export default {
 .title {
   font-size: 24px;
   margin-bottom: 20px;
-  color: #4b4b4b;
+  color: white;
 }
 
 input {
@@ -114,7 +128,7 @@ input {
   padding: 10px;
   border: none;
   border-radius: 5px;
-  background-color: #7f3fbf;
+  background-color: #8C52FF;
   color: white;
   font-size: 16px;
   cursor: pointer;
@@ -122,7 +136,7 @@ input {
 }
 
 .btn:hover {
-  background-color: #6a32a5;
+  background-color: #8C52FF;
 }
 
 .register-link {
