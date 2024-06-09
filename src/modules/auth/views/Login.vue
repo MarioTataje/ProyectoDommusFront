@@ -4,7 +4,8 @@
       <img src="@/assets/logos/logo.png" alt="Dommus Logo" class="logo" />
       <h1 class="title">Login</h1>
       <form @submit.prevent="handleSubmit">
-        <input type="text" placeholder="Email" v-model="user.email" required />
+        <input type="text" placeholder="Email" v-model="user.email" @input="validateEmail" required />
+        <p v-if="emailError" class="error">{{ emailError }}</p>
         <div class="password-container">
           <input :type="showPassword ? 'text' : 'password'" placeholder="Contraseña" v-model="user.password" required />
           <span class="toggle-password" @click="showPassword = !showPassword">
@@ -37,9 +38,22 @@ export default {
       email: '',
       password: ''
     });
-    const showPassword = false;
+    const showPassword = ref(false);
+    const emailError = ref('');
+
+    const validateEmail = () => {
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(user.value.email)) {
+        emailError.value = 'Por favor, introduce un correo electrónico válido.';
+      } else {
+        emailError.value = '';
+      }
+    };
 
     const handleSubmit = async () => {
+      if (emailError.value) {
+        return;
+      }
       const authenticated = await loginUser(user.value);
       if (authenticated) {
         router.push({ name: 'home' });
@@ -55,6 +69,8 @@ export default {
     return {
       user,
       showPassword,
+      emailError,
+      validateEmail,
       handleSubmit,
       showModal,
       closeModal
@@ -147,5 +163,11 @@ input {
 .register-link a {
   color: #7f3fbf;
   text-decoration: none;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 15px;
 }
 </style>

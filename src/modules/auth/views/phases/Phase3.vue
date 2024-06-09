@@ -46,7 +46,7 @@ export default {
 
     const handleSubmit = () => {
       const convertedAnswers = answers.value.map(value => parseFloat((parseInt(value) * 5 / 100).toFixed(1)));
-      const calculatedTag = calculateTag(answers);
+      const calculatedTag = calculateTag(answers.value);
       user.value.self_personality = {
         tag: calculatedTag,
         mind: convertedAnswers[0],

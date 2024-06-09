@@ -9,9 +9,10 @@
         <input type="text" placeholder="Apellidos *" v-model="user.lastnames" required />
       </div>
       <div class="phase1-group">
-        <input type="email" placeholder="Correo Universitario *" v-model="user.email" required />
+        <input type="email" placeholder="Correo Universitario *" v-model="user.email" @input="validateEmail" required />
         <input type="tel" placeholder="Número de Celular *" v-model="user.phone" required />
       </div>
+      <p v-if="emailError" class="error">{{ emailError }}</p>
       <div class="phase1-group">
         <input type="password" placeholder="Ingrese su contraseña *" v-model="user.password" required />
         <input type="password" placeholder="Confirme su contraseña *" required />
@@ -70,6 +71,17 @@ export default {
       { name: 'Femenino', value: 'F' }
     ];
 
+    const emailError = ref('');
+
+    const validateEmail = () => {
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(user.value.email)) {
+        emailError.value = 'Por favor, introduce un correo electrónico válido.';
+      } else {
+        emailError.value = '';
+      }
+    };
+
     const onUniversityChange = () => {
       const university = selectedUniversity.value;
       getDegrees(university.id);
@@ -82,6 +94,9 @@ export default {
     };
 
     const handleSubmit = async () => {
+      if (emailError.value) {
+        return;
+      }
       user.value.university = selectedUniversity.value;
       user.value.degree = selectedDegree.value;
       user.value.birth_date = formatDateToISO(user.value.birth_date);
@@ -100,6 +115,8 @@ export default {
       genders,
       universities,
       degrees,
+      emailError,
+      validateEmail,
       handleSubmit,
       onUniversityChange
     };
@@ -195,5 +212,11 @@ a {
 
 a:hover {
   color: #f0f0f0;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 5px;
 }
 </style>

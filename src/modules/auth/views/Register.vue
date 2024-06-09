@@ -32,7 +32,7 @@ export default {
       { label: 'Vivienda', component: 'Phase4' },
       { label: 'Hábitos', component: 'Phase5' },
     ];
-    const currentStep = ref(2);
+    const currentStep = ref(0);
 
     const toNextPhase = () => {
       if (currentStep.value < steps.length - 1) {
