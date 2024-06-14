@@ -44,7 +44,9 @@ export default {
       if (label === 'Logout') {
         logout();
       } else {
+        console.log(ctx);
         ctx.$emit('updateOption', label);
+        ctx.emit('updateOption', label);
       }
     };
 
