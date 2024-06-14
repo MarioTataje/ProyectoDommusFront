@@ -35,7 +35,7 @@ export default {
 
     const closeModal = () => {
       isOpen.value = false;
-      ctx.$emit('close');
+      ctx._.emit('close');
     };
 
     const confirmAccept = () => {

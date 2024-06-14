@@ -72,7 +72,7 @@ export default {
     const handleSubmit = async () => {
       user.value.district = selectedDistrict.value;
       updateUser(user.value);
-      ctx.$emit('goToNextPhase');
+      ctx._.emit('goToNextPhase');
     };
 
     onMounted(() => {

@@ -81,7 +81,7 @@ export default {
     const closeResult = () => {
       showModal.value = false;
       showResult.value = false;
-      ctx.$emit('goToNextPhase');
+      ctx._.emit('goToNextPhase');
     };
 
     return {

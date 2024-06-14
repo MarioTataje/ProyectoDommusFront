@@ -47,7 +47,7 @@ export default {
 
     const handleSubmit = () => {
       updateUser(user.value);
-      ctx.$emit('goToNextPhase');
+      ctx._.emit('goToNextPhase');
     };
 
     onMounted(() => {

@@ -101,7 +101,7 @@ export default {
       user.value.degree = selectedDegree.value;
       user.value.birth_date = formatDateToISO(user.value.birth_date);
       updateUser(user.value);
-      ctx.$emit('goToNextPhase');
+      ctx._.emit('goToNextPhase');
     };
 
     onMounted(() => {
