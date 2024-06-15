@@ -61,7 +61,7 @@ export default {
     };
 
     const calculateTag = (answers) => {
-      const aspects = ['I', 'N', 'T', 'J'];
+      const aspects = ['E', 'S', 'F', 'P'];
       const aspect = aspects.map((aspect, index) => calculateAspect(answers[index], aspect)).join('');
       return aspect;
     };
@@ -71,10 +71,10 @@ export default {
     };
 
     const oppositeAspect = (aspect) => {
-      return aspect === 'I' ? 'E' :
-        aspect === 'N' ? 'S' :
-        aspect === 'T' ? 'F' :
-        aspect === 'J' ? 'P' :
+      return aspect === 'E' ? 'I' :
+        aspect === 'S' ? 'N' :
+        aspect === 'F' ? 'T' :
+        aspect === 'P' ? 'J' :
         null;
     };
 
