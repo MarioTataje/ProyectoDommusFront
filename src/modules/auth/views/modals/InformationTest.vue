@@ -49,7 +49,7 @@ export default {
     };
 
     const openTest = () => {
-      window.location.href = 'https://www.16personalities.com/es/test-de-personalidad';
+      window.open('https://www.16personalities.com/es/test-de-personalidad', '_blank');
     };
 
     onMounted(() => {
