@@ -9,8 +9,8 @@
           <div class="slider-wrapper">
             <input type="range" min="0" max="100" v-model="answers[index]" class="slider" />
             <div class="slider-labels">
-              <span class="slider-label left">{{ 100 - answers[index] }}%</span>
-              <span class="slider-label right">{{ answers[index] }}%</span>
+              <span class="slider-label left">{{ answers[index] }}%</span>
+              <span class="slider-label right">{{ 100 - answers[index] }}%</span>
             </div>
           </div>
           <span class="progress-text">{{ question.max }}</span>
