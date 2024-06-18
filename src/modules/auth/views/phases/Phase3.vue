@@ -4,10 +4,15 @@
     <hr class="line">
     <div v-for="(question, index) in questions" :key="index" class="question">
       <div class="response">
-        <span class="percentage">{{ answers[index] }}%</span>
         <div class="progress-container">
           <span class="progress-text">{{ question.min }}</span>
-          <input type="range" min="0" max="100" v-model="answers[index]" class="slider" />
+          <div class="slider-wrapper">
+            <input type="range" min="0" max="100" v-model="answers[index]" class="slider" />
+            <div class="slider-labels">
+              <span class="slider-label left">{{ 100 - answers[index] }}%</span>
+              <span class="slider-label right">{{ answers[index] }}%</span>
+            </div>
+          </div>
           <span class="progress-text">{{ question.max }}</span>
         </div>
       </div>
@@ -37,7 +42,7 @@ export default {
       { min: 'Pensamiento', max: 'Sentimiento' },
       { min: 'Juicio', max: 'Percepción' }
     ];
-    const answers = ref([0, 0, 0, 0]);
+    const answers = ref([50, 50, 50, 50]); // Inicializar en 50%
     const user = ref({});
     const { ctx } = getCurrentInstance();
     const showModal = ref(true);
@@ -128,7 +133,8 @@ export default {
 }
 
 .question {
-  margin-bottom: 40px;
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 
 .question-text {
@@ -144,14 +150,20 @@ export default {
 }
 
 .progress-container {
-  margin-left: 30px;
   display: flex;
   align-items: center;
   width: 100%;
+  justify-content: space-between;
+}
+
+.left-side, .right-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .progress-text {
-  margin-right: 10px;
+  margin: 0 10px;
   color: #8F6EE0;
   font-weight: bold;
   width: 80px;
@@ -163,9 +175,26 @@ export default {
   font-weight: bold;
 }
 
-.slider {
-  margin: 0 15px;
+.slider-wrapper {
+  position: relative;
   width: 70%;
+}
+
+.slider {
+  width: 100%;
+}
+
+.slider-labels {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  top: -20px;
+}
+
+.slider-label {
+  color: #8F6EE0;
+  font-weight: bold;
 }
 
 .button-container {
