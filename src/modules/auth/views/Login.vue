@@ -1,23 +1,34 @@
 <template>
-  <div class="login">
-    <div class="login-box">
-      <img src="@/assets/logos/logo.png" alt="Dommus Logo" class="logo" />
-      <h1 class="title">Login</h1>
+  <Header></Header>
+  <div class="login-container">
+    <div class="form-section">
+      <h1 class="welcome-title">Bienvenido de nuevo!</h1>
       <form @submit.prevent="handleSubmit">
+        <p class="input-label">Email:</p>
         <input type="text" placeholder="Email" v-model="user.email" @input="validateEmail" required />
         <p v-if="emailError" class="error">{{ emailError }}</p>
+        
+        <p class="input-label">Contraseña:</p>
         <div class="password-container">
           <input :type="showPassword ? 'text' : 'password'" placeholder="Contraseña" v-model="user.password" required />
           <span class="toggle-password" @click="showPassword = !showPassword">
             <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
           </span>
         </div>
-        <button type="submit" class="btn">Iniciar Sesión</button>
+        <p class="register-link"> ¿No tienes cuenta? 
+          <router-link to="/register" class="link-title">
+            Regístrate
+          </router-link>
+        </p>
+        <button type="submit" class="btn">INGRESAR</button>
       </form>
-      <p class="register-link">¿Aún no tienes una cuenta? <router-link to="/register">Regístrate</router-link></p>
     </div>
-    <NoLogin v-if="showModal" @close="closeModal"></NoLogin>
+    <div class="image-section">
+      <img src="@/assets/backgrounds/partners.png" alt="Roommates Partners" class="roommates-image" />
+    </div>
   </div>
+  <Footer></Footer>
+  <NoLogin v-if="showModal" @close="closeModal"></NoLogin>
 </template>
 
 <script>
@@ -25,10 +36,12 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import usePhase from '../composables/usePhase';
 import NoLogin from './modals/NoLogin.vue';
+import Header from './Header.vue';
+import Footer from './Footer.vue';
 
 export default {
   name: 'Login',
-  components: { NoLogin },
+  components: { NoLogin, Header, Footer },
   setup() {
     const { loginUser } = usePhase();
     const router = useRouter();
@@ -80,50 +93,55 @@ export default {
 </script>
 
 <style>
-.login {
+.login-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
   height: 100vh;
-  background: url('@/assets/backgrounds/global-background.png') no-repeat center center;
+  align-items: center;
+  justify-content: space-between;
+  background-color: white;
+}
+
+.form-section {
+  width: 60%; /* Aumentado de 50% a 60% */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0 7%; /* Aumentado el padding horizontal */
+}
+
+.image-section {
+  width: 40%; /* Reducido de 50% a 40% */
   background-size: cover;
-  position: relative;
-  overflow: hidden;
+  background-position: center;
 }
 
-.login-box {
-  padding: 40px;
-  border-radius: 10px;
-  border: 2px solid white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  width: 100%;
-  max-width: 400px;
-  z-index: 2;
+.welcome-title {
+  font-size: 38px; /* Aumentado el tamaño de la fuente */
+  font-weight: bold;
+  color: #6441A4; /* Color púrpura */
+  margin-bottom: 25px; /* Aumentado el margen inferior */
 }
 
-.logo {
-  max-width: 150px;
-  margin-bottom: 20px;
-}
-
-.title {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: white;
+.input-label {
+  margin-bottom: 8px; /* Aumentado el margen inferior */
+  font-size: 18px; /* Aumentado el tamaño de la fuente */
+  color: #1E1E1E;
 }
 
 input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  width: 110%; /* Aumentado el ancho del input */
+  padding: 14px; /* Aumentado el padding */
+  margin-bottom: 25px; /* Aumentado el margen inferior */
+  border-radius: 10px; /* Aumentado el radio de los bordes */
+  border: 1px solid #ccc;
+  font-size: 18px; /* Aumentado el tamaño de la fuente */
 }
 
 .password-container {
   position: relative;
+  width: 110%; /* Aumentado el ancho del contenedor de la contraseña */
 }
 
 .toggle-password {
@@ -134,40 +152,35 @@ input {
   cursor: pointer;
 }
 
-.toggle-password i {
-  font-size: 16px;
-  color: #888;
-}
-
 .btn {
-  width: 100%;
-  padding: 10px;
+  width: 110%; /* Aumentado el ancho del botón */
+  padding: 14px; /* Aumentado el padding */
   border: none;
-  border-radius: 5px;
+  border-radius: 20px; /* Aumentado el radio de los bordes */
   background-color: #8C52FF;
   color: white;
-  font-size: 16px;
+  font-size: 20px; /* Aumentado el tamaño de la fuente */
   cursor: pointer;
-  transition: background-color 0.3s;
 }
 
 .btn:hover {
-  background-color: #8C52FF;
+  background-color: #7A42D8;
 }
 
 .register-link {
-  margin-top: 20px;
-  color: #888;
+  color: #1E1E1E;
+  margin-bottom: 25px; /* Aumentado el margen inferior */
 }
 
-.register-link a {
-  color: #7f3fbf;
-  text-decoration: none;
+.link-title {
+  color: #6441A4;
+  margin-bottom: 20px;
 }
 
 .error {
   color: red;
-  font-size: 14px;
-  margin-bottom: 15px;
+  font-size: 15px; /* Aumentado ligeramente el tamaño de la fuente */
 }
+
+
 </style>
