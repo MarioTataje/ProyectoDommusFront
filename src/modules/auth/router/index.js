@@ -12,9 +12,9 @@ export default [
         component: () => import('./../views/Login.vue'),
     },
     {
-        path: '/register',
-        name: 'register',
-        component: () => import('./../views/Register.vue'),
+        path: '/phase1',
+        name: 'phase1',
+        component: () => import('./../views/phases/Phase1.vue'),
     },
     {
         path: '/phase2',

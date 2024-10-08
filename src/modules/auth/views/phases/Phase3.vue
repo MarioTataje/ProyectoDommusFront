@@ -1,39 +1,49 @@
 <template>
+  <Header></Header>
   <div class="phase3-container">
-    <h2 class="title">Más sobre ti</h2>
-    <hr class="line">
-    <div v-for="(question, index) in questions" :key="index" class="question">
-      <div class="response">
-        <div class="progress-container">
-          <span class="progress-text">{{ question.min }}</span>
-          <div class="slider-wrapper">
-            <input type="range" min="0" max="100" v-model="answers[index]" class="slider" />
-            <div class="slider-labels">
-              <span class="slider-label left">{{ answers[index] }}%</span>
-              <span class="slider-label right">{{ 100 - answers[index] }}%</span>
+    <div class="form-section">
+      <h2 class="title">Carga tus resultados  </h2>
+      <!-- material ui react vue  slider -->
+      <div v-for="(question, index) in questions" :key="index" class="question">
+        <div class="response">
+          <div class="progress-container">
+            <span class="progress-text">{{ question.min }}</span>
+            <div class="slider-wrapper">
+              <input type="range" min="0" max="100" v-model="answers[index]" class="slider" />
+              <div class="slider-labels">
+                <span class="slider-label left">{{ answers[index] }}%</span>
+                <span class="slider-label right">{{ 100 - answers[index] }}%</span>
+              </div>
             </div>
+            <span class="progress-text">{{ question.max }}</span>
           </div>
-          <span class="progress-text">{{ question.max }}</span>
         </div>
       </div>
+      <div class="button-container">
+        <button @click="handleSubmit">Continuar</button>
+      </div>
     </div>
-    <div class="button-container">
-      <button @click="handleSubmit">Continuar</button>
+    <div class="image-section">
+      <img src="@/assets/backgrounds/partners.png" alt="Two people reading" class="profile-image" />
     </div>
     <InformationTest v-if="showModal"></InformationTest>
     <Personality :tag="tag" v-if="showResult" @close="closeResult"></Personality>
   </div>
+  <Footer></Footer>
 </template>
 
 <script>
-import { ref, getCurrentInstance } from 'vue';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import usePhase from '../../composables/usePhase';
 import InformationTest from './../modals/InformationTest.vue'; 
 import Personality from './../modals/Personality.vue'; 
+import Header from '../commons/Header.vue';
+import Footer from '../commons/Footer.vue';
 
 export default {
   name: 'Phase3',
-  components: { InformationTest, Personality },
+  components: { InformationTest, Personality, Header, Footer },
   setup() {
     const { updateUser } = usePhase();
     const questions = [
@@ -44,7 +54,7 @@ export default {
     ];
     const answers = ref([50, 50, 50, 50]); // Inicializar en 50%
     const user = ref({});
-    const { ctx } = getCurrentInstance();
+    const router = useRouter();
     const showModal = ref(true);
     const showResult = ref(false);
     const tag = ref(null);
@@ -86,7 +96,7 @@ export default {
     const closeResult = () => {
       showModal.value = false;
       showResult.value = false;
-      ctx._.emit('goToNextPhase');
+      router.push('phase4');
     };
 
     return {
@@ -106,20 +116,17 @@ export default {
 
 <style>
 .phase3-container {
-  background: url('@/assets/backgrounds/global-background.png') no-repeat center center;
-  background-size: cover;  
-  flex-direction: column;
-  justify-content: center;
+  display: flex;
+  width: 120%;
+  height: 100vh;
   align-items: center;
-  width: calc(100vw - 400px);
-  padding: 20px;
-  border-radius: 15px;
-  box-sizing: border-box;
+  justify-content: space-between;
+  background-color: white;
 }
 
 .title {
-  color: #8F6EE0;
-  text-align: center;
+  color: #6441A4;
+  text-align: start;
   margin-top: 30px;
   margin-bottom: 30px;
 }
@@ -127,13 +134,13 @@ export default {
 .line {
   width: 100%;
   border: none;
-  border-top: 8px solid #8F6EE0;
+  border-top: 8px solid #6441A4;
   margin-top: 10px;
   margin-bottom: 20px;
 }
 
 .question {
-  margin-top: 50px;
+  margin-top: 100px;
   margin-bottom: 50px;
 }
 
@@ -164,14 +171,14 @@ export default {
 
 .progress-text {
   margin: 0 10px;
-  color: #8F6EE0;
+  color: #6441A4;
   font-weight: bold;
   width: 80px;
 }
 
 .percentage {
   margin-bottom: 5px;
-  color: #8F6EE0;
+  color: #6441A4;
   font-weight: bold;
 }
 
@@ -193,7 +200,7 @@ export default {
 }
 
 .slider-label {
-  color: #8F6EE0;
+  color: #7e57c2;
   font-weight: bold;
 }
 
@@ -217,5 +224,24 @@ button {
 
 button:hover {
   background-color: #5e35b1;
+}
+
+.image-section {
+  width: 50%;
+  height: 100vh;
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.form-section {
+  width: 60%;
+  height: 80vh;
+  padding-left: 20px;
+  padding-right: 20px;
+  overflow-y: auto;
 }
 </style>

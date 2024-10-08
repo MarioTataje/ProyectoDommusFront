@@ -80,8 +80,8 @@
 
       const profileImage = computed(() => {
         return profile.value?.genre === 'M'
-          ? require('@/assets/profiles/men_profile.png')
-          : require('@/assets/profiles/women_profile.png');
+          ? require('@/assets/profiles/men-profile.png')
+          : require('@/assets/profiles/women-profile.png');
       });
   
       return {

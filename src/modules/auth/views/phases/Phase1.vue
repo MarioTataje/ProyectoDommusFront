@@ -2,7 +2,7 @@
   <Header></Header>
   <div class="register-container">
     <div class="form-section">
-      <form @submit.prevent="handleSubmit" class="register-form">
+      <form @submit.prevent="handleSubmit">
         <h1 class="register-title">Regístrate</h1>
         <div class="form-group-inline">
           <div class="input-group">
@@ -60,12 +60,12 @@
 </template>
 
 <script>
-import { ref, onMounted, getCurrentInstance } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import usePhase from '../../composables/usePhase';
 import useStudies from '../../composables/useStudies';
-import Header from '../Header.vue';
-import Footer from '../Footer.vue';
+import Header from '../commons/Header.vue';
+import Footer from '../commons/Footer.vue';
 
 export default {
   name: 'Register',
@@ -84,7 +84,6 @@ export default {
       birth_date: '',
       genre: ''
     });
-    const { ctx } = getCurrentInstance();
 
     const selectedUniversity = ref(null);
     const selectedDegree = ref(null);
@@ -124,7 +123,6 @@ export default {
       user.value.degree = selectedDegree.value;
       user.value.birth_date = formatDateToISO(user.value.birth_date);
       updateUser(user.value);
-      print(ctx);
       router.push('/phase2');
     };
 
@@ -159,7 +157,7 @@ export default {
 }
 
 .form-section {
-  width: 50%;
+  width: 60%;
   padding: 40px;
 }
 
@@ -186,17 +184,32 @@ export default {
   flex-direction: column;
 }
 
-input, select {
+input {
   width: 100%;
   padding: 14px;
   margin-top: 10px;
-  font-size: 16px;
+  margin-bottom: 0px;
+  font-size: 14px;
   border-radius: 8px;
   border: 1px solid #ccc;
 }
 
+select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: white;
+  font-size: 14px;
+  color: #333;
+  transition: border-color 0.3s;
+  appearance: none;
+}
+
 .button-container {
   display: flex;
+  justify-content: flex-end;
 }
 
 .submit-button {
@@ -207,7 +220,6 @@ input, select {
   border-radius: 5px;
   cursor: pointer;
   width: 150px;
-  justify-content: flex-end;
 }
 
 .submit-button:hover {
@@ -215,7 +227,7 @@ input, select {
 }
 
 .image-section {
-  width: 40%;
+  width: 50%;
   height: 100vh;
 }
 

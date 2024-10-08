@@ -5,7 +5,7 @@
     <OtherProfile :profileId="profileId" v-if="showProfile" @close="closeProfile"></OtherProfile>
     <div class="profiles">
       <div v-for="profile in profiles" :key="profile.id" class="profile-card" @click="openProfile(profile.id)">
-        <img :src="profile.genre === 'M' ? require('@/assets/profiles/men_profile.png') : require('@/assets/profiles/women_profile.png')" 
+        <img :src="profile.genre === 'M' ? require('@/assets/profiles/men-profile.png') : require('@/assets/profiles/women-profile.png')" 
           alt="User Image" 
           class="profile-img"
         />

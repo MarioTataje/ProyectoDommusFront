@@ -1,10 +1,10 @@
 <template>
   <div class="modal" v-if="isOpen" @click="closeModal">
     <div class="modal-content" @click.stop>
-      <h1 class="title">{{ detail.title }}</h1>
+      <h2 class="subtitle"> Perfil Test </h2>
+      <h2 class="title">{{ detail.title }}</h2>
       <img class="icon" :src="icon" alt="Icon">
       <div class="description">
-        <h2>Acerca de Ti</h2>
         <p>{{ detail.subtitle }}</p>
         <p class="information"> {{ detail.description }} </p>
       </div>
@@ -78,7 +78,7 @@ export default {
 }
 
 .modal-content {
-  background: url('@/assets/backgrounds/global-background.png') no-repeat center center;
+  background-color: white;
   padding: 10px;
   border-radius: 10px;
   text-align: center;
@@ -89,9 +89,9 @@ export default {
 
 .title {
   font-size: 24px;
-  color: white;
-  font-weight: bold;
+  color: #6441A4;
   margin-bottom: 10px;
+  text-align: center;
 }
 
 .icon {
@@ -102,7 +102,7 @@ export default {
 
 .description {
   font-size: 14px;
-  color: #8C52FF;
+  color: black;
   border: 2px solid white;
   padding: 10px;
   border-radius: 8px;

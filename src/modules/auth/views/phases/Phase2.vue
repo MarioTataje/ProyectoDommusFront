@@ -1,41 +1,41 @@
 <template>
-  <div class="phase2-container">
-    <h2 class="centered-title">Editar Perfil</h2>
-    <div class="profile-header">
-      <img src="@/assets/logos/logo.png" alt="Profile Logo" class="profile-logo" />
-      <div class="profile-info">
-        <p><strong>{{ user.names }} {{ user.lastnames }}</strong></p>
-        <p>{{ userAge }}</p>
-        <p>{{ user.degree?.name }}</p>
-        <p>{{ user.university?.name }}</p>
+  <Header></Header>
+  <div class="profile-container">
+    <div class="form-section">
+      <h1 class="profile-title">Edición de perfil</h1>
+      <div class="input-group">
+        <label for="description">Descripción</label>
+        <textarea id="description" v-model="user.description" placeholder="Escriba su descripción"></textarea>
+      </div>
+
+      <div class="fortalezas-section">
+        <label for="description">Fortalezas</label>
+        <!-- code here -->
+      </div>
+
+      <div class="button-container">
+        <button class="continue-button" @click="handleSubmit">Continuar</button>
       </div>
     </div>
-    <div class="profile-description">
-      <label for="description">Mi Descripción</label>
-      <textarea id="description" v-model="user.description"></textarea>
-    </div>
-    <div class="budget-container">
-      <div class="budget-input">
-        <label for="min-budget">Presupuesto Mínimo</label>
-        <input type="number" id="min-budget" v-model.number="user.min_budget" step="0.1" @change="formatBudget('min_budget')" placeholder="Min" />
-      </div>
-      <div class="budget-input">
-        <label for="max-budget">Presupuesto Máximo</label>
-        <input type="number" id="max-budget" v-model.number="user.max_budget" step="0.1" @change="formatBudget('max_budget')" placeholder="Max" />
-      </div>
-    </div>
-    <div class="button-container">
-      <button @click="handleSubmit">Continuar</button>
+
+    <div class="image-section">
+      <img src="@/assets/backgrounds/partners.png" alt="Two people reading" class="profile-image" />
     </div>
   </div>
+  <Footer></Footer>
 </template>
 
+
 <script>
-import { ref, onMounted, computed, getCurrentInstance } from 'vue';
+import { ref, onMounted, computed } from 'vue';
+import { useRouter } from 'vue-router';
 import usePhase from '../../composables/usePhase';
+import Header from '../commons/Header.vue';
+import Footer from '../commons/Footer.vue';
 
 export default {
   name: 'Phase2',
+  components: { Header, Footer },
   setup() {
     const { user: userInfo, updateUser } = usePhase();
     const user = ref({
@@ -43,11 +43,11 @@ export default {
       max_budget: 0.0
     });
 
-    const { ctx } = getCurrentInstance();
+    const router = useRouter();
 
     const handleSubmit = () => {
       updateUser(user.value);
-      ctx._.emit('goToNextPhase');
+      router.push('phase3');
     };
 
     onMounted(() => {
@@ -83,122 +83,101 @@ export default {
 </script>
 
 <style scoped>
-.phase2-container {
-  background: url('@/assets/backgrounds/global-background.png') no-repeat center center;
-  background-size: cover;  
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: calc(100vw - 400px);
-  padding: 20px;
-  border-radius: 15px;
-  box-sizing: border-box;
-}
-
-
-.centered-title {
-  color: #7e57c2;
-  text-align: center;
-  width: 100%;
-  margin-top: 60px;
-  margin-bottom: 40px;
-}
-
-.profile-header {
+.profile-container {
   display: flex;
-  flex-direction: column;
+  width: 120%;
+  height: 100vh;
   align-items: center;
-  margin-bottom: 10px;
+  justify-content: space-between;
+  background-color: white;
 }
 
-.profile-logo {
-  width: 150px;
-  height: 150px;
-  margin-bottom: 20px;
-  border-radius: 50%;
-  border: 2px solid #ccc;
+.form-section {
+  width: 60%;
+  padding: 40px;
 }
 
-.profile-info p {
-  margin: 0;
-  color: #333;
-  font-size: 18px; 
-  text-align: center; 
+.image-section {
+  width: 50%;
+  height: 100vh;
 }
 
-.profile-description {
+.profile-image {
   width: 100%;
-  margin-bottom: 10px;
+  height: 100%;
+  object-fit: cover;
 }
 
-.profile-description label {
-  display: block;
-  margin-bottom: 10px;
-  color: #333;
+.profile-title {
+  color: #6441A4;
+  font-size: 32px;
   font-weight: bold;
+  margin-bottom: 20px;
 }
 
-.profile-description textarea {
+.input-group {
+  margin-bottom: 20px;
+}
+
+input, textarea {
   width: 100%;
-  height: 100px;
-  padding: 10px;
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  box-sizing: border-box;
-  resize: none;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
 }
 
-.budget-container {
+input::placeholder, textarea::placeholder {
+  color: #999;
+}
+
+textarea {
+  resize: none;
+  height: 100px;
+}
+
+.budget-section {
   display: flex;
   justify-content: space-between;
-  width: 100%;
   margin-bottom: 20px;
 }
 
 .budget-input {
-  display: flex;
-  flex-direction: column;
   width: 48%;
 }
 
 .budget-input label {
-  margin-bottom: 5px;
-  color: #333;
+  display: block;
+  margin-bottom: 8px;
   font-weight: bold;
 }
 
-.budget-input input {
-  padding: 10px;
-  border: 2px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
-}
-
 .button-container {
   display: flex;
   justify-content: flex-end;
-  width: 100%;
 }
 
-.button-container {
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-}
-
-button {
-  background-color: #7e57c2;
-  color: #fff;
+.continue-button {
+  background-color: #6F41E2;
+  color: white;
   padding: 12px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-top: 10px;
-  text-decoration: underline;
-  width: 100px;
 }
 
-button:hover {
-  background-color: #5e35b1;
+.continue-button:hover {
+  background-color: #5334B7;
+}
+
+.back-button button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.back-button img {
+  width: 24px;
+  height: 24px;
 }
 </style>

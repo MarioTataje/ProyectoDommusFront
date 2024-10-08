@@ -16,7 +16,7 @@
           </span>
         </div>
         <p class="register-link"> ¿No tienes cuenta? 
-          <router-link to="/register" class="link-title">
+          <router-link to="/phase1" class="link-title">
             Regístrate
           </router-link>
         </p>
@@ -36,8 +36,8 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import usePhase from '../composables/usePhase';
 import NoLogin from './modals/NoLogin.vue';
-import Header from './Header.vue';
-import Footer from './Footer.vue';
+import Header from './commons/Header.vue';
+import Footer from './commons/Footer.vue';
 
 export default {
   name: 'Login',
