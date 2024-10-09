@@ -1,27 +1,31 @@
 <template>
   <div class="home-container">
-    <h1 class="home-title">Roommies</h1>
     <Match :otherId="otherId" v-if="showModal" @close="closeModal"></Match>
     <OtherProfile :profileId="profileId" v-if="showProfile" @close="closeProfile"></OtherProfile>
+
+    <!-- Texto explicativo sobre los perfiles -->
+    <div class="profiles-info">
+      <p class="info-title">2000 Roomies Registrados</p>
+      <p class="info-sub-title">Los roomies están clasificados en 3 categorías según su compatibilidad</p>
+    </div>
+
     <div class="profiles">
-      <div v-for="profile in profiles" :key="profile.id" class="profile-card" @click="openProfile(profile.id)">
-        <img :src="profile.genre === 'M' ? require('@/assets/profiles/men-profile.png') : require('@/assets/profiles/women-profile.png')" 
-          alt="User Image" 
-          class="profile-img"
-        />
-        <div class="profile-info">
-          <h2>{{ profile.names }}</h2>
-          <p class="profile-tag1">{{ profile.personality.tag  }}</p>
-          <p class="profile-tag2">{{ profile.district_name }}</p>
-          <p class="profile-tag3">{{ profile.degree_name }}</p>
+      <div v-for="profile in profiles" :key="profile.id"
+        :class="['profile-card', getCardColor(profile)]" @click="openProfile(profile.id)">
+        <img 
+          :src="profile.genre === 'M' ? require('@/assets/profiles/men-profile.png') : require('@/assets/profiles/women-profile.png')"
+          alt="User Image" class="profile-img"/>
+        <div class="compatibility-circle">
+          <span>50%</span>
         </div>
-        <div class="profile-actions">
-          <button class="accept-btn" @click="acceptProfile(profile.id)">
-            <span class="material-icons">check</span>
-          </button>
-          <button class="reject-btn" @click="rejectProfile(profile.id)">
-            <span class="material-icons">close</span>
-          </button>
+        <div class="profile-info">
+          <h2>{{ profile.names + ' ' + profile.lastnames }}</h2>
+          <!-- Contenedor para los dos primeros tags -->
+          <div class="tags-container">
+            <p class="profile-tag1">{{ profile.personality.tag }}</p>
+            <p class="profile-tag2">{{ profile.district_name }}</p>
+          </div>
+          <p class="profile-tag3">{{ profile.degree_name }}</p>
         </div>
       </div>
     </div>
@@ -29,132 +33,142 @@
 </template>
 
 <script>
-  import { onMounted, ref } from 'vue';
-  import OtherProfile from './modals/OtherProfile.vue'; 
-  import Match from './modals/Match.vue'; 
-  import useProfile from '../composables/useProfile';
-  import useMatch from '../composables/useMatch';
-  import usePhase from '@/modules/auth/composables/usePhase';
+import { onMounted, ref } from 'vue';
+import OtherProfile from './modals/OtherProfile.vue'; 
+import Match from './modals/Match.vue'; 
+import useProfile from '../composables/useProfile';
+import usePhase from '@/modules/auth/composables/usePhase';
 
-  export default {
-    name: 'Home',
-    components: { 
-      Match, 
-      OtherProfile 
-    },
-    setup() {
-      const { profiles, getProfiles } = useProfile();
-      const { userId } = usePhase();
-      const { sendLike, sendDislike } = useMatch();
-      const profileId = ref(null);
-      const otherId = ref(null);
-      const showProfile = ref(false);
-      const showModal = ref(false);
+export default {
+  name: 'Home',
+  components: { 
+    Match, 
+    OtherProfile 
+  },
+  setup() {
+    const { profiles, getProfiles } = useProfile();
+    const { userId } = usePhase();
+    const profileId = ref(null);
+    const otherId = ref(null);
+    const showProfile = ref(false);
+    const showModal = ref(false);
 
-      onMounted(() => {
-        getProfiles(userId.value);
-      });
+    onMounted(() => {
+      getProfiles(userId.value);
+    });
 
-      const openProfile = (id) => {
-        profileId.value = id;
-        showProfile.value = true;
-      };
+    const openProfile = (id) => {
+      profileId.value = id;
+      showProfile.value = true;
+    };
 
-      const closeProfile = () => {
-        showProfile.value = false;
-      };
+    const closeProfile = () => {
+      showProfile.value = false;
+    };
 
-      const closeModal = () => {
-        showModal.value = false;
-      };
+    const closeModal = () => {
+      showModal.value = false;
+    };
 
-      const acceptProfile = async (receiverId) => {
-        const senderId = userId.value;
-        const like = await sendLike(senderId, receiverId);
-        if (like.flag_match){
-          const id = like.sender.id !== senderId ? like.sender.id : like.receiver.id;
-          otherId.value = id;
-          showModal.value = true;
-        }
-        await getProfiles(senderId);
-      };
+    const getCardColor = (profile) => {
+      const compatibility = profile;
+      if (compatibility >= 80) return 'card-green';
+      if (compatibility >= 40) return 'card-blue';
+      return 'card-red';
+    };
 
-      const rejectProfile = async (receiverId) => {
-        const senderId = userId.value;
-        await sendDislike(senderId, receiverId);
-        await getProfiles(senderId);
-      };
+    return {
+      openProfile,
+      closeProfile,
+      closeModal,
+      showProfile,
+      showModal,
+      getCardColor,
 
-      return {
-        profiles,
-        acceptProfile,
-        rejectProfile,
-        openProfile,
-        closeProfile,
-        closeModal,
-        showProfile,
-        showModal,
-        profileId,
-        otherId
-      };
-    }
-  };
+      profiles,
+      profileId,
+      otherId
+    };
+  }
+};
 </script>
 
 <style scoped>
 .home-container {
   background-color: #fff;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: calc(100vw - 400px);
-  height: 100%;
+  width: 100%;
   padding: 20px;
-  border-radius: 15px;
   box-sizing: border-box;
 }
 
-.home-title {
-  margin-left: 20px;
-  margin-top: 20px;
-  margin-bottom: 30px;
-}
-
-h1 {
-  color: #7b4fe3;
-  font-size: 2em;
+.profiles-info {
+  text-align: center;
   margin-bottom: 20px;
+  position: absolute; /* Para moverlo a una posición más arriba */
+  top: 100px; /* Controla la separación desde el margen superior */
 }
 
-h2 {
-  color: #8C52FF;
+.info-title {
+  font-size: 1.6em;
+  color: #1E1E1E;
   font-weight: bold;
+}
+
+.info-sub-title {
+  font-size: 1.2em;
+  color: #6441A4;
 }
 
 .profiles {
   display: flex;
-  flex-direction: row;
   justify-content: center;
   align-items: center;
   gap: 20px;
-  width: 95%;
-  overflow-x: auto;
-  margin-left: 20px;
-  margin-right: 20px;
+  width: 100%;
+  height: 100%;
   padding: 10px;
-  box-sizing: border-box;
+  margin-top: 50px; /* Ajustar para compensar el desplazamiento hacia arriba del texto */
 }
 
 .profile-card {
-  background-color: transparent;
+  position: relative;
+  background-color: white;
+  padding: 40px 20px 20px;
   border-radius: 15px;
   padding: 20px;
   width: 250px;
   text-align: center;
-  border: 1px solid #8C52FF;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
-  flex: 0 0 auto;
+}
+
+.profile-card.card-red {
+  border: 3px solid #f44336;
+}
+
+.profile-card.card-blue {
+  border: 3px solid #2196f3;
+}
+
+.profile-card.card-green {
+  border: 3px solid #4caf50;
+}
+
+.compatibility-circle {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  background-color: white;
+  border-radius: 60%;
+  border: 3px solid #ccc;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .profile-img {
@@ -165,21 +179,32 @@ h2 {
   margin-bottom: 15px;
 }
 
-.profile-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .profile-info h2 {
   font-size: 1.5em;
   margin-bottom: 10px;
 }
 
+.tags-container {
+  display: flex;
+  justify-content: space-between; /* Distribuye el espacio entre los dos tags */
+  margin-bottom: 10px;
+}
+
 .profile-info p {
-  color: white;
   font-size: 1em;
   margin: 5px 0;
+}
+
+.profile-tag1, .profile-tag2, .profile-tag3 {
+  display: block;
+  color: black;
+  background-color: #F0F0FF;
+  border-radius: 12px;
+  padding: 5px;
+}
+
+.profile-tag1, .profile-tag2 {
+  width: 48%; /* Ajustar el ancho para que ambos tags ocupen el espacio horizontal */
 }
 
 .profile-actions {
@@ -188,39 +213,11 @@ h2 {
   margin-top: 15px;
 }
 
-.profile-tag1,
-.profile-tag2,
-.profile-tag3 {
-  color: white;
-  width: 60%;
-  border-radius: 12px;
-  padding: 5px 10px;
-}
-
-.profile-tag1 {
-  background-color: #EDCE80;
-}
-
-.profile-tag2 {
-  background-color: #9AC5EC;
-}
-
-.profile-tag3 {
-  background-color: #FB7DEE;
-}
-
 .accept-btn,
 .reject-btn {
   background-color: transparent;
   border: none;
   cursor: pointer;
-  font-size: 1.2em;
-  padding: 10px 20px;
-  border-radius: 5px;
-  transition: background-color 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .accept-btn {
@@ -229,13 +226,5 @@ h2 {
 
 .reject-btn {
   color: #f44336;
-}
-
-.accept-btn:hover {
-  background-color: #e8f5e9;
-}
-
-.reject-btn:hover {
-  background-color: #ffebee;
 }
 </style>

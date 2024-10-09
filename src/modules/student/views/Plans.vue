@@ -45,21 +45,21 @@
     <div class="plans-options">
       <div class="plan-card free-plan">
         <p class="plan-title">Free</p>
-        <p class="plan-price">S/. 0,00</p>
-        <button class="plan-button" :disabled="profilePlan === 0">
+        <p class="plan-price">S/. 0</p>
+        <button class="plan-button" @click="changePlan('L', 0)" :disabled="profilePlan === 0">
           {{ profilePlan === 0 ? 'PLAN ACTUAL' : 'UPGRADE' }}
         </button>      </div>
       <div class="plan-card">
         <p class="plan-title">Mensual</p>
         <p class="plan-price">S/. 15</p>
-        <button class="plan-button" :disabled="profilePlan === 1">
+        <button class="plan-button" @click="changePlan('M', 15)" :disabled="profilePlan === 1">
           {{ profilePlan === 1 ? 'PLAN ACTUAL' : 'UPGRADE' }}
         </button>
       </div>
       <div class="plan-card">
         <p class="plan-title">Trimestral</p>
         <p class="plan-price">S/. 30</p>
-        <button class="plan-button" :disabled="profilePlan === 2">
+        <button class="plan-button" @click="changePlan('T', 30)" :disabled="profilePlan === 2">
           {{ profilePlan === 2 ? 'PLAN ACTUAL' : 'UPGRADE' }}
         </button>
       </div>
@@ -80,7 +80,7 @@ export default {
   name: 'Plans',
   setup() {
     const { userId } = usePhase();
-    const { profile, getUserProfile } = useProfile();
+    const { profile, getUserProfile, updatePlan } = useProfile();
 
     onMounted(async () => {
       const id = userId.value;
@@ -90,7 +90,9 @@ export default {
     const profilePlan = computed(() => {
       const { plan_name, frequency } = profile.value?.plan;
       const planMapping = {
-        'Free': 0,
+        'Free': {
+          'L': 0
+        },
         'Pro': {
           'M': 1,
           'T': 2
@@ -99,8 +101,21 @@ export default {
       return planMapping[plan_name]?.[frequency] ?? 3;
     });
 
+    const changePlan = async (frequency, amount) => {
+      const id = userId.value;     
+      const data = {
+        frequency,
+        amount
+      }
+      const result = await updatePlan(id, data);
+      console.log(result);
+
+      await getUserProfile(id);
+    };
+
     return {
-      profilePlan
+      profilePlan,
+      changePlan
     };
   },
 };

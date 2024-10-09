@@ -10,7 +10,6 @@
 import { ref } from 'vue';
 import Profile from './Profile.vue';
 import Home from './Home.vue';
-import Notifications from './Notifications.vue';
 import Plans from './Plans.vue';
 
 import Header from './commons/Header.vue';
@@ -21,7 +20,6 @@ export default {
   components: {
     Profile,
     Home,
-    Notifications,
     Plans,
     Header,
     Footer,
@@ -30,7 +28,6 @@ export default {
     const options = [
       { label: 'Profile', component: 'Profile' },
       { label: 'Home', component: 'Home' },
-      { label: 'Notifications', component: 'Notifications' },
       { label: 'Plans', component: 'Plans' },
     ];
 
