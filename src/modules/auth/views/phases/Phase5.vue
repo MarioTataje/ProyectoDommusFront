@@ -1,5 +1,4 @@
 <template>
-  <Header></Header>
   <div class="phase5-container">
     <div class="form-section">
       <h2 class="centered-title">Hábitos</h2>
@@ -19,11 +18,7 @@
       </div>
       <button @click="handleContinue" class="register-button">REGISTRATE</button>
     </div>
-    <div class="image-section">
-      <img src="@/assets/backgrounds/partners.png" alt="Two people reading" class="profile-image" />
-    </div>
   </div>
-  <Footer></Footer>
 </template>
 
 
@@ -31,12 +26,9 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import usePhase from '../../composables/usePhase';
-import Header from '../commons/Header.vue';
-import Footer from '../commons/Footer.vue';
 
 export default {
   name: 'Phase5',
-  components: { Header, Footer },
   setup() {
     const { user: userInfo, createUser } = usePhase();
     const router = useRouter()
@@ -131,11 +123,17 @@ export default {
   background-color: white;
 }
 
+.form-section {
+  width: 95%;
+  padding: 20px;
+  overflow-y: auto;
+}
+
 .centered-title {
   color: #6441A4;
   text-align: start;
-  margin-top: 30px;
-  margin-bottom: 30px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .centered-content {
@@ -143,6 +141,7 @@ export default {
 }
 
 .question {
+  margin-top: 20px;
   margin-bottom: 20px;
   text-align: left;
 }
@@ -205,23 +204,6 @@ button {
 
 button:hover {
   background-color: #7b1fa2;
-}
-
-.form-section {
-  width: 60%;
-  padding: 40px;
-  overflow-y: auto;
-}
-
-.image-section {
-  width: 50%; /* Aumentar ancho de la imagen */
-  height: 100vh;
-}
-
-.profile-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 </style>

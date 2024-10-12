@@ -31,11 +31,9 @@ export default {
       { label: 'Plans', component: 'Plans' },
     ];
 
-    const activeOption = ref(options[1].label);
     const currentComponent = ref(options[1].component);
 
     const updateOption = (label) => {
-      activeOption.value = label;
       currentComponent.value = options.find((option) => option.label === label).component;
     };
 
@@ -45,7 +43,6 @@ export default {
 
     return {
       options,
-      activeOption,
       currentComponent,
       updateOption,
       setComponent,

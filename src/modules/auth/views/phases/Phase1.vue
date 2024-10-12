@@ -1,5 +1,4 @@
 <template>
-  <Header></Header>
   <div class="register-container">
     <div class="form-section">
       <form @submit.prevent="handleSubmit">
@@ -52,26 +51,17 @@
         </div>    
       </form>
     </div>
-    <div class="image-section">
-      <img src="@/assets/backgrounds/partners.png" alt="Roommates Partners" class="roommates-image" />
-    </div>
   </div>
-  <Footer></Footer>
 </template>
 
 <script>
 import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
 import usePhase from '../../composables/usePhase';
 import useStudies from '../../composables/useStudies';
-import Header from '../commons/Header.vue';
-import Footer from '../commons/Footer.vue';
 
 export default {
   name: 'Register',
-  components: { Header, Footer },
-  setup() {
-    const router = useRouter();
+  setup(props, { emit }) {
     const { updateUser } = usePhase();
     const { universities, degrees, getUniversities, getDegrees } = useStudies();
     const user = ref({
@@ -123,7 +113,7 @@ export default {
       user.value.degree = selectedDegree.value;
       user.value.birth_date = formatDateToISO(user.value.birth_date);
       updateUser(user.value);
-      router.push('/phase2');
+      emit('setOption', { option: 'Phase2' });
     };
 
     onMounted(() => {
@@ -149,15 +139,17 @@ export default {
 <style scoped>
 .register-container {
   display: flex;
-  width: 120%;
-  height: 100vh;
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
   align-items: center;
   justify-content: space-between;
   background-color: white;
 }
 
 .form-section {
-  width: 60%;
+  width: 100%;
+  height: 90%;
   padding: 40px;
 }
 
@@ -226,14 +218,4 @@ select {
   background-color: #5e35b1;
 }
 
-.image-section {
-  width: 50%;
-  height: 100vh;
-}
-
-.roommates-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
 </style>

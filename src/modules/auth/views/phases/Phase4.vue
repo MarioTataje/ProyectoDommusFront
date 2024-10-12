@@ -1,5 +1,4 @@
 <template>
-  <Header></Header>
   <div class="phase4-container">
     <div class="form-section">
       <h2 class="centered-title">Vivienda</h2>
@@ -34,27 +33,18 @@
         </form>
       </div>
     </div>
-
-    <div class="image-section">
-      <img src="@/assets/backgrounds/partners.png" alt="Two people reading" class="profile-image" />
-    </div>
   </div>
-  <Footer></Footer>
 </template>
 
 
 <script>
 import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
 import usePhase from '../../composables/usePhase';
 import useLocations from '../../composables/useLocations';
-import Header from '../commons/Header.vue';
-import Footer from '../commons/Footer.vue';
 
 export default {
   name: 'Phase4',
-  components: { Header, Footer },
-  setup() {
+  setup(props, { emit }) {
     const { user: userInfo, updateUser } = usePhase();
     const { districts, getDistricts } = useLocations();
 
@@ -64,12 +54,11 @@ export default {
     });
 
     const selectedDistrict = ref(null);
-    const router = useRouter();
-
+    
     const handleSubmit = async () => {
       user.value.district = selectedDistrict.value;
       updateUser(user.value);
-      router.push('phase5');
+      emit("setOption", { option: "Phase5" });
     };
 
     const formatBudget = (key) => {
@@ -97,11 +86,17 @@ export default {
 <style scoped>
 .phase4-container {
   display: flex;
-  width: 120%;
+  width: 100%;
   height: 100vh;
   align-items: center;
   justify-content: space-between;
   background-color: white;
+}
+
+.form-section {
+  width: 95%;
+  padding: 20px;
+  overflow-y: auto;
 }
 
 .centered-title {
@@ -191,23 +186,6 @@ button {
 
 button:hover {
   background-color: #5e35b1;
-}
-
-.form-section {
-  width: 60%;
-  padding: 40px;
-  overflow-y: auto;
-}
-
-.image-section {
-  width: 50%; /* Aumentar ancho de la imagen */
-  height: 100vh;
-}
-
-.profile-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 </style>

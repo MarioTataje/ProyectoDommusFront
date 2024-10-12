@@ -1,5 +1,4 @@
 <template>
-  <Header></Header>
   <div class="profile-container">
     <div class="form-section">
       <h1 class="profile-title">Edición de perfil</h1>
@@ -17,48 +16,28 @@
         <button class="continue-button" @click="handleSubmit">Continuar</button>
       </div>
     </div>
-
-    <div class="image-section">
-      <img src="@/assets/backgrounds/partners.png" alt="Two people reading" class="profile-image" />
-    </div>
   </div>
-  <Footer></Footer>
 </template>
 
 
 <script>
 import { ref, onMounted, computed } from 'vue';
-import { useRouter } from 'vue-router';
 import usePhase from '../../composables/usePhase';
-import Header from '../commons/Header.vue';
-import Footer from '../commons/Footer.vue';
 
 export default {
   name: 'Phase2',
-  components: { Header, Footer },
-  setup() {
+  setup(props, { emit }) {
     const { user: userInfo, updateUser } = usePhase();
-    const user = ref({
-      min_budget: 0.0,
-      max_budget: 0.0
-    });
-
-    const router = useRouter();
+    const user = ref({});
 
     const handleSubmit = () => {
       updateUser(user.value);
-      router.push('phase3');
+      emit('setOption', { option: 'Phase3' });
     };
 
     onMounted(() => {
       user.value = { ...user.value, ...userInfo.value };
     });
-
-    const formatBudget = (key) => {
-      if (user.value[key] !== null && user.value[key] !== undefined) {
-        user.value[key] = parseFloat(user.value[key]).toFixed(1);
-      }
-    };
 
     const userAge = computed(() => {
       if (!user.value.birth_date) return '';
@@ -75,8 +54,7 @@ export default {
     return {
       user,
       handleSubmit,
-      userAge,
-      formatBudget
+      userAge    
     };
   }
 };
@@ -85,7 +63,7 @@ export default {
 <style scoped>
 .profile-container {
   display: flex;
-  width: 120%;
+  width: 100%;
   height: 100vh;
   align-items: center;
   justify-content: space-between;
@@ -93,19 +71,9 @@ export default {
 }
 
 .form-section {
-  width: 60%;
-  padding: 40px;
-}
-
-.image-section {
-  width: 50%;
-  height: 100vh;
-}
-
-.profile-image {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: 90%;
+  padding: 40px;
 }
 
 .profile-title {

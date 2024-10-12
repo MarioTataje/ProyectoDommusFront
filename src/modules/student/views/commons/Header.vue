@@ -4,6 +4,8 @@
     <div class="spacer"></div>
     <button @click="goPlans" class="dommus-pro-button">DOMMUS PRO</button>
 
+    <button v-if="isPro" class="dommus-pro-button">COMUNIDAD</button>
+
     <!-- Filter Pro Icon -->
     <img v-if="isPro" src="@/assets/icons/filter-pro-icon.png" alt="Filtros Pro" class="filter-pro-icon" @click="toggleFilterPro" />
 
@@ -34,7 +36,6 @@
         </div>
       </div>
     </div>
-
 
     <!-- Notification Icon -->
     <div class="notification-wrapper">

@@ -43,7 +43,7 @@ export default {
       this.$router.push('/login');
     },
     register() {
-      this.$router.push('/phase1');
+      this.$router.push('/register');
     },
   },
 };

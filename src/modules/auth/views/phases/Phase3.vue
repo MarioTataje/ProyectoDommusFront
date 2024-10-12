@@ -1,18 +1,25 @@
 <template>
-  <Header></Header>
   <div class="phase3-container">
     <div class="form-section">
-      <h2 class="title">Carga tus resultados  </h2>
+      <h2 class="title">Carga tus resultados</h2>
       <!-- material ui react vue  slider -->
       <div v-for="(question, index) in questions" :key="index" class="question">
         <div class="response">
           <div class="progress-container">
             <span class="progress-text">{{ question.min }}</span>
             <div class="slider-wrapper">
-              <input type="range" min="0" max="100" v-model="answers[index]" class="slider" />
+              <input
+                type="range"
+                min="0"
+                max="100"
+                v-model="answers[index]"
+                class="slider"
+              />
               <div class="slider-labels">
                 <span class="slider-label left">{{ answers[index] }}%</span>
-                <span class="slider-label right">{{ 100 - answers[index] }}%</span>
+                <span class="slider-label right"
+                  >{{ 100 - answers[index] }}%</span
+                >
               </div>
             </div>
             <span class="progress-text">{{ question.max }}</span>
@@ -23,44 +30,42 @@
         <button @click="handleSubmit">Continuar</button>
       </div>
     </div>
-    <div class="image-section">
-      <img src="@/assets/backgrounds/partners.png" alt="Two people reading" class="profile-image" />
-    </div>
     <InformationTest v-if="showModal"></InformationTest>
-    <Personality :tag="tag" v-if="showResult" @close="closeResult"></Personality>
+    <Personality
+      :tag="tag"
+      v-if="showResult"
+      @close="closeResult"
+    ></Personality>
   </div>
-  <Footer></Footer>
 </template>
 
 <script>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import usePhase from '../../composables/usePhase';
-import InformationTest from './../modals/InformationTest.vue'; 
-import Personality from './../modals/Personality.vue'; 
-import Header from '../commons/Header.vue';
-import Footer from '../commons/Footer.vue';
+import { ref } from "vue";
+import usePhase from "../../composables/usePhase";
+import InformationTest from "./../modals/InformationTest.vue";
+import Personality from "./../modals/Personality.vue";
 
 export default {
-  name: 'Phase3',
-  components: { InformationTest, Personality, Header, Footer },
-  setup() {
+  name: "Phase3",
+  components: { InformationTest, Personality },
+  setup(props, { emit }) {
     const { updateUser } = usePhase();
     const questions = [
-      { min: 'Introvertido', max: 'Extrovertido' },
-      { min: 'Intuición', max: 'Sensación' },
-      { min: 'Pensamiento', max: 'Sentimiento' },
-      { min: 'Juicio', max: 'Percepción' }
+      { min: "Introvertido", max: "Extrovertido" },
+      { min: "Intuición", max: "Sensación" },
+      { min: "Pensamiento", max: "Sentimiento" },
+      { min: "Juicio", max: "Percepción" },
     ];
     const answers = ref([50, 50, 50, 50]); // Inicializar en 50%
     const user = ref({});
-    const router = useRouter();
     const showModal = ref(true);
     const showResult = ref(false);
     const tag = ref(null);
 
     const handleSubmit = () => {
-      const convertedAnswers = answers.value.map(value => parseFloat((parseInt(value) * 5 / 100).toFixed(1)));
+      const convertedAnswers = answers.value.map((value) =>
+        parseFloat(((parseInt(value) * 5) / 100).toFixed(1))
+      );
       const calculatedTag = calculateTag(answers.value);
       user.value.self_personality = {
         tag: calculatedTag,
@@ -68,7 +73,7 @@ export default {
         energy: convertedAnswers[1],
         nature: convertedAnswers[2],
         tactics: convertedAnswers[3],
-        identity: 0.1
+        identity: 0.1,
       };
       updateUser(user.value);
       tag.value = calculatedTag;
@@ -76,8 +81,10 @@ export default {
     };
 
     const calculateTag = (answers) => {
-      const aspects = ['E', 'S', 'F', 'P'];
-      const aspect = aspects.map((aspect, index) => calculateAspect(answers[index], aspect)).join('');
+      const aspects = ["E", "S", "F", "P"];
+      const aspect = aspects
+        .map((aspect, index) => calculateAspect(answers[index], aspect))
+        .join("");
       return aspect;
     };
 
@@ -86,21 +93,25 @@ export default {
     };
 
     const oppositeAspect = (aspect) => {
-      return aspect === 'E' ? 'I' :
-        aspect === 'S' ? 'N' :
-        aspect === 'F' ? 'T' :
-        aspect === 'P' ? 'J' :
-        null;
+      return aspect === "E"
+        ? "I"
+        : aspect === "S"
+        ? "N"
+        : aspect === "F"
+        ? "T"
+        : aspect === "P"
+        ? "J"
+        : null;
     };
 
     const closeResult = () => {
       showModal.value = false;
       showResult.value = false;
-      router.push('phase4');
+      emit("setOption", { option: "Phase4" });
     };
 
     return {
-      questions, 
+      questions,
       answers,
       user,
       handleSubmit,
@@ -108,24 +119,31 @@ export default {
       showModal,
       showResult,
       tag,
-      closeResult
+      closeResult,
     };
-  }
+  },
 };
 </script>
 
 <style>
 .phase3-container {
   display: flex;
-  width: 120%;
+  width: 90%;
   height: 100vh;
   align-items: center;
   justify-content: space-between;
   background-color: white;
 }
 
+.form-section {
+  width: 95%;
+  height: 80vh;
+  padding-left: 20px;
+  overflow-y: auto;
+}
+
 .title {
-  color: #6441A4;
+  color: #6441a4;
   text-align: start;
   margin-top: 30px;
   margin-bottom: 30px;
@@ -134,7 +152,7 @@ export default {
 .line {
   width: 100%;
   border: none;
-  border-top: 8px solid #6441A4;
+  border-top: 8px solid #6441a4;
   margin-top: 10px;
   margin-bottom: 20px;
 }
@@ -163,7 +181,8 @@ export default {
   justify-content: space-between;
 }
 
-.left-side, .right-side {
+.left-side,
+.right-side {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -171,14 +190,14 @@ export default {
 
 .progress-text {
   margin: 0 10px;
-  color: #6441A4;
+  color: #6441a4;
   font-weight: bold;
   width: 80px;
 }
 
 .percentage {
   margin-bottom: 5px;
-  color: #6441A4;
+  color: #6441a4;
   font-weight: bold;
 }
 
@@ -224,24 +243,5 @@ button {
 
 button:hover {
   background-color: #5e35b1;
-}
-
-.image-section {
-  width: 50%;
-  height: 100vh;
-}
-
-.profile-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.form-section {
-  width: 60%;
-  height: 80vh;
-  padding-left: 20px;
-  padding-right: 20px;
-  overflow-y: auto;
 }
 </style>
