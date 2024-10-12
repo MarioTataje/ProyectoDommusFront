@@ -69,7 +69,7 @@ export default {
 
     onMounted(() => {
       user.value = { ...user.value, ...userInfo.value };
-      getDistricts(7);
+      getDistricts(1);
     });
 
     return {
