@@ -19,9 +19,9 @@ class IdealProfileService {
         }
     }
 
-    async getIdealRoomates(userId) {
+    async getIdealRoomates(data, userId) {
         try {
-            const response = await dommusApi.get(`users/${userId}/ideal-rommates/`);
+            const response = await dommusApi.post(`users/${userId}/ideal-rommates/`, data);
             return response;
         } catch (error) {
             return null;

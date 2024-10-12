@@ -8,8 +8,8 @@ const useProfile = () => {
     await store.dispatch('student/getUserProfile', userId);
   };
 
-  const getProfiles = async (userId) => {
-    await store.dispatch('student/getProfiles', userId);
+  const getProfiles = async (userId, data) => {
+    await store.dispatch('student/getProfiles', { userId, data });
   };
 
   const getContacts = async (userId) => {

@@ -104,14 +104,14 @@
           // otherId.value = id;
           // showModal.value = true;
         }
-        await getProfiles(senderId);
+        await getProfiles(senderId,{});
         closeModal();
       };
 
       const rejectProfile = async (receiverId) => {
         const senderId = userId.value;
         await sendDislike(senderId, receiverId);
-        await getProfiles(senderId);
+        await getProfiles(senderId,{});
         closeModal();
       };
   

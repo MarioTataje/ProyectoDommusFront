@@ -3,10 +3,11 @@ import IdealProfileService from '@/api/idealProfileService';
 import MatchService from '@/api/matchService';
 import ContactService from '@/api/contactService';
 
-export const getProfiles = async({ commit }, userId ) => {
+export const getProfiles = async({ commit }, payload ) => {
     commit('setLoading', true);
     try {
-        const response = await IdealProfileService.getIdealRoomates(userId);
+        const { data, userId } = payload;
+        const response = await IdealProfileService.getIdealRoomates(data, userId);
         commit('setProfiles', response.data);
     } catch (error) {
         commit('setError', error.message || 'Error al obtener los perfiles');
