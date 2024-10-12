@@ -16,7 +16,7 @@
           :src="profile.genre === 'M' ? require('@/assets/profiles/men-profile.png') : require('@/assets/profiles/women-profile.png')"
           alt="User Image" class="profile-img"/>
         <div class="compatibility-circle">
-          <span>50%</span>
+          <span>{{ profile.compatibility }}%</span>
         </div>
         <div class="profile-info">
           <h2>{{ profile.names + ' ' + profile.lastnames }}</h2>
@@ -71,7 +71,7 @@ export default {
     };
 
     const getCardColor = (profile) => {
-      const compatibility = profile;
+      const { compatibility } = profile;
       if (compatibility >= 80) return 'card-green';
       if (compatibility >= 40) return 'card-blue';
       return 'card-red';

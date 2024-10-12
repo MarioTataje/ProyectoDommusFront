@@ -89,7 +89,7 @@
       });
 
       const getCardColor = (profile) => {
-        const compatibility = profile;
+        const { compatibility } = profile;
         if (compatibility >= 80) return 'card-green';
         if (compatibility >= 40) return 'card-blue';
         return 'card-red';

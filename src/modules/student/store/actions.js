@@ -6,7 +6,7 @@ import ContactService from '@/api/contactService';
 export const getProfiles = async({ commit }, userId ) => {
     commit('setLoading', true);
     try {
-        const response = await IdealProfileService.getProfiles(userId);
+        const response = await IdealProfileService.getIdealRoomates(userId);
         commit('setProfiles', response.data);
     } catch (error) {
         commit('setError', error.message || 'Error al obtener los perfiles');
