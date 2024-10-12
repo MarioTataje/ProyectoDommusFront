@@ -26,7 +26,7 @@ class AuthenticationService {
                 budget_min: data.min_budget,
                 budget_max: data.max_budget,
                 habits: data.habits,
-                phone: data.phone
+                phone: '995995408'
             };
             const response = await dommusApi.post(`register/`, newUser);
             return response;

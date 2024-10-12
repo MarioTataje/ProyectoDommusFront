@@ -16,7 +16,7 @@
           </span>
         </div>
         <p class="register-link"> ¿No tienes cuenta? 
-          <router-link to="/phase1" class="link-title">
+          <router-link to="/register" class="link-title">
             Regístrate
           </router-link>
         </p>
