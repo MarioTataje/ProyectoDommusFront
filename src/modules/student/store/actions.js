@@ -88,3 +88,16 @@ export const getContacts = async({ commit }, userId ) => {
         commit('setLoading', false);
     }
 }
+
+export const updatePlan = async({ commit }, payload ) => {
+    commit('setLoading', true);
+    try {
+        const { userId, data } = payload;
+        const response = await UserService.updatePlan(data, userId);
+        return response.data;
+    } catch (error) {
+        commit('setError', error.message || 'Error al actualizar plan');
+    } finally {
+        commit('setLoading', false);
+    }
+}

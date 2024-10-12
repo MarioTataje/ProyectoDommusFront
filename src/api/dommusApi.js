@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const dommusApi = axios.create({
-    baseURL: 'https://ms-apis.azurewebsites.net/api/'
+    baseURL: 'https://dommus-a2hyfzbwbng7hcev.brazilsouth-01.azurewebsites.net/api/'
 })
 dommusApi.interceptors.request.use((config) => {
     const newConfig = {...config};

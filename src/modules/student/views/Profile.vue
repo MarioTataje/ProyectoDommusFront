@@ -1,240 +1,389 @@
 <template>
-  <div v-if="profile" class="profile-container">
-    <div class="profile-content">
-      <div class="profile-header">
+  <div class="profile-content">
+    <div class="profile-header">
+      <div class="profile-img-wrapper">
         <img :src="profileImage" alt="Profile Image" class="profile-img" />
-        <div class="profile-details">
-          <h2 class="profile-name">{{ profile.names }}</h2>
-          <span class="profile-personality">{{ profile.personality.tag }}</span>
-          <div class="profile-info">
-            <span class="profile-tag1">{{ profile.university_name }}</span>
-            <span class="profile-tag2">{{ profile.degree_name }}</span>
-            <span class="profile-tag3">{{ profile.district_name }}</span>
-            <span class="profile-tag4">{{ profile.budget_min }} - {{ profile.budget_max }} S/.</span>
-          </div>
+      </div>
+      <div class="profile-info">
+        <p class="profile-name">{{ profile.names }}</p>
+        <p class="profile-email">{{ profile.email }}</p>
+      </div>
+    </div>
+
+    <div class="profile-tabs">
+      <div class="tab" :class="{ active: activeTab === 'configuracion' }" 
+        @click="activeTab = 'configuracion'">
+        Configuración
+      </div>
+      <div class="tab" :class="{ active: activeTab === 'datos' }"
+        @click="activeTab = 'datos'">
+        Mis Datos
+      </div>
+      <div class="tab" :class="{ active: activeTab === 'vivienda' }"
+        @click="activeTab = 'vivienda'">
+        Vivienda
+      </div>
+      <div class="tab" :class="{ active: activeTab === 'habitos' }"
+        @click="activeTab = 'habitos'">
+        Hábitos
+      </div>
+    </div>
+
+    <div v-if="activeTab === 'configuracion'" class="profile-configuracion">
+      <div class="form-group">
+        <label for="plan">Plan:</label>
+        <input id="plan" type="text" class="input-configuration"
+          v-model="profile.plan.plan_name" placeholder="Plan" disabled/>
+      </div>
+
+      <div class="form-group">
+        <label for="frequency">Frecuencia:</label>
+        <input id="frequency" type="text" class="input-configuration"
+          v-model="profilePlan" placeholder="Frecuencia" disabled/>
+      </div>
+
+      <div class="form-group">
+        <label for="amount">Monto:</label>
+        <input id="amount" type="number" class="input-configuration"
+          v-model="profile.plan.amount" placeholder="Monto" disabled/>
+      </div>
+    </div>
+
+    <div v-if="activeTab === 'datos'" class="profile-datos">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name">Nombre:</label>
+          <input id="name" type="text" class="input-datos"
+            v-model="fullName" placeholder="Nombre Completo" disabled/>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Descripcion:</label>
+          <input id="description" type="text" class="input-datos"
+            v-model="profile.description" placeholder="Descripcion" disabled/>
         </div>
       </div>
-      <div class="profile-description">
-        <p>{{ profile.description }}</p>
-      </div>
-      <div class="profile-habits">
-        <div class="habits-section">
-          <div class="habits-heading">
-            <div class="habits-text">Mis hábitos</div>
-            <img src="@/assets/logos/habitos.png" alt="Habits" class="habits-img" />
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="birthDate">Fecha de Nacimiento:</label>
+          <input id="birthDate" type="text" class="input-datos"
+            v-model="birthDate" placeholder="Fecha de Nacimiento" disabled/>
           </div>
-          <ul>
-            <li v-for="habit in habitsArray" :key="habit">{{ habit }}</li>
-          </ul>
+
+        <div class="form-group">
+          <label for="degree">Carrera:</label>
+          <input id="degree" type="text" class="input-datos"
+            v-model="fullDegree" placeholder="Carrera" disabled/>
         </div>
       </div>
     </div>
+
+    <div v-if="activeTab === 'vivienda'" class="profile-vivienda">
+      <div class="form-group">
+        <label for="district">Distrito:</label>
+        <input id="district" type="text" class="input-vivienda"
+          v-model="profile.district_name" placeholder="Distrito" disabled/>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="budget_min">Presupuesto Minimo:</label>
+          <input id="budget_min" type="text" class="input-datos"
+            v-model="profile.budget_min" placeholder="Presupuesto Minimo" disabled/>
+        </div>
+
+        <div class="form-group">
+          <label for="budget_max">Presupuesto Maximo:</label>
+          <input id="budget_max" type="text" class="input-datos"
+            v-model="profile.budget_max" placeholder="Presupuesto Maximo" disabled/>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="activeTab === 'habitos'" class="profile-habitos">
+      <div class="habits-section">
+        <div class="habits-heading">
+          <div class="habits-text">Mis hábitos</div>
+        </div>
+        <ul>
+          <li v-for="habit in habitsArray" :key="habit">{{ habit }}</li>
+        </ul>
+      </div>
+    </div>
   </div>
-  <div v-else class="loading-message">Cargando perfil...</div>
 </template>
 
 <script>
-import { onMounted, computed } from 'vue';
-import useProfile from '../composables/useProfile';
-import usePhase from '@/modules/auth/composables/usePhase';
+  import { onMounted, ref, computed } from "vue";
+  import useProfile from "../composables/useProfile";
+  import usePhase from "@/modules/auth/composables/usePhase";
 
-export default {
-  name: 'Profile',
-  setup() {
-    const { userId } = usePhase();
-    const { profile, getUserProfile } = useProfile();
+  export default {
+    name: "Profile",
+    setup() {
+      const { userId } = usePhase();
+      const { profile, getUserProfile } = useProfile();
 
-    onMounted(async () => {
-      const id = userId.value;
-      await getUserProfile(id);
-    });
+      onMounted(async () => {
+        const id = userId.value;
+        await getUserProfile(id);
+      });
 
-    const habitsArray = computed(() => {
-      return profile.value?.habits ? profile.value.habits.split(',').map(habit => habit.trim()) : [];
-    });
+      const habitsArray = computed(() => {
+        return profile.value?.habits
+          ? profile.value.habits.split(",").map((habit) => habit.trim())
+          : [];
+      });
 
-    const profileImage = computed(() => {
-      return profile.value?.genre === 'M'
-        ? require('@/assets/profiles/men_profile.png')
-        : require('@/assets/profiles/women_profile.png');
-    });
+      const activeTab = ref("configuracion");
 
-    return {
-      profile,
-      habitsArray,
-      profileImage
-    };
-  }
-};
+      const profileImage = computed(() => {
+        return profile.value?.genre === "M"
+          ? require("@/assets/profiles/men-profile.png")
+          : require("@/assets/profiles/women-profile.png");
+      });
+
+      const profilePlan = computed(() => {
+        const { plan_name, frequency } = profile.value?.plan;
+        const planMapping = {
+          'Free': 'Libre',
+          'Pro': {
+            'M': 'Mensual',
+            'T': 'Trimestral'
+          }
+        };
+        return planMapping[plan_name]?.[frequency] ?? 3;
+      });
+
+      const fullName = computed(() => {
+        const { names = '', lastnames = '' } = profile.value || {};
+        return `${names} ${lastnames}`;
+      });
+
+      const birthDate = computed(() => {
+        const { birth_date } = profile.value || {};
+
+        if (!birth_date) return '';
+
+        const date = new Date(birth_date);
+        const day = String(date.getUTCDate()).padStart(2, '0');
+        const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Los meses en JS son 0-indexed
+        const year = date.getUTCFullYear();
+
+        return `${day}-${month}-${year}`;
+      });
+
+      const fullDegree = computed(() => {
+        const { university_name = '', degree_name = '' } = profile.value || {};
+        return `${degree_name} - ${university_name}`;
+      });
+
+      return {
+        profile,
+        habitsArray,
+        profileImage,
+        profilePlan,
+        fullName,
+        birthDate,
+        fullDegree,
+        activeTab,
+      };
+    },
+  };
 </script>
 
 <style scoped>
-.profile-container {
-  background-color: #fff;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: calc(100vw - 400px);
-  height: 100vh;
-  padding: 20px;
-  border-radius: 15px;
-  overflow: hidden;
-  box-sizing: border-box;
-}
 
-.profile-content {
-  background-color: #fff;
-  border: 2px solid #8C52FF;
-  border-radius: 15px;
-  padding: 20px;
-  box-sizing: border-box;
-  width: 80%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+  .profile-content {
+    width: 80%;
+    padding: 10px;
+    background-color: #fff;
+    margin-top: -100px;
+  }
 
-.loading-message {
-  font-size: 1.5em;
-  color: #777;
-  text-align: center;
-  margin-top: 50px;
-}
+  .profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 80px;
+  }
 
-.profile-header {
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
+  .profile-img-wrapper {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
 
-.profile-img {
-  border-radius: 15px;
-  width: 250px;
-  height: 250px;
-  object-fit: cover;
-  margin-right: 20px;
-}
+  .profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 
-.profile-details {
-  display: flex;
-  flex-direction: column;
-  width: 80%;
-  align-items: center;
-}
+  .profile-info {
+    margin-left: 20px;
+  }
 
-.profile-name {
-  font-size: 1.5em;
-  margin: 0;
-  color: #8C52FF;
-  text-align: center;
-  width: 100%;
-}
+  .profile-name {
+    font-size: 2em;
+    color: #6441A4;
+  }
 
-.profile-personality {
-  background-color: #BB9FFF;
-  color: white;
-  border-radius: 12px;
-  padding: 5px 10px;
-  margin: 5px 0;
-  text-align: center;
-  width: 60%;
-}
+  .profile-email {
+    color: #888;
+  }
 
-.profile-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 60%;
-}
+  .profile-tabs {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 20px;
+    position: relative; /* Para posicionar el pseudo-elemento */
+  }
 
-.profile-tag1,
-.profile-tag2,
-.profile-tag3,
-.profile-tag4 {
-  color: white;
-  border-radius: 12px;
-  padding: 5px 10px;
-  margin: 5px 0;
-}
+  .tab {
+    flex: 1;
+    padding: 10px;
+    cursor: pointer;
+    text-align: center;
+    background-color: #ffffff;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: #4f4f4f;
+    transition: background-color 0.3s, color 0.3s;
+    position: relative;
+    z-index: 1;
+  }
 
-.profile-tag1 {
-  background-color: #EDCE80;
-}
+  .tab.active {
+    background-color: #e3daf9;
+    color: #6441A4;
+  }
 
-.profile-tag2 {
-  background-color: #9AC5EC;
-}
+  .tab:hover {
+    background-color: #e9e3fa;
+    color: white;
+  }
 
-.profile-tag3 {
-  background-color: #FB7DEE;
-}
+  .tab:first-child {
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 0;
+  }
 
-.profile-tag4 {
-  background-color: #7AD67E;
-}
+  .tab:last-child {
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 0;
+  }
 
-.profile-description {
-  width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
-  border: 1px solid #8C52FF;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  background-color: white;
-  margin-top: 20px;
-}
+  .tab:not(:first-child) {
+    margin-left: -1px;
+  }
 
-.profile-description p {
-  margin: 0;
-}
+  .profile-configuracion {
+    display: flex;
+    flex-direction: column;
+  }
 
-.profile-habits {
-  width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
-}
+  .profile-datos {
+    display: flex;
+    flex-direction: column;
+  }
 
-.profile-habits h3 {
-  margin-bottom: 10px;
-}
+  .profile-vivienda {
+    display: flex;
+    flex-direction: column;
+  }
 
-.habits-section {
-  display: flex;
-  align-items: flex-start;
-}
+  .profile-habitos {
+    display: flex;
+    flex-direction: column;
+  }
 
-.habits-heading {
-  align-items: center;
-  justify-content: center;
-  margin-right: 100px;
-}
+  .form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+    margin-bottom: 20px;
+  }
 
-.habits-text {
-  font-size: 1.2em;
-  color: #8C52FF;
-  align-items: center;
-  margin-bottom: 0;
-}
+  .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
 
-.habits-img {
-  width: 150px;
-  height: 150px;
-  margin-left: 20px;
-  margin-top: 20px;
-  margin-bottom: 0;
-}
+  .input-configuration {
+    padding: 10px 5px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    background-color: transparent;
+    width: 100%;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+    border-radius: 0;
+  }
 
-.profile-habits ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
+  .input-datos {
+    padding: 10px 5px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    background-color: transparent;
+    width: 90%;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+    border-radius: 0;
+  }
 
-.profile-habits li {
-  background-color: #f0f0f0;
-  border-radius: 8px;
-  padding: 10px;
-  margin-bottom: 5px;
-}
+  .input-vivienda {
+    padding: 10px 5px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    background-color: transparent;
+    width: 100%;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+    border-radius: 0;
+  }
+
+  .habits-section {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .habits-heading {
+    margin-bottom: 10px;
+  }
+
+  .habits-text {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+
+  ul {
+    list-style-type: disc;
+    padding-left: 20px;
+  }
+
+  li {
+    font-size: 1.1em;
+    color: #4f4f4f;
+    margin-bottom: 5px;
+  }
+
+  input:focus {
+    border-bottom-color: #6441A4;
+  } 
 </style>

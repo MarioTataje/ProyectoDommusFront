@@ -1,48 +1,54 @@
 <template>
   <div class="modal" v-if="isOpen" @click="closeModal">
     <div class="modal-content" @click.stop>
-      <!-- Contenido del perfil -->
       <div v-if="profile" class="profile-container">
-        <div class="profile-content">
+        <div :class="['profile-content', getCardColor(profile)]">
           <div class="profile-header">
             <img :src="profileImage" alt="Profile Image" class="profile-img" />
             <div class="profile-details">
-              <h2 class="profile-name">{{ profile.names }}</h2>
-              <span class="profile-personality">{{ profile.personality.tag }}</span>
-              <div class="profile-info">
-                <span class="profile-tag1">{{ profile.university_name }}</span>
-                <span class="profile-tag2">{{ profile.degree_name }}</span>
-                <span class="profile-tag3">{{ profile.district_name }}</span>
-                <span class="profile-tag4">{{ profile.budget_min }} - {{ profile.budget_max }} S/.</span>
-              </div>
+              <h2 class="profile-name">{{ profile.names + " " + profile.lastnames }}</h2>
+              <span class="profile-location">{{ profile.district_name }}</span>
             </div>
           </div>
+
           <div class="profile-description">
             <p>{{ profile.description }}</p>
           </div>
+
+          <div class="profile-tags">
+            <span class="profile-tag">{{ profile.degree_name }}</span>
+            <span class="profile-tag">{{ profile.personality.tag }}</span>
+            <span class="profile-tag">{{ profile.budget_min }} - {{ profile.budget_max }} S/.</span>
+            <span class="profile-tag">{{ profile.university_name }}</span>
+          </div>
+
           <div class="profile-habits">
-            <div class="habits-section">
-              <div class="habits-heading">
-                <div class="habits-text">Mis hábitos</div>
-                <img src="@/assets/logos/habitos.png" alt="Habits" class="habits-img" />
-              </div>
-              <ul>
-                <li v-for="habit in habitsArray" :key="habit">{{ habit }}</li>
-              </ul>
+            <div v-for="(habit, index) in habitsArray" :key="habit" 
+              :class="['habit-item', { 'habit-left': index % 2 === 0, 'habit-right': index % 2 !== 0 }]">
+              "{{ habit }}"
             </div>
           </div>
         </div>
+
+        <div class="action-buttons">
+          <button @click="rejectProfile(profile.id)" class="reject-btn">
+            <img src="@/assets/icons/reject-icon.png" alt="Dislike" class="button-icon" />
+          </button>
+          <button @click="acceptProfile(profile.id)" class="like-btn">
+            <img src="@/assets/icons/match-icon.png" alt="Like" class="button-icon" />
+          </button>
+        </div>
       </div>
       <div v-else class="loading-message">Cargando perfil...</div>
-      <!-- Fin del contenido del perfil -->
-      <button class="continue-button" @click="confirmAccept">Continuar</button>
     </div>
   </div>
 </template>
 
 <script>
   import { ref, computed, onMounted, getCurrentInstance } from 'vue';
+  import usePhase from '@/modules/auth/composables/usePhase';
   import useProfile from '../../composables/useProfile';
+  import useMatch from '../../composables/useMatch';
 
   export default {
     props: {
@@ -53,7 +59,9 @@
     },
     setup(props) {
       const { ctx } = getCurrentInstance();
-      const { profile, getUserProfile } = useProfile();
+      const { profile, getUserProfile, getProfiles } = useProfile();
+      const { sendLike, sendDislike } = useMatch();
+      const { userId } = usePhase();
       const isOpen = ref(false);
   
       const openModal = () => {
@@ -63,10 +71,6 @@
       const closeModal = () => {
         isOpen.value = false;
         ctx._.emit('close');
-      };
-  
-      const confirmAccept = () => {
-        closeModal();
       };
   
       onMounted(async () => {
@@ -80,24 +84,55 @@
 
       const profileImage = computed(() => {
         return profile.value?.genre === 'M'
-          ? require('@/assets/profiles/men_profile.png')
-          : require('@/assets/profiles/women_profile.png');
+          ? require('@/assets/profiles/men-profile.png')
+          : require('@/assets/profiles/women-profile.png');
       });
+
+      const getCardColor = (profile) => {
+        const compatibility = profile;
+        if (compatibility >= 80) return 'card-green';
+        if (compatibility >= 40) return 'card-blue';
+        return 'card-red';
+      };
+
+      const acceptProfile = async (receiverId) => {
+        const senderId = userId.value;
+        const like = await sendLike(senderId, receiverId);
+        if (like.flag_match){
+          const id = like.sender.id !== senderId ? like.sender.id : like.receiver.id;
+          console.log(id);
+          // otherId.value = id;
+          // showModal.value = true;
+        }
+        await getProfiles(senderId);
+        closeModal();
+      };
+
+      const rejectProfile = async (receiverId) => {
+        const senderId = userId.value;
+        await sendDislike(senderId, receiverId);
+        await getProfiles(senderId);
+        closeModal();
+      };
   
       return {
         isOpen,
+        openModal,
+        closeModal,
+
         profile,
         habitsArray,
         profileImage,
-        openModal,
-        closeModal,
-        confirmAccept
+        getCardColor,
+        acceptProfile,
+        rejectProfile
       };
     }
   };
 </script>
 
 <style scoped>
+/* Modal Styles */
 .modal {
   position: fixed;
   top: 0;
@@ -112,11 +147,12 @@
 }
 
 .modal-content {
-  background: url('@/assets/backgrounds/global-background.png') no-repeat center center;
-  padding: 10px;
+  background-color: white;
+  padding: 20px;
   border-radius: 10px;
   text-align: center;
-  max-width: 700px;
+  max-width: 900px;
+  max-height: 80%;
   width: 100%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
@@ -128,164 +164,114 @@
   margin-top: 20px;
 }
 
-.profile-container {
-  background-color: transparent;
-  width: 100%;
-  padding: 0;
-  margin: 10px;
-}
-
+/* Profile Styles */
 .profile-content {
-  background-color: transparent; 
-  border: none;
-  padding: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-radius: 15px;
+  position: relative;
+}
+
+.profile-content.card-red {
+  border: 3px solid #f44336;
+}
+
+.profile-content.card-blue {
+  border: 3px solid #2196f3;
+}
+
+.profile-content.card-green {
+  border: 3px solid #4caf50;
 }
 
 .profile-header {
   display: flex;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 20px;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px 20px 10px 20px; 
 }
 
 .profile-img {
   border-radius: 50%;
-  width: 200px;
-  height: 200px;
-  object-fit: cover;
-  margin-left: 25px;
-}
-
-.profile-details {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
+  width: 120px;
+  height: 120px;
+  position: absolute;
+  top: -60px;
+  left: -30px; 
+  border: 3px solid white; 
 }
 
 .profile-name {
+  font-size: 1.8em;
+  margin: 0;
+}
+
+.profile-location {
+  color: #888;
   font-size: 1.2em;
-  margin: 0;
-  color: #8C52FF;
-  text-align: center;
-  width: 100%;
 }
 
-.profile-personality {
-  background-color: #BB9FFF;
-  color: white;
-  border-radius: 12px;
-  padding: 5px 10px;
-  margin: 5px 0;
-  text-align: center;
-  width: 60%;
-}
-
-.profile-info {
+/* Profile Info Tags */
+.profile-tags {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
-.profile-tag1,
-.profile-tag2,
-.profile-tag3,
-.profile-tag4 {
-  color: white;
-  border-radius: 12px;
-  width: 40%;
-  padding: 5px 10px;
-  margin: 5px 0;
-}
-
-.profile-tag1 {
-  background-color: #EDCE80;
-}
-
-.profile-tag2 {
-  background-color: #9AC5EC;
-}
-
-.profile-tag3 {
-  background-color: #FB7DEE;
-}
-
-.profile-tag4 {
-  background-color: #7AD67E;
-}
-
-.profile-description {
-  width: 90%;
-  padding: 20px;
-  box-sizing: border-box;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-  margin-bottom: 20px;
-  text-align: left;
-}
-
-.profile-description p {
-  margin: 0;
-}
-
-.profile-habits {
-  width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.habits-section {
-  display: flex;
-  align-items: flex-start;
-}
-
-.habits-heading {
-  align-items: center;
   justify-content: center;
-  margin-right: 100px;
+  gap: 10px;
+  margin-top: 10px;
 }
 
-.habits-text {
-  font-size: 20px;
-  color: #8C52FF;
-  align-items: center;
-  margin-bottom: 0;
+.profile-tag {
+  background-color: #F0F0FF;
+  border-radius: 12px;
+  padding: 5px 10px;
+  font-size: 0.9em;
 }
 
-.habits-img {
-  width: 100px;
-  height: 100px;
-  margin-left: 20px;
-  margin-top: 20px;
-  margin-bottom: 0;
-}
-
-.profile-habits ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-.profile-habits li {
-  background-color: #f0f0f0;
-  border-radius: 8px;
+/* Profile Description */
+.profile-description {
+  background-color: white;
   padding: 10px;
-  margin-bottom: 5px;
+  text-align: justify; 
 }
 
-.continue-button {
-  background-color: #8F6EE0;
-  color: #fff;
-  border: none;
+/* Profile Habits */
+.profile-habits {
+  display: flex;
+  flex-wrap: wrap; /* Stack habits vertically */
+  padding: 10px;
+  margin-top: 5px;
+}
+
+.habit-item {
   border-radius: 8px;
+  padding: 8px 15px; /* Adjust padding for better appearance */
+  font-size: 0.9em;
+  margin: 0 10px; /* Margin for spacing between items */
+  flex: 1 1 45%;
+}
+
+.habit-left {
+  align-self: flex-start; 
+}
+
+.habit-right {
+  align-self: flex-end;
+}
+
+/* Action Buttons */
+.action-buttons {
+  margin-top: 20px;
+}
+
+.reject-btn, .like-btn {
+  background-color: transparent; 
+  border: none;
   cursor: pointer;
-  margin-top: 0px;
-  font-size: 14px;
-  padding: 12px 20px;
+  padding: 0;
+}
+
+.button-icon {
+  width: 40px; 
+  height: 40px;
 }
 </style>

@@ -1,60 +1,73 @@
 <template>
-  <div class="phase1-container">
-    <div class="phase1-header">
-      <img src="@/assets/logos/logo.png" alt="Dommus Logo" class="logo" />
+  <div class="register-container">
+    <div class="form-section">
+      <form @submit.prevent="handleSubmit">
+        <h1 class="register-title">Regístrate</h1>
+        <div class="form-group-inline">
+          <div class="input-group">
+            <label for="names">Nombre:</label>
+            <input type="text" id="names" placeholder="Nombre" v-model="user.names" required />
+          </div>
+          <div class="input-group">
+            <label for="lastnames">Apellido:</label>
+            <input type="text" id="lastnames" placeholder="Apellido" v-model="user.lastnames" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" placeholder="Email" v-model="user.email" @input="validateEmail" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Contraseña:</label>
+          <input type="password" id="password" placeholder="Contraseña" v-model="user.password" required />
+        </div>
+        <div class="form-group-inline">
+          <div class="input-group">
+            <label for="birthdate">Fecha de nac.:</label>
+            <input type="date" id="birthdate" v-model="user.birth_date" required />
+          </div>
+          <div class="input-group">
+            <label for="gender">Sexo:</label>
+            <select id="gender" v-model="user.genre" required>
+              <option value="">Seleccionar</option>
+              <option v-for="g in genders" :key="g.value" :value="g.value">{{ g.name }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="university">Universidad:</label>
+          <select id="university" v-model="selectedUniversity" @change="onUniversityChange" required>
+            <option v-for="university in universities" :key="university.id" :value="university">{{ university.name }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="degree">Facultad Universitaria:</label>
+          <select id="degree" v-model="selectedDegree" required>
+            <option v-for="degree in degrees" :key="degree.id" :value="degree">{{ degree.name }}</option>
+          </select>
+        </div>
+        <div class="form-group button-container">
+          <button type="submit" class="submit-button">Continuar</button>
+        </div>    
+      </form>
     </div>
-    <form @submit.prevent="handleSubmit" class="phase1-content">
-      <div class="phase1-group">
-        <input type="text" placeholder="Nombres *" v-model="user.names" required />
-        <input type="text" placeholder="Apellidos *" v-model="user.lastnames" required />
-      </div>
-      <div class="phase1-group">
-        <input type="email" placeholder="Correo Universitario *" v-model="user.email" @input="validateEmail" required />
-        <input type="tel" placeholder="Número de Celular *" v-model="user.phone" required />
-      </div>
-      <p v-if="emailError" class="error">{{ emailError }}</p>
-      <div class="phase1-group">
-        <input type="password" placeholder="Ingrese su contraseña *" v-model="user.password" required />
-        <input type="password" placeholder="Confirme su contraseña *" required />
-      </div>
-      <div class="phase1-group">
-        <select v-model="selectedUniversity" @change="onUniversityChange" required style="height: 52px;">
-          <option v-for="university in universities" :key="university.id" :value="university">{{ university.name }}</option>
-        </select>
-        <select v-model="selectedDegree" required style="height: 52px;">
-          <option v-for="degree in degrees" :key="degree.id" :value="degree">{{ degree.name }}</option>
-        </select>
-      </div>
-      <div class="phase1-group">
-        <input type="date" placeholder="Fecha de Nacimiento *" v-model="user.birth_date" required />
-        <select v-model="user.genre" required style="height: 52px;">
-          <option value="">Sexo</option>
-          <option v-for="g in genders" :key="g.value" :value="g.value">{{ g.name }}</option>
-        </select>
-      </div>
-      <p>¿Ya tienes una cuenta? <router-link to="/login">Inicia Sesión</router-link></p>
-      <div class="button-container">
-        <button type="submit" class="submit-button">Continuar</button>
-      </div>    
-    </form>
   </div>
 </template>
 
 <script>
-import { ref, onMounted, getCurrentInstance } from 'vue';
+import { ref, onMounted } from 'vue';
 import usePhase from '../../composables/usePhase';
 import useStudies from '../../composables/useStudies';
 
 export default {
-  name: 'Phase1',
-  setup() {
+  name: 'Register',
+  setup(props, { emit }) {
     const { updateUser } = usePhase();
     const { universities, degrees, getUniversities, getDegrees } = useStudies();
     const user = ref({
       names: '',
       lastnames: '',
       email: '',
-      phone: '',
       password: '',
       university: null,
       degree: null,
@@ -64,7 +77,6 @@ export default {
 
     const selectedUniversity = ref(null);
     const selectedDegree = ref(null);
-    const { ctx } = getCurrentInstance();
 
     const genders = [
       { name: 'Masculino', value: 'M' },
@@ -101,7 +113,7 @@ export default {
       user.value.degree = selectedDegree.value;
       user.value.birth_date = formatDateToISO(user.value.birth_date);
       updateUser(user.value);
-      ctx._.emit('goToNextPhase');
+      emit('setOption', { option: 'Phase2' });
     };
 
     onMounted(() => {
@@ -125,98 +137,85 @@ export default {
 </script>
 
 <style scoped>
-.phase1-container {
-  background: url('@/assets/backgrounds/global-background.png') no-repeat center center;
-  background-size: cover;  
+.register-container {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: calc(100vw - 400px);
-  padding: 10px;
-  box-sizing: border-box;
-  border-radius: 15px;
-  border: 2px solid white;
-}
-
-.phase1-header {
-  text-align: center;
-  margin-top: 20px;
-  margin-bottom: 30px;
-}
-
-.logo {
-  width: 250px;
+  width: 100%;
   height: auto;
-  margin-bottom: 10px; 
-}
-
-.phase1-content {
-  margin-left: 110px;
-  width: 80%;
-}
-
-.phase1-group {
-  display: flex;
+  margin: 0 auto;
+  align-items: center;
   justify-content: space-between;
+  background-color: white;
+}
+
+.form-section {
+  width: 100%;
+  height: 90%;
+  padding: 40px;
+}
+
+.register-title {
+  font-size: 32px;
+  color: #6441A4;
   margin-bottom: 20px;
 }
 
-.phase1-group input,
-.phase1-group select {
-  background-color: #d7d7d7;
-  color: #fff;
-  width: 45%;
-  padding: 17px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
+.form-group-inline {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
 }
 
-.phase1-group input::placeholder,
-.phase1-group select::placeholder {
-  color: #fff;
+.input-group {
+  width: 100%;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  margin-bottom: 0px;
+  font-size: 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: white;
+  font-size: 14px;
+  color: #333;
+  transition: border-color 0.3s;
+  appearance: none;
 }
 
 .button-container {
   display: flex;
   justify-content: flex-end;
-  width: 100%;
 }
 
-button {
+.submit-button {
   background-color: #7e57c2;
-  color: #fff;
+  color: white;
   padding: 12px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  text-decoration: underline;
-  margin-top: 10px;
-  width: 100px;
-  align-self: flex-end; 
+  width: 150px;
 }
 
-button:hover {
+.submit-button:hover {
   background-color: #5e35b1;
 }
 
-p {
-  color: white;
-}
-
-a {
-  color: white;
-  text-decoration: underline; 
-}
-
-a:hover {
-  color: #f0f0f0;
-}
-
-.error {
-  color: red;
-  font-size: 14px;
-  margin-bottom: 5px;
-}
 </style>

@@ -1,94 +1,83 @@
 <template>
   <div class="phase4-container">
-    <h2 class="centered-title">Vivienda</h2>
-    <div class="centered-content">
-      <form @submit.prevent="handleSubmit" class="centered-form">
-        <div class="form-group">
-          <label for="departamento">Departamento</label>
-          <select v-model="selectedRegion" @change="onRegionChange" id="departamento" required>
-            <option disabled value="">Departamento</option>
-            <option v-for="region in regions" :key="region.id" :value="region">
-              {{ region.name }}
-            </option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="provincia">Provincia</label>
-          <select v-model="selectedProvince" @change="onProvinceChange" id="provincia" required>
-            <option disabled value="">Provincia</option>
-            <option v-for="province in provinces" :key="province.id" :value="province">
-              {{ province.name }}
-            </option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="distrito">Distrito</label>
-          <select v-model="selectedDistrict" id="distrito" required>
-            <option disabled value="">Distrito</option>
-            <option v-for="district in districts" :key="district.id" :value="district">
-              {{ district.name }}
-            </option>
-          </select>
-        </div>
-        <div class="icon-container">
-          <img src="@/assets/logos/ubigeo.png" alt="Mapa" />
-        </div>
-        <div class="button-container">
-          <button type="submit">Continuar</button>
-        </div>
-      </form>
+    <div class="form-section">
+      <h2 class="centered-title">Vivienda</h2>
+      <div class="centered-content">
+        <p>Descripción del lugar donde desea vivir</p>
+        <form @submit.prevent="handleSubmit" class="centered-form">
+          <div class="form-group">
+            <select v-model="selectedDistrict" id="distrito" required>
+              <option disabled value="">Distrito</option>
+              <option v-for="district in districts" :key="district.id" :value="district">
+                {{ district.name }}
+              </option>
+            </select>
+          </div>
+          <div class="budget-section-inline">
+            <div class="budget-input">
+              <label for="min-budget">Presupuesto Mínimo</label>
+              <input type="number" id="min-budget" v-model.number="user.min_budget" @change="formatBudget('min_budget')" placeholder="Min" />
+            </div>
+            <div class="budget-input">
+              <label for="max-budget">Presupuesto Máximo</label>
+              <input type="number" id="max-budget" v-model.number="user.max_budget" @change="formatBudget('max_budget')" placeholder="Max" />
+            </div>
+          </div>
+          <div class="icon-container">
+            <img src="@/assets/logos/ubigeo.png" alt="Mapa" />
+          </div>
+
+          <div class="button-container">
+            <button type="submit">Continuar</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </template>
 
+
 <script>
-import { ref, onMounted, getCurrentInstance } from 'vue';
+import { ref, onMounted } from 'vue';
 import usePhase from '../../composables/usePhase';
 import useLocations from '../../composables/useLocations';
 
 export default {
   name: 'Phase4',
-  setup() {
-    const { updateUser } = usePhase();
-    const { regions, provinces, districts, getRegions, getProvinces, getDistricts } = useLocations();
+  setup(props, { emit }) {
+    const { user: userInfo, updateUser } = usePhase();
+    const { districts, getDistricts } = useLocations();
 
-    const user = ref({});
+    const user = ref({
+      min_budget: 0.0,
+      max_budget: 0.0
+    });
 
-    const selectedRegion = ref(null);
-    const selectedProvince = ref(null);
     const selectedDistrict = ref(null);
-    const { ctx } = getCurrentInstance();
-
-    const onRegionChange = () => {
-      const region = selectedRegion.value;
-      getProvinces(region.id);
-    };
-
-    const onProvinceChange = () => {
-      const province = selectedProvince.value;
-      getDistricts(province.id);
-    };
-
+    
     const handleSubmit = async () => {
       user.value.district = selectedDistrict.value;
       updateUser(user.value);
-      ctx._.emit('goToNextPhase');
+      emit("setOption", { option: "Phase5" });
+    };
+
+    const formatBudget = (key) => {
+      if (user.value[key] !== null && user.value[key] !== undefined) {
+        user.value[key] = parseFloat(user.value[key]).toFixed(1);
+      }
     };
 
     onMounted(() => {
-      getRegions();
+      user.value = { ...user.value, ...userInfo.value };
+      getDistricts(7);
     });
 
     return {
-      selectedRegion,
-      selectedProvince,
       selectedDistrict,
-      regions,
-      provinces,
       districts,
       handleSubmit,
-      onRegionChange,
-      onProvinceChange
+      formatBudget,
+      user
     };
   }
 };
@@ -96,29 +85,29 @@ export default {
 
 <style scoped>
 .phase4-container {
-  background: url('@/assets/backgrounds/global-background.png') no-repeat center center;
-  background-size: cover;  
-  flex-direction: column;
-  justify-content: center;
+  display: flex;
+  width: 100%;
+  height: 100vh;
   align-items: center;
-  width: calc(100vw - 400px);
+  justify-content: space-between;
+  background-color: white;
+}
+
+.form-section {
+  width: 95%;
   padding: 20px;
-  border-radius: 15px;
-  box-sizing: border-box;
+  overflow-y: auto;
 }
 
 .centered-title {
-  color: #7e57c2;
-  text-align: center;
-  width: 100%;
-  margin-top: 60px;
-  margin-bottom: 40px;
+  color: #6441A4;
+  text-align: start;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 .centered-content {
-  margin: 0 auto;
   width: 100%;
-  max-width: 40%;
 }
 
 .form-group {
@@ -135,6 +124,34 @@ export default {
   width: 100%;
   padding: 10px;
   margin-top: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: white;
+  font-size: 15px;
+  color: #333;
+  transition: border-color 0.3s;
+  appearance: none;
+}
+
+.budget-section-inline {
+  display: flex;
+  justify-content: space-between; /* Los inputs estarán en línea */
+  margin-bottom: 20px;
+}
+
+.budget-input {
+  width: 48%; /* Cada input ocupará casi la mitad */
+}
+
+.budget-input label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.budget-input input {
+  width: 100%;
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
@@ -170,5 +187,6 @@ button {
 button:hover {
   background-color: #5e35b1;
 }
+
 </style>
 

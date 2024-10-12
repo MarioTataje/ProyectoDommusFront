@@ -1,20 +1,26 @@
 <template>
   <div class="phase5-container">
-    <h2 class="centered-title">Hábitos</h2>
-    <div class="centered-content">
-      <div v-for="(question, qIndex) in questions" :key="qIndex" class="question">
-        <p>{{ question.text }}</p>
-        <div class="options">
-          <label v-for="(option, oIndex) in question.options" :key="oIndex">
-            <input type="radio" :name="question.name" :value="option.value" v-model="answers[qIndex]" />
-            {{ option.label }}
-          </label>
+    <div class="form-section">
+      <h2 class="centered-title">Hábitos</h2>
+      <div class="centered-content">
+        <div v-for="(question, qIndex) in questions" :key="qIndex" class="question">
+          <p>{{ question.text }}</p>
+          <div class="options">
+            <select v-model="answers[qIndex]" required>
+              <option disabled value="">Seleccione una opción</option>
+              <option v-for="(option, oIndex) in question.options" :key="oIndex" 
+                :value="option.value">
+                {{ option.label }}
+              </option>
+            </select>
+          </div>
         </div>
       </div>
-      <button @click="handleContinue">Continuar</button>
+      <button @click="handleContinue" class="register-button">REGISTRATE</button>
     </div>
   </div>
 </template>
+
 
 <script>
 import { ref, onMounted } from 'vue';
@@ -109,46 +115,56 @@ export default {
 
 <style scoped>
 .phase5-container {
-  background: url('@/assets/backgrounds/global-background.png') no-repeat center center;
-  background-size: cover;  
-  flex-direction: column;
-  justify-content: center;
+  display: flex;
+  width: 120%;
+  height: 100vh;
   align-items: center;
-  width: calc(100vw - 400px);
+  justify-content: space-between;
+  background-color: white;
+}
+
+.form-section {
+  width: 95%;
   padding: 20px;
-  border-radius: 15px;
-  box-sizing: border-box;
+  overflow-y: auto;
 }
 
 .centered-title {
-  color: #7e57c2;
-  text-align: center;
-  width: 100%;
-  margin-top: 40px;
-  margin-bottom: 20px;
+  color: #6441A4;
+  text-align: start;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .centered-content {
-  margin: 0 auto;
-  width: 80%;
-  max-width: 80%;
+  width: 100%;
 }
 
 .question {
+  margin-top: 20px;
   margin-bottom: 20px;
   text-align: left;
 }
 
 .question p {
-  font-weight: bold;
+  margin-bottom: 10px;
 }
 
-.options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 10px;
-  margin-bottom: 10px;
+.options select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: white;
+  font-size: 15px;
+  color: #333;
+  transition: border-color 0.3s;
+  appearance: none;
+}
+
+.options select:hover, .options select:focus {
+  border-color: #7e57c2;
+  outline: none;
 }
 
 label {
@@ -189,4 +205,5 @@ button {
 button:hover {
   background-color: #7b1fa2;
 }
+
 </style>

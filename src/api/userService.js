@@ -19,6 +19,15 @@ class UserService {
         }
     }
 
+    async updatePlan(data, userId) {
+        try {
+            const response = await dommusApi.post(`users/${userId}/plans/`, data);
+            return response;
+        } catch (error) {
+            return null;
+        }
+    }
+
 }
 
 export default new UserService();

@@ -1,66 +1,64 @@
-<!--eslint-disable-->
 <template>
+  <Header @setOption="setComponent"/> 
   <div class="layout">
-    <Menu :activeOption="activeOption" :options="options" @updateOption="updateOption"/>
     <component :is="currentComponent"/>
   </div>
+  <Footer></Footer>
 </template>
-  
-<script>
-  import { ref } from 'vue';
-  import Menu from './Menu.vue';
-  import Profile from './Profile.vue';
-  import Home from './Home.vue';
-  import Notifications from './Notifications.vue';
-  
-  import profileIcon from '@/assets/icons/profile_icon.png';
-  import homeIcon from '@/assets/icons/home_icon.png';
-  import notificationsIcon from '@/assets/icons/notifications_icon.png';
-  import logoutIcon from '@/assets/icons/logout_icon.png';
 
-  export default {
-	name: 'UserLayout',
-	components: {
+<script>
+import { ref } from 'vue';
+import Profile from './Profile.vue';
+import Home from './Home.vue';
+import Plans from './Plans.vue';
+
+import Header from './commons/Header.vue';
+import Footer from './commons/Footer.vue';
+
+export default {
+  name: 'UserLayout',
+  components: {
     Profile,
-		Menu,
-		Home,
-    Notifications,
-	},
-  setup(){
+    Home,
+    Plans,
+    Header,
+    Footer,
+  },
+  setup() {
     const options = [
-      { label: 'Profiles', component: 'Profile', icon: profileIcon },
-      { label: 'Home', component: 'Home', icon: homeIcon },
-      { label: 'Notifications', component: 'Notifications', icon: notificationsIcon },
-      { label: 'Logout', component: 'Logout', icon: logoutIcon }
+      { label: 'Profile', component: 'Profile' },
+      { label: 'Home', component: 'Home' },
+      { label: 'Plans', component: 'Plans' },
     ];
 
-    const activeOption = ref(options[1].label);
     const currentComponent = ref(options[1].component);
 
     const updateOption = (label) => {
-      activeOption.value = label;
-      currentComponent.value = options.find(option => option.label === label).component;
+      currentComponent.value = options.find((option) => option.label === label).component;
+    };
+
+    const setComponent = (event) => {
+      updateOption(event.option);
     };
 
     return {
       options,
-      activeOption,
       currentComponent,
-      updateOption
+      updateOption,
+      setComponent,
     };
-  }
-  };
+  },
+};
 </script>
-  
+
 <style scoped>
-  .layout {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-  }
+.layout {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
 </style>
-  

@@ -1,27 +1,24 @@
 <template>
   <div class="modal" v-if="isOpen" @click="closeModal">
     <div class="modal-content" @click.stop>
-      <h2 class="title-text">¡Descubre tu personalidad!</h2>
+      <h2 class="title-text">Descubre tu personalidad de MBTI</h2>
       <p class="instructions">Sigue estos pasos para tomar el test y compartir tus resultados</p>
       <div class="steps">
         <div class="step">
           <p class="step-label">1. Haz clic en el siguiente enlace para realizar tu test de personalidad:</p>
           <button class="test-button" @click="openTest">Test de personalidad</button>
-        </div>
-        <div class="step">
-          <p class="step-label">2. Completa el test de personalidad siguiendo las indicaciones en la página.</p>
           <p class="step-description">El test te tomará aproximadamente 12 minutos.</p>
         </div>
         <div class="step">
-          <p class="step-label">3. Recibe tus resultados.</p>
+          <p class="step-label">2. Recibe tus resultados.</p>
           <p class="step-description">
             Al finalizar el test, recibirás un análisis detallado con <strong>porcentajes</strong> de cada uno de 
             los cuatro enfoques: Introversión/Extraversion, Intuición/Observación, Pensamiento/Sentimiento, y 
-            Juicio/Percepción.
+            Juicio/Percepción.            
           </p>
         </div>
         <div class="step">
-          <p class="step-label">4. Regresa a esta plataforma e ingresa tus resultados en la siguiente pantalla.</p>
+          <p class="step-label">3. Ingresa tus resultados en la siguiente pantalla.</p>
         </div>
       </div>
       <button class="continue-button" @click="confirmAccept">Continuar</button>
@@ -82,7 +79,7 @@ export default {
 }
 
 .modal-content {
-  background: url('@/assets/backgrounds/global-background.png') no-repeat center center;
+  background-color: white;
   padding: 20px;
   border-radius: 10px;
   text-align: center;
@@ -92,13 +89,12 @@ export default {
 }
 
 .title-text {
-  color: white;
+  color: #6441A4;
   margin-bottom: 10px;
 }
 
 .instructions {
-  color: #8c52ff;
-  font-weight: bold;
+  color: black;
   margin-bottom: 20px;
 }
 
@@ -117,20 +113,19 @@ export default {
 }
 
 .step-label {
-  color: #8c52ff;
-  font-weight: bold;
+  color: black;
   margin: 0;
 }
 
 .step-description {
-  color: #8c52ff;
-  margin-top: 8px;
+  color: black;
+  margin-top: 1px;
 }
 
 .test-button {
+  margin-top: 0px;
   background-color: transparent;
-  border: 2px solid #8c52ff;
-  color: #8f6ee0;
+  color: blue;
   border-radius: 8px;
   cursor: pointer;
   font-size: 14px;

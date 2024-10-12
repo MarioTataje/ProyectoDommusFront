@@ -16,10 +16,16 @@ const useProfile = () => {
     await store.dispatch('student/getContacts', userId)
   };
 
+  const updatePlan = async (userId, data) => {
+    const response = await store.dispatch('student/updatePlan', { userId, data });
+    return response;
+  };
+
   return {
     getUserProfile,
     getProfiles,
     getContacts,
+    updatePlan,
     profile: computed(() => store.getters['student/profile']),
     profiles: computed(() => store.getters['student/profiles']),
     contacts: computed(() => store.getters['student/contacts']),
