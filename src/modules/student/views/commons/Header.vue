@@ -58,8 +58,8 @@
         <div class="slider-wrapper">
           <vue-slider
             v-model="ageRange"
-            min="0"
-            max="70"
+            min=0
+            max=70
             style="width: 300px;"
           ></vue-slider>
         </div>
@@ -80,6 +80,9 @@
           </select>
         </div>
       </div>
+      <button @click="applyFilters" class="filter-button">
+        Filtrar
+      </button>
     </div>
 
     <!-- Notification Icon -->
@@ -133,7 +136,7 @@ export default {
   },
   setup(props, { emit }) {
     const { userId } = usePhase();
-    const { profile, getUserProfile } = useProfile();
+    const { profile, getUserProfile, getProfiles } = useProfile();
     const { receivedLikes: notifications, getReceivedLikes } = useMatch();
     const { universities, getUniversities } = useStudies();
 
@@ -184,6 +187,16 @@ export default {
       emit("setOption", { option: "Profile" });
     };
 
+    const applyFilters = () => {
+      const filters = {
+        sex: selectedGender.value,
+        age_min: ageRange.value[0],
+        age_max: ageRange.value[1],
+        university_id: selectedUniversity.value
+      }
+      getProfiles(userId.value, filters)
+    };
+
     return {
       profileImage,
       notifications,
@@ -203,8 +216,8 @@ export default {
       selectGender,
       universities,
       selectedUniversity,
-
-      ageRange
+      ageRange,
+      applyFilters
     };
   },
 };
@@ -367,4 +380,19 @@ export default {
   flex-wrap: nowrap; /* Asegura que los elementos no se bajen a una nueva fila */
 }
 
+.filter-button {
+  background-color: #7e57c2;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.filter-button:hover {
+  background-color: #5e3c8e;
+}
 </style>
