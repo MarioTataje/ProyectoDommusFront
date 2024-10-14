@@ -58,8 +58,8 @@
         <div class="slider-wrapper">
           <vue-slider
             v-model="ageRange"
-            min=0
-            max=70
+            min=16
+            max=45
             style="width: 300px;"
           ></vue-slider>
         </div>
@@ -85,7 +85,7 @@
       </button>
     </div>
 
-    <!-- Notification Icon -->
+    <!-- Notification Icon -->  
     <div class="notification-wrapper">
       <img
         src="@/assets/icons/notification-icon.png"
@@ -97,25 +97,34 @@
       <!-- Dropdown menu for notifications -->
       <div v-if="showNotifications" class="notification-dropdown">
         <h3>Notificaciones</h3>
-        <div
-          v-for="(notification, index) in notifications.slice(0, 4)"
-          :key="index"
-          class="notification-item"
-        >
-          <span
-            >{{ notification.sender.names }}
-            {{ notification.sender.lastnames }} quiere contactarte!</span
-          >
+        <div v-for="(notification, index) in notifications.slice(0, 4)" :key="index" class="notification-item">
+          <span>
+            {{ notification.sender.names }}
+            {{ notification.sender.lastnames }} quiere contactarte!
+          </span>
         </div>
       </div>
     </div>
 
-    <img
-      :src="profileImage"
-      @click="goProfile"
-      alt="Perfil"
-      class="profile-picture"
-    />
+    <div class="profile-wrapper">
+      <img
+        :src="profileImage"
+        @click="toggleProfileMenu"
+        alt="Perfil"
+        class="profile-picture"
+      />
+
+      <!-- Dropdown menu for profile -->
+      <div v-if="showProfileMenu" class="profile-dropdown">
+        <button @click="goProfile" class="profile-dropdown-item">Mi Perfil</button>
+        <button class="profile-dropdown-item">
+          <router-link to="/" class="link-title">
+            Cerrar Sesión
+          </router-link>
+        </button>
+      </div>
+    </div>
+
   </header>
 </template>
 
@@ -168,11 +177,16 @@ export default {
     };
 
     const selectedUniversity = ref(null);
-    const ageRange = ref([5, 50]);
+    const ageRange = ref([20, 30]);
 
     const showFilterPro = ref(false);
     const toggleFilterPro = () => {
       showFilterPro.value = !showFilterPro.value;
+    };
+
+    const showProfileMenu = ref(false);
+    const toggleProfileMenu = () => {
+      showProfileMenu.value = !showProfileMenu.value;
     };
 
     const goHome = () => {
@@ -212,6 +226,9 @@ export default {
 
       showFilterPro,
       toggleFilterPro,
+
+      showProfileMenu,
+      toggleProfileMenu,
 
       selectedGender,
       selectGender,
@@ -395,5 +412,53 @@ export default {
 
 .filter-button:hover {
   background-color: #5e3c8e;
+}
+
+.profile-wrapper {
+  position: relative;
+}
+
+.profile-picture {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  width: 150px;
+  background-color: white;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 10px;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-dropdown-item {
+  padding: 10px 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+}
+
+.profile-dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+.link-title {
+  text-decoration: none;
+  color: inherit;
+}
+
+.link-title:hover {
+  text-decoration: none; 
 }
 </style>

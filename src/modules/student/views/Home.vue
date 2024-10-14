@@ -58,9 +58,9 @@ export default {
       getProfiles(userId.value, {});
     });
 
-    const openProfile = (id, compatibility) => {
+    const openProfile = (id, profileCompatibility) => {
       profileId.value = id;
-      compatibility.value = compatibility;
+      compatibility.value = profileCompatibility;
       showProfile.value = true;
     };
 

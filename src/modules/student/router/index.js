@@ -2,7 +2,7 @@ import UserLayout from '../views/UserLayout.vue'
 
 export default [
     {
-        path: "/",
+        path: "/home",
         name: "home",
         component: UserLayout
     },
