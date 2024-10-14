@@ -55,7 +55,7 @@ export default {
     const showModal = ref(false);
 
     onMounted(() => {
-      getProfiles(userId.value, {});
+      // getProfiles(userId.value, {});
     });
 
     const openProfile = (id, profileCompatibility) => {
