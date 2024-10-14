@@ -44,8 +44,8 @@
           </button>
           <button
             class="filter-option"
-            :class="{ selected: selectedGender === 'Ambos' }"
-            @click="selectGender('Ambos')"
+            :class="{ selected: selectedGender === 'A' }"
+            @click="selectGender('A')"
           >
             Ambos
           </button>
@@ -188,8 +188,9 @@ export default {
     };
 
     const applyFilters = () => {
+      const bothGender = selectedGender.value === 'A';
       const filters = {
-        sex: selectedGender.value,
+        sex: bothGender ? undefined : selectedGender.value,
         age_min: ageRange.value[0],
         age_max: ageRange.value[1],
         university_id: selectedUniversity.value
