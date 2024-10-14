@@ -9,7 +9,19 @@
 
       <div class="fortalezas-section">
         <label for="description">Fortalezas</label>
-        <!-- code here -->
+        <div class="tags-container">
+          <div v-for="(row, rowIndex) in fortalezasRows" :key="rowIndex" class="tag-row">
+            <div
+              v-for="fortaleza in row"
+              :key="fortaleza"
+              class="tag"
+              :class="{ selected: isSelected(fortaleza) }"
+              @click="toggleTag(fortaleza)"
+            >
+              {{ fortaleza }}
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="button-container">
@@ -18,7 +30,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import { ref, onMounted, computed } from 'vue';
@@ -29,9 +40,10 @@ export default {
   setup(props, { emit }) {
     const { user: userInfo, updateUser } = usePhase();
     const user = ref({});
+    const tagsSeleccionados = ref([]);
 
     const handleSubmit = () => {
-      updateUser(user.value);
+      updateUser({ ...user.value, fortalezas: tagsSeleccionados.value });
       emit('setOption', { option: 'Phase3' });
     };
 
@@ -39,22 +51,38 @@ export default {
       user.value = { ...user.value, ...userInfo.value };
     });
 
-    const userAge = computed(() => {
-      if (!user.value.birth_date) return '';
-      const birthDate = new Date(user.value.birth_date);
-      const today = new Date();
-      let age = today.getFullYear() - birthDate.getFullYear();
-      const monthDiff = today.getMonth() - birthDate.getMonth();
-      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
+    const fortalezas = [
+      'Responsabilidad', 'Empatía', 'Adaptabilidad', 'Honestidad',
+      'Paciencia', 'Creatividad', 'Autodisciplina', 'Generosidad'
+    ];
+
+    const fortalezasRows = computed(() => {
+      const rows = [];
+      for (let i = 0; i < fortalezas.length; i += 4) {
+        rows.push(fortalezas.slice(i, i + 4));
       }
-      return age;
+      return rows;
     });
+
+    const toggleTag = (fortaleza) => {
+      const index = tagsSeleccionados.value.indexOf(fortaleza);
+      if (index === -1) {
+        tagsSeleccionados.value.push(fortaleza);
+      } else {
+        tagsSeleccionados.value.splice(index, 1);
+      }
+    };
+
+    const isSelected = (fortaleza) => {
+      return tagsSeleccionados.value.includes(fortaleza);
+    };
 
     return {
       user,
       handleSubmit,
-      userAge    
+      fortalezasRows,
+      toggleTag,
+      isSelected
     };
   }
 };
@@ -147,5 +175,42 @@ textarea {
 .back-button img {
   width: 24px;
   height: 24px;
+}
+
+.tags-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tag-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.tag {
+  width: 23%; /* Ancho fijo para que todos los tags tengan el mismo tamaño */
+  display: block;
+  color: black;
+  background-color: #F0F0FF;
+  border-radius: 20px;
+  padding: 12px 20px;
+  font-size: 16px;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.tag.selected {
+  background-color: #6F41E2; /* Cambiar color si está seleccionada */
+  color: white;
+}
+
+.tag:hover {
+  background-color: #5334B7;
+  color: white;
 }
 </style>

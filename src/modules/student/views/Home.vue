@@ -1,7 +1,7 @@
 <template>
   <div class="home-container">
     <Match :otherId="otherId" v-if="showModal" @close="closeModal"></Match>
-    <OtherProfile :profileId="profileId" v-if="showProfile" @close="closeProfile"></OtherProfile>
+    <OtherProfile :profileId="profileId" :compatibility="compatibility" v-if="showProfile" @close="closeProfile"></OtherProfile>
 
     <!-- Texto explicativo sobre los perfiles -->
     <div class="profiles-info">
@@ -11,7 +11,7 @@
 
     <div class="profiles">
       <div v-for="profile in profiles" :key="profile.id"
-        :class="['profile-card', getCardColor(profile)]" @click="openProfile(profile.id)">
+        :class="['profile-card', getCardColor(profile)]" @click="openProfile(profile.id, profile.compatibility)">
         <img 
           :src="profile.genre === 'M' ? require('@/assets/profiles/men-profile.png') : require('@/assets/profiles/women-profile.png')"
           alt="User Image" class="profile-img"/>
@@ -50,6 +50,7 @@ export default {
     const { userId } = usePhase();
     const profileId = ref(null);
     const otherId = ref(null);
+    const compatibility = ref(null);
     const showProfile = ref(false);
     const showModal = ref(false);
 
@@ -57,8 +58,9 @@ export default {
       getProfiles(userId.value, {});
     });
 
-    const openProfile = (id) => {
+    const openProfile = (id, compatibility) => {
       profileId.value = id;
+      compatibility.value = compatibility;
       showProfile.value = true;
     };
 
@@ -87,7 +89,8 @@ export default {
 
       profiles,
       profileId,
-      otherId
+      otherId,
+      compatibility
     };
   }
 };

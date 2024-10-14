@@ -41,7 +41,7 @@ export default {
       { label: 'Phase5', component: 'Phase5' },
     ];
 
-    const currentComponent = ref(options[0  ].component);
+    const currentComponent = ref(options[3].component);
 
     const updateOption = (label) => {
       currentComponent.value = options.find((option) => option.label === label).component;

@@ -2,7 +2,7 @@
   <div class="modal" v-if="isOpen" @click="closeModal">
     <div class="modal-content" @click.stop>
       <div v-if="profile" class="profile-container">
-        <div :class="['profile-content', getCardColor(profile)]">
+        <div :class="['profile-content', getCardColor()]">
           <div class="profile-header">
             <img :src="profileImage" alt="Profile Image" class="profile-img" />
             <div class="profile-details">
@@ -55,6 +55,10 @@
       profileId: {
         type: Number,
         required: true
+      },
+      compatibility: {
+        type: Number,
+        required: true
       }
     },
     setup(props) {
@@ -88,10 +92,9 @@
           : require('@/assets/profiles/women-profile.png');
       });
 
-      const getCardColor = (profile) => {
-        const { compatibility } = profile;
-        if (compatibility >= 80) return 'card-green';
-        if (compatibility >= 40) return 'card-blue';
+      const getCardColor = () => {
+        if (props.compatibility >= 80) return 'card-green';
+        if (props.compatibility >= 40) return 'card-blue';
         return 'card-red';
       };
 
@@ -121,6 +124,7 @@
         closeModal,
 
         profile,
+        
         habitsArray,
         profileImage,
         getCardColor,

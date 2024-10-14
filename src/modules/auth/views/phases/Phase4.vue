@@ -3,7 +3,7 @@
     <div class="form-section">
       <h2 class="centered-title">Vivienda</h2>
       <div class="centered-content">
-        <p>Descripción del lugar donde desea vivir</p>
+        <p>Destino</p>
         <form @submit.prevent="handleSubmit" class="centered-form">
           <div class="form-group">
             <select v-model="selectedDistrict" id="distrito" required>
@@ -13,16 +13,21 @@
               </option>
             </select>
           </div>
-          <div class="budget-section-inline">
-            <div class="budget-input">
-              <label for="min-budget">Presupuesto Mínimo</label>
-              <input type="number" id="min-budget" v-model.number="user.min_budget" @change="formatBudget('min_budget')" placeholder="Min" />
-            </div>
-            <div class="budget-input">
-              <label for="max-budget">Presupuesto Máximo</label>
-              <input type="number" id="max-budget" v-model.number="user.max_budget" @change="formatBudget('max_budget')" placeholder="Max" />
+          <div class="budget-section">
+            <label>Presupuesto</label>
+            <vue-slider
+              v-model="budgetRange"
+              :min="400"
+              :max="2500"
+              :interval="100"
+              style="width: 100%; margin-top: 10px;"
+            ></vue-slider>
+            <div class="budget-display">
+              <span>Min: {{ budgetRange[0] }} </span>
+              <span>Max: {{ budgetRange[1] }} </span>
             </div>
           </div>
+
           <div class="icon-container">
             <img src="@/assets/logos/ubigeo.png" alt="Mapa" />
           </div>
@@ -41,9 +46,14 @@
 import { ref, onMounted } from 'vue';
 import usePhase from '../../composables/usePhase';
 import useLocations from '../../composables/useLocations';
+import VueSlider from "vue-slider-component"; 
+import 'vue-slider-component/theme/default.css'
 
 export default {
   name: 'Phase4',
+  components: {
+    VueSlider
+  },
   setup(props, { emit }) {
     const { user: userInfo, updateUser } = usePhase();
     const { districts, getDistricts } = useLocations();
@@ -54,17 +64,21 @@ export default {
     });
 
     const selectedDistrict = ref(null);
+    const budgetRange = ref([600, 2000]);
     
     const handleSubmit = async () => {
+      user.value.min_budget = formatBudget(budgetRange.value[0]);
+      user.value.max_budget = formatBudget(budgetRange.value[1]);
       user.value.district = selectedDistrict.value;
+
+      console.log(user.value);
+
       updateUser(user.value);
       emit("setOption", { option: "Phase5" });
     };
 
-    const formatBudget = (key) => {
-      if (user.value[key] !== null && user.value[key] !== undefined) {
-        user.value[key] = parseFloat(user.value[key]).toFixed(1);
-      }
+    const formatBudget = (budget) => {
+      return parseFloat(budget).toFixed(1);
     };
 
     onMounted(() => {
@@ -75,6 +89,8 @@ export default {
     return {
       selectedDistrict,
       districts,
+      budgetRange,
+
       handleSubmit,
       formatBudget,
       user
@@ -133,10 +149,20 @@ export default {
   appearance: none;
 }
 
-.budget-section-inline {
-  display: flex;
-  justify-content: space-between; /* Los inputs estarán en línea */
+.budget-section {
+  margin-top: 20px;
   margin-bottom: 20px;
+}
+
+.budget-display {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.budget-display span {
+  font-weight: bold;
+  color: #6441A4;
 }
 
 .budget-input {

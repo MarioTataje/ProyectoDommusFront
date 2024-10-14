@@ -16,15 +16,17 @@
         <div class="form-group">
           <label for="email">Email:</label>
           <input type="email" id="email" placeholder="Email" v-model="user.email" @input="validateEmail" required />
+          <span v-if="emailError" class="error-message">{{ emailError }}</span>
         </div>
         <div class="form-group">
           <label for="password">Contraseña:</label>
-          <input type="password" id="password" placeholder="Contraseña" v-model="user.password" required />
+          <input type="password" id="password" placeholder="Contraseña" v-model="user.password" @input="validatePassword" required />
+          <span v-if="passwordError" class="error-message">{{ passwordError }}</span>
         </div>
         <div class="form-group-inline">
           <div class="input-group">
             <label for="birthdate">Fecha de nac.:</label>
-            <input type="date" id="birthdate" v-model="user.birth_date" required />
+            <input type="date" id="birthdate" v-model="user.birth_date" :min="minDate" :max="maxDate" required />
           </div>
           <div class="input-group">
             <label for="gender">Sexo:</label>
@@ -84,13 +86,39 @@ export default {
     ];
 
     const emailError = ref('');
+    const passwordError = ref('');
+    const minDate = '1985-01-01';
+    const maxDate = '2007-12-31';
 
     const validateEmail = () => {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const eduDomainPattern = /\.edu$/;
+
       if (!emailPattern.test(user.value.email)) {
         emailError.value = 'Por favor, introduce un correo electrónico válido.';
+      } else if (!eduDomainPattern.test(user.value.email)) {
+        emailError.value = 'El correo debe terminar en .edu.';
       } else {
         emailError.value = '';
+      }
+    };
+
+    const validatePassword = () => {
+      const hasUpperCase = /[A-Z]/.test(user.value.password);
+      const hasLowerCase = /[a-z]/.test(user.value.password);
+      const hasNumber = /\d/.test(user.value.password);
+      const hasSpecialChar = /[!"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]/.test(user.value.password);
+
+      if (!hasUpperCase) {
+        passwordError.value = 'La contraseña debe contener al menos una letra mayúscula.';
+      } else if (!hasLowerCase) {
+        passwordError.value = 'La contraseña debe contener al menos una letra minúscula.';
+      } else if (!hasNumber) {
+        passwordError.value = 'La contraseña debe contener al menos un número.';
+      } else if (!hasSpecialChar) {
+        passwordError.value = 'La contraseña debe contener al menos un carácter especial (!"#$%&/.-()).';
+      } else {
+        passwordError.value = '';
       }
     };
 
@@ -127,8 +155,14 @@ export default {
       genders,
       universities,
       degrees,
+      
       emailError,
+      passwordError,
       validateEmail,
+      validatePassword,
+      minDate,
+      maxDate,
+
       handleSubmit,
       onUniversityChange
     };
@@ -216,6 +250,12 @@ select {
 
 .submit-button:hover {
   background-color: #5e35b1;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
 }
 
 </style>

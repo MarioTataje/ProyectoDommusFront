@@ -208,6 +208,7 @@ export default {
 
 .slider {
   width: 100%;
+  background: red;
 }
 
 .slider-labels {
