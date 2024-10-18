@@ -97,7 +97,7 @@ export default {
       if (!emailPattern.test(user.value.email)) {
         emailError.value = 'Por favor, introduce un correo electrónico válido.';
       } else if (!eduDomainPattern.test(user.value.email)) {
-        emailError.value = 'El correo debe terminar en .edu.';
+        emailError.value = 'El correo debe terminar en .edu.pe';
       } else {
         emailError.value = '';
       }

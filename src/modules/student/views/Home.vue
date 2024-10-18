@@ -3,30 +3,39 @@
     <Match :otherId="otherId" v-if="showModal" @close="closeModal"></Match>
     <OtherProfile :profileId="profileId" :compatibility="compatibility" v-if="showProfile" @close="closeProfile"></OtherProfile>
 
-    <!-- Texto explicativo sobre los perfiles -->
-    <div class="profiles-info">
-      <p class="info-title">2000 Roomies Registrados</p>
-      <p class="info-sub-title">Los roomies están clasificados en 3 categorías según su compatibilidad</p>
+    <!-- Mensaje de carga si no hay perfiles -->
+    <div v-if="profiles.length === 0" class="loading-container">
+      <img src="@/assets/logos/loading-robot.png" alt="Cargando..." class="loading-img"/>
+      <p class="loading-text">Estamos trabajando para encontrar a tu compañero ideal</p>
     </div>
 
-    <div class="profiles">
-      <div v-for="profile in profiles" :key="profile.id"
-        :class="['profile-card', getCardColor(profile)]" @click="openProfile(profile.id, profile.compatibility)">
-        <img 
-          :src="profile.genre === 'M' ? require('@/assets/profiles/men-profile.png') : require('@/assets/profiles/women-profile.png')"
-          alt="User Image" class="profile-img"/>
-        <div class="compatibility-circle">
-          <span>{{ profile.compatibility }}%</span>
-        </div>
-        <div class="profile-info">
-          <h2>{{ profile.names + ' ' + profile.lastnames }}</h2>
-          <!-- Contenedor para los dos primeros tags -->
-          <div class="tags-container">
-            <p class="profile-tag1">{{ profile.personality.tag }}</p>
-            <p class="profile-tag2">{{ profile.district_name }}</p>
+    <div class="profiles" v-else>
+      <!-- Texto explicativo sobre los perfiles -->
+      <div class="profiles-info">
+        <p class="info-title">2000 Roomies Registrados</p>
+        <p class="info-sub-title">Los roomies están clasificados en 3 categorías según su compatibilidad</p>
+      </div>
+
+      <div class="profiles-scroll-container">
+      <div class="profiles-scroll">
+        <div v-for="profile in profiles" :key="profile.id"
+             :class="['profile-card', getCardColor(profile)]" @click="openProfile(profile.id, profile.compatibility)">
+          <img 
+            :src="profile.genre === 'M' ? require('@/assets/profiles/men-profile.png') : require('@/assets/profiles/women-profile.png')"
+            alt="User Image" class="profile-img"/>
+          <div class="compatibility-circle">
+            <span>{{ profile.compatibility }}%</span>
           </div>
-          <p class="profile-tag3">{{ profile.degree_name }}</p>
+          <div class="profile-info">
+            <h2>{{ profile.names + ' ' + profile.lastnames }}</h2>
+            <div class="tags-container">
+              <p class="profile-tag1">{{ profile.personality.tag }}</p>
+              <p class="profile-tag2">{{ profile.district_name }}</p>
+            </div>
+            <p class="profile-tag3">{{ profile.degree_name }}</p>
+          </div>
         </div>
+      </div>
       </div>
     </div>
   </div>
@@ -55,7 +64,7 @@ export default {
     const showModal = ref(false);
 
     onMounted(() => {
-      // getProfiles(userId.value, {});
+      getProfiles(userId.value, {});
     });
 
     const openProfile = (id, profileCompatibility) => {
@@ -111,19 +120,8 @@ export default {
 .profiles-info {
   text-align: center;
   margin-bottom: 20px;
-  position: absolute; /* Para moverlo a una posición más arriba */
-  top: 100px; /* Controla la separación desde el margen superior */
-}
-
-.info-title {
-  font-size: 1.6em;
-  color: #1E1E1E;
-  font-weight: bold;
-}
-
-.info-sub-title {
-  font-size: 1.2em;
-  color: #6441A4;
+  position: absolute;
+  top: 100px;
 }
 
 .profiles {
@@ -137,15 +135,69 @@ export default {
   margin-top: 50px; /* Ajustar para compensar el desplazamiento hacia arriba del texto */
 }
 
+.info-title {
+  font-size: 1.6em;
+  color: #1E1E1E;
+  font-weight: bold;
+}
+
+.info-sub-title {
+  font-size: 1.2em;
+  color: #6441A4;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 50px;
+}
+
+.loading-img {
+  width: 250px;
+  height: 150px;
+}
+
+.loading-text {
+  font-size: 1.2em;
+  color: #6441A4;
+  text-align: center;
+}
+
+.profiles-scroll-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 50px;
+  overflow-x: hidden; /* Esconde los perfiles fuera del contenedor */
+}
+
+.profiles-scroll {
+  display: flex;
+  gap: 20px;
+  overflow-x: scroll;
+  overflow-y:auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  height: 100%;
+  max-width: 1080px;
+}
+
 .profile-card {
   position: relative;
   background-color: white;
-  padding: 40px 20px 20px;
-  border-radius: 15px;
   padding: 20px;
+  border-radius: 15px;
   width: 250px;
   text-align: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0; /* No permitir que los perfiles se encojan */
+  scroll-snap-align: start; /* Alinea cada perfil en el inicio del contenedor */
+  overflow: visible; 
 }
 
 .profile-card.card-red {
@@ -162,8 +214,8 @@ export default {
 
 .compatibility-circle {
   position: absolute;
-  top: -15px;
-  right: -15px;
+  top: -3px;
+  right: -10px;
   background-color: white;
   border-radius: 60%;
   border: 3px solid #ccc;
@@ -172,6 +224,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 2;
 }
 
 .profile-img {
@@ -189,7 +242,7 @@ export default {
 
 .tags-container {
   display: flex;
-  justify-content: space-between; /* Distribuye el espacio entre los dos tags */
+  justify-content: space-between;
   margin-bottom: 10px;
 }
 
@@ -207,7 +260,7 @@ export default {
 }
 
 .profile-tag1, .profile-tag2 {
-  width: 48%; /* Ajustar el ancho para que ambos tags ocupen el espacio horizontal */
+  width: 48%;
 }
 
 .profile-actions {
@@ -230,4 +283,5 @@ export default {
 .reject-btn {
   color: #f44336;
 }
+
 </style>
