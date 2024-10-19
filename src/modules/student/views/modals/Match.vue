@@ -1,23 +1,19 @@
 <template>
   <div class="modal" v-if="isOpen" @click="closeModal">
     <div class="modal-content" @click.stop>
-      <h2 class="modal-title">¡Felicidades!</h2>
+      <h3 class="modal-title">¡Felicidades!</h3>
       <img src="@/assets/logos/match.png" alt="Contacto" class="modal-image">
-      <p>Has conseguido tu potencial compañero de piso, ahora puedes contactarlo.</p>
-      <p>Aseguramos que tendrán una convivencia y experiencia UNIVERSITARIA espectacular.</p>
+      <p>¡Hemos encontrado a tu roommate ideal! 
+        Ahora puedes ponerte en contacto con tu nuevo compañero de piso a través de WhatsApp o correo electrónico 
+        para conocerse mejor y coordinar detalles.
+      </p>
       <div class="contact-info" v-if="contacts.length">
         <div v-for="contact in contacts" :key="contact.id" class="contact-item">
-          <div v-if="contact.type === 'WhatsApp'" class="contact-detail">
-            <img src="@/assets/icons/wsp_icon.png" alt="WhatsApp" class="contact-icon">
-            <span class="whatsapp-info">{{ contact.description }}</span>
-          </div>
           <div v-if="contact.type === 'Email'" class="contact-detail">
-            <img src="@/assets/icons/email_icon.png" alt="Email" class="contact-icon">
             <span class="email-info">{{ contact.description }}</span>
           </div>
         </div>
       </div>
-      <button @click="confirmAccept" class="confirm-button">Aceptar</button>
     </div>
   </div>
 </template>
@@ -47,10 +43,6 @@ export default {
       ctx._.emit('close');
     };
 
-    const confirmAccept = () => {
-      closeModal();
-    };
-
     onMounted(() => {
       getContacts(props.otherId);
       openModal();
@@ -60,8 +52,7 @@ export default {
       isOpen,
       openModal,
       closeModal,
-      contacts,
-      confirmAccept
+      contacts
     };
   }
 };
@@ -78,31 +69,29 @@ export default {
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente detrás del modal */
 }
 
 .modal-content {
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: white; /* Fondo blanco */
   padding: 40px;
-  background: url('@/assets/backgrounds/global-background.png') no-repeat center center;
-  background-size: cover;
   border-radius: 20px;
   text-align: center;
-  position: relative;
-  max-width: 70%;
-  max-height: 70%;
+  max-width: 50%;
+  max-height: 60%;
   overflow-y: auto;
-  margin-left: 5%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .modal-title {
-  color: #fff;
+  color: #333;
   margin: 0 0 20px 0;
   font-size: 2em;
 }
 
 .modal-image {
   width: 150px;
-  margin: 20px 0;
+  margin: 0 0;
 }
 
 .contact-info {
@@ -110,7 +99,7 @@ export default {
   flex-wrap: wrap;
   justify-content: center;
   gap: 15px;
-  margin: 20px 0;
+  margin: 5px 0;
 }
 
 .contact-item {
@@ -126,37 +115,12 @@ export default {
   border-radius: 5px;
 }
 
-.contact-icon {
-  width: 24px;
-  height: 24px;
-  vertical-align: middle;
-  margin-right: 10px;
-}
-
-.whatsapp-info {
-  background-color: #4caf50;
-  color: #fff;
-  padding: 10px;
-  border-radius: 10px;
-  flex-grow: 1;
-}
-
 .email-info {
-  background-color: #2196f3;
+  background-color: #0043CE;
   color: #fff;
   padding: 10px;
   border-radius: 10px;
   flex-grow: 1;
-}
-
-.confirm-button {
-  background-color: #f44336;
-  color: #fff;
-  padding: 15px 30px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 16px;
 }
 
 h2 {

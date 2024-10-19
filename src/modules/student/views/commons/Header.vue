@@ -141,7 +141,7 @@ import usePhase from "@/modules/auth/composables/usePhase";
 export default {
   name: "Header",
   components: {
-    VueSlider,
+    VueSlider
   },
   setup(props, { emit }) {
     const { userId } = usePhase();

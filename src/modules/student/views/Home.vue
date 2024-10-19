@@ -1,7 +1,7 @@
 <template>
   <div class="home-container">
-    <Match :otherId="otherId" v-if="showModal" @close="closeModal"></Match>
     <OtherProfile :profileId="profileId" :compatibility="compatibility" v-if="showProfile" @close="closeProfile"></OtherProfile>
+    <Match :otherId="otherId" v-if="showMatch" @close="closeMatch"></Match>
 
     <!-- Mensaje de carga si no hay perfiles -->
     <div v-if="profiles.length === 0" class="loading-container">
@@ -45,23 +45,25 @@
 import { onMounted, ref } from 'vue';
 import OtherProfile from './modals/OtherProfile.vue'; 
 import Match from './modals/Match.vue'; 
+
 import useProfile from '../composables/useProfile';
 import usePhase from '@/modules/auth/composables/usePhase';
 
 export default {
   name: 'Home',
   components: { 
-    Match, 
-    OtherProfile 
+    OtherProfile,
+    Match
   },
   setup() {
     const { profiles, getProfiles } = useProfile();
     const { userId } = usePhase();
     const profileId = ref(null);
-    const otherId = ref(null);
     const compatibility = ref(null);
+
     const showProfile = ref(false);
-    const showModal = ref(false);
+    const showMatch = ref(false);
+    const otherId = ref(null);
 
     onMounted(() => {
       getProfiles(userId.value, {});
@@ -73,12 +75,13 @@ export default {
       showProfile.value = true;
     };
 
-    const closeProfile = () => {
+    const closeProfile = (isMatch) => {
+      console.log(isMatch);
       showProfile.value = false;
-    };
-
-    const closeModal = () => {
-      showModal.value = false;
+      if (isMatch) {
+        otherId.value = profileId.value;
+        showMatch.value = true;
+      }
     };
 
     const getCardColor = (profile) => {
@@ -88,17 +91,22 @@ export default {
       return 'card-red';
     };
 
+    const closeMatch = () => {
+      showMatch.value = false;
+    };
+
     return {
       openProfile,
       closeProfile,
-      closeModal,
+      showMatch,
+      closeMatch,
+
       showProfile,
-      showModal,
       getCardColor,
+      otherId,
 
       profiles,
       profileId,
-      otherId,
       compatibility
     };
   }

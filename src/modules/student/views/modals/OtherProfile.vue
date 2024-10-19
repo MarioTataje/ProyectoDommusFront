@@ -66,15 +66,18 @@
       const { profile, getUserProfile, getProfiles } = useProfile();
       const { sendLike, sendDislike } = useMatch();
       const { userId } = usePhase();
+
       const isOpen = ref(false);
-  
+      const otherId = ref(null);
+      const isMatch = ref(false);
+
       const openModal = () => {
         isOpen.value = true;
       };
   
       const closeModal = () => {
         isOpen.value = false;
-        ctx._.emit('close');
+        ctx._.emit('close', isMatch.value);
       };
   
       onMounted(async () => {
@@ -103,9 +106,8 @@
         const like = await sendLike(senderId, receiverId);
         if (like.flag_match){
           const id = like.sender.id !== senderId ? like.sender.id : like.receiver.id;
-          console.log(id);
-          // otherId.value = id;
-          // showModal.value = true;
+          otherId.value = id;
+          isMatch.value = true;
         }
         await getProfiles(senderId,{});
         closeModal();
@@ -124,6 +126,7 @@
         closeModal,
 
         profile,
+        otherId,
         
         habitsArray,
         profileImage,
