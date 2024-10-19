@@ -97,7 +97,8 @@
       <!-- Dropdown menu for notifications -->
       <div v-if="showNotifications" class="notification-dropdown">
         <h3>Notificaciones</h3>
-        <div v-for="(notification, index) in notifications.slice(0, 4)" :key="index" class="notification-item">
+        <div v-for="(notification, index) in notifications.slice(0, 4)" :key="index" 
+          @click="showLike(notification)" class="notification-item">
           <span>
             {{ notification.sender.names }}
             {{ notification.sender.lastnames }} quiere contactarte!
@@ -171,6 +172,11 @@ export default {
       showNotifications.value = !showNotifications.value;
     };
 
+    const showLike = (notification) => {
+      const senderId = notification.sender.id;
+      emit('showProfile', { profileId: senderId });
+    };
+
     const selectedGender = ref(null);
     const selectGender = (gender) => {
       selectedGender.value = gender;
@@ -223,6 +229,7 @@ export default {
 
       showNotifications,
       toggleNotifications,
+      showLike,
 
       showFilterPro,
       toggleFilterPro,
@@ -460,5 +467,15 @@ export default {
 
 .link-title:hover {
   text-decoration: none; 
+}
+
+.notification-item {
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.notification-item:hover {
+  background-color: #f0f0f0; 
 }
 </style>

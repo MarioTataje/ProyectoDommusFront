@@ -1,7 +1,7 @@
 <template>
-  <Header @setOption="setComponent"/> 
+  <Header @setOption="setComponent" @showProfile="handleShowProfile"/> 
   <div class="layout">
-    <component :is="currentComponent"/>
+    <component :is="currentComponent" :notificationProfileId="profileId"/>
   </div>
   <Footer></Footer>
 </template>
@@ -32,6 +32,7 @@ export default {
     ];
 
     const currentComponent = ref(options[1].component);
+    const profileId = ref(null);
 
     const updateOption = (label) => {
       currentComponent.value = options.find((option) => option.label === label).component;
@@ -41,11 +42,19 @@ export default {
       updateOption(event.option);
     };
 
+    const handleShowProfile = (data) => {
+      profileId.value = data.profileId;
+    };
+
+
     return {
       options,
       currentComponent,
       updateOption,
       setComponent,
+
+      handleShowProfile,
+      profileId,
     };
   },
 };

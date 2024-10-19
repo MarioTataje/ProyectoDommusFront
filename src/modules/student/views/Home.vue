@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import OtherProfile from './modals/OtherProfile.vue'; 
 import Match from './modals/Match.vue'; 
 
@@ -55,7 +55,13 @@ export default {
     OtherProfile,
     Match
   },
-  setup() {
+  props: {
+    notificationProfileId: {
+      type: Number,
+      required: false,
+    },
+  },
+  setup(props) {
     const { profiles, getProfiles } = useProfile();
     const { userId } = usePhase();
     const profileId = ref(null);
@@ -67,6 +73,13 @@ export default {
 
     onMounted(() => {
       getProfiles(userId.value, {});
+    });
+
+    watch(() => props.notificationProfileId, (newProfileId) => {
+      if (newProfileId) {
+        showProfile.value = true;
+        profileId.value = newProfileId;
+      }
     });
 
     const openProfile = (id, profileCompatibility) => {
