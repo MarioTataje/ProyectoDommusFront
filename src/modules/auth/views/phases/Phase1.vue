@@ -92,7 +92,7 @@ export default {
 
     const validateEmail = () => {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const eduDomainPattern = /\.edu$/;
+      const eduDomainPattern = /\.edu.pe$/;
 
       if (!emailPattern.test(user.value.email)) {
         emailError.value = 'Por favor, introduce un correo electrónico válido.';
