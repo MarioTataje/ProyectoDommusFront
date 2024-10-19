@@ -48,7 +48,7 @@ export default {
     });
 
     const icon = computed(() => {
-      return require(`@/assets/personalities/${detail.value.icon}.png`);
+      return require(`@/assets/personalities/${detail.value.icon}.jpg`);
     });
 
     return {
