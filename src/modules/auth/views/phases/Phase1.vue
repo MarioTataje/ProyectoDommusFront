@@ -64,7 +64,7 @@ import useStudies from '../../composables/useStudies';
 export default {
   name: 'Register',
   setup(props, { emit }) {
-    const { updateUser } = usePhase();
+    const { updateUser, verifyEmail } = usePhase();
     const { universities, degrees, getUniversities, getDegrees } = useStudies();
     const user = ref({
       names: '',
@@ -90,7 +90,7 @@ export default {
     const minDate = '1985-01-01';
     const maxDate = '2007-12-31';
 
-    const validateEmail = () => {
+    const validateEmail = async () => {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       const eduDomainPattern = /\.edu.pe$/;
 
@@ -100,6 +100,14 @@ export default {
         emailError.value = 'El correo debe terminar en .edu.pe';
       } else {
         emailError.value = '';
+        try {
+          const response = await verifyEmail( { email: user.value.email } );
+          if (response.message != 'Email disponible para utilizar') {
+            emailError.value = response.message;
+          }
+        } catch (error) {
+          console.error('Error al verificar el correo electrónico:', error);
+        }
       }
     };
 

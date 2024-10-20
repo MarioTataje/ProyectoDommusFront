@@ -52,6 +52,7 @@ export const getUserProfile = async({ commit }, userId ) => {
     }
 }
 
+
 export const sendLike = async({ commit }, data ) => {
     commit('setLoading', true);
     try {
@@ -69,8 +70,7 @@ export const sendDislike = async({ commit }, data ) => {
     commit('setLoading', true);
     try {
         const { senderId, receivedId } = data;
-        const response = await MatchService.sendDislike(senderId, receivedId);
-        console.log(response);
+        await MatchService.sendDislike(senderId, receivedId);
     } catch (error) {
         commit('setError', error.message || 'Error al enviar el dislike');
     } finally {

@@ -1,6 +1,7 @@
 import StudiesService from '@/api/studiesService';
 import LocationsService from '@/api/locationsService';
 import AuthenticationService from '@/api/authenticationService';
+import UserService from '@/api/userService';
 import PersonalityService from '@/api/personalityService';
 import { jwtDecode } from 'jwt-decode';
 
@@ -103,6 +104,18 @@ export const loginUser = async ({ commit }, user ) => {
         return data;
     } catch (error) {
         commit('setError', error.message || 'Error al al crear el usuario');
+    } finally {
+        commit('setLoading', false);
+    }
+}
+
+export const verifyEmail = async({ commit }, data ) => {
+    commit('setLoading', true);
+    try {
+        const response = await UserService.verifyEmail(data);
+        return response.data;
+    } catch (error) {
+        commit('setError', error.message || 'Error al verificar el email');
     } finally {
         commit('setLoading', false);
     }

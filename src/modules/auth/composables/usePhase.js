@@ -17,10 +17,16 @@ const usePhase = () => {
     return response;
   };
 
+  const verifyEmail = async(data) => {
+    const response = await store.dispatch('auth/verifyEmail', data);
+    return response;
+  };
+
   return {
     updateUser,
     createUser,
     loginUser,
+    verifyEmail,
     user: computed(() => store.getters['auth/user']),
     userId: computed(() => store.getters['auth/userId']),
   }

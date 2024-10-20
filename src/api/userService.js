@@ -10,6 +10,18 @@ class UserService {
         }
     }
 
+    async verifyEmail(data) {
+        try {
+            const response = await dommusApi.post(`users/mail/`, data);
+            return response;
+        } catch (error) {
+            if(error.response){
+                return error.response;
+            }
+            return error;
+        }
+    }
+
     async editUser(data, userId) {
         try {
             const response = await dommusApi.patch(`users/${userId}`, data);
