@@ -1,6 +1,6 @@
 <template>
     <footer class="footer-container">
-      <p>© 2024 Dommus</p>
+      <p>© 2024 Dommus - Contacto Soporte</p>
     </footer>
 </template>
   

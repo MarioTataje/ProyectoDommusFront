@@ -6,11 +6,13 @@
         <div class="form-group-inline">
           <div class="input-group">
             <label for="names">Nombre:</label>
-            <input type="text" id="names" placeholder="Nombre" v-model="user.names" required />
+            <input type="text" id="names" placeholder="Nombre" v-model="user.names" @input="validateName" required />
+            <span v-if="nameError" class="error-message">{{ nameError }}</span>
           </div>
           <div class="input-group">
             <label for="lastnames">Apellido:</label>
-            <input type="text" id="lastnames" placeholder="Apellido" v-model="user.lastnames" required />
+            <input type="text" id="lastnames" placeholder="Apellido" v-model="user.lastnames" @input="validateLastName" required />
+            <span v-if="lastNameError" class="error-message">{{ lastNameError }}</span>
           </div>
         </div>
         <div class="form-group">
@@ -85,10 +87,30 @@ export default {
       { name: 'Femenino', value: 'F' }
     ];
 
+    const nameError = ref('');
+    const lastNameError = ref('');
     const emailError = ref('');
     const passwordError = ref('');
     const minDate = '1985-01-01';
     const maxDate = '2007-12-31';
+
+    const validateName = async () => {
+      const namePattern = /^[A-Za-z\s\p{L}]+$/u;
+      if (!namePattern.test(user.value.names)) {
+        nameError.value = 'Por favor, introduce un nombre válido.';
+      } else {
+        nameError.value = '';
+      }
+    };
+
+    const validateLastName = async () => {
+      const lastNamePattern = /^[A-Za-z\s\p{L}]+$/u;
+      if (!lastNamePattern.test(user.value.lastnames)) {
+        lastNameError.value = 'Por favor, introduce un apellido válido.';
+      } else {
+        lastNameError.value = '';
+      }
+    };
 
     const validateEmail = async () => {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -142,7 +164,7 @@ export default {
     };
 
     const handleSubmit = async () => {
-      if (emailError.value) {
+      if (nameError.value || lastNameError.value || emailError.value || passwordError.value) {
         return;
       }
       user.value.university = selectedUniversity.value;
@@ -164,13 +186,18 @@ export default {
       universities,
       degrees,
       
+      nameError,
+      lastNameError,
       emailError,
       passwordError,
+
+      validateName,
+      validateLastName,
       validateEmail,
       validatePassword,
+
       minDate,
       maxDate,
-
       handleSubmit,
       onUniversityChange
     };

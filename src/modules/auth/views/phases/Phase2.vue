@@ -4,13 +4,25 @@
       <h1 class="profile-title">Edición de perfil</h1>
       <div class="input-group">
         <label for="description">Descripción</label>
-        <textarea id="description" v-model="user.description" placeholder="Escriba su descripción"></textarea>
+        <textarea
+          id="description"
+          v-model="user.description"
+          @input="validateDescription"
+          placeholder="Escriba su descripción"
+        ></textarea>
+        <span v-if="descriptionError" class="error-message">{{
+          descriptionError
+        }}</span>
       </div>
 
       <div class="fortalezas-section">
         <label for="description">Fortalezas</label>
         <div class="tags-container">
-          <div v-for="(row, rowIndex) in fortalezasRows" :key="rowIndex" class="tag-row">
+          <div
+            v-for="(row, rowIndex) in fortalezasRows"
+            :key="rowIndex"
+            class="tag-row"
+          >
             <div
               v-for="fortaleza in row"
               :key="fortaleza"
@@ -22,6 +34,7 @@
             </div>
           </div>
         </div>
+        <span v-if="fortalezasError" class="error-message">{{ fortalezasError }}</span>
       </div>
 
       <div class="button-container">
@@ -32,19 +45,33 @@
 </template>
 
 <script>
-import { ref, onMounted, computed } from 'vue';
-import usePhase from '../../composables/usePhase';
+import { ref, onMounted, computed } from "vue";
+import usePhase from "../../composables/usePhase";
 
 export default {
-  name: 'Phase2',
+  name: "Phase2",
   setup(props, { emit }) {
     const { user: userInfo, updateUser } = usePhase();
     const user = ref({});
     const tagsSeleccionados = ref([]);
+    const descriptionError = ref("");
+    const fortalezasError = ref("");
 
     const handleSubmit = () => {
+      if (descriptionError.value || !user.value.description || user.value.description.trim() === "") {
+        descriptionError.value = "Por favor, complete el campo de descripción.";
+        return;
+      }
+
+      if (tagsSeleccionados.value.length === 0) {
+        fortalezasError.value = "Debes seleccionar al menos una fortaleza.";
+        return;
+      } else {
+        fortalezasError.value = "";
+      }
+  
       updateUser({ ...user.value, fortalezas: tagsSeleccionados.value });
-      emit('setOption', { option: 'Phase3' });
+      emit("setOption", { option: "Phase3" });
     };
 
     onMounted(() => {
@@ -52,9 +79,23 @@ export default {
     });
 
     const fortalezas = [
-      'Responsabilidad', 'Empatía', 'Adaptabilidad', 'Honestidad',
-      'Paciencia', 'Creatividad', 'Autodisciplina', 'Generosidad'
+      "Responsabilidad",
+      "Empatía",
+      "Adaptabilidad",
+      "Honestidad",
+      "Paciencia",
+      "Creatividad",
+      "Autodisciplina",
+      "Generosidad",
     ];
+
+    const validateDescription = async () => {
+      if (!user.value.description || user.value.description.trim() === "") {
+        descriptionError.value = "Por favor, complete el campo de descripción.";
+      } else {
+        descriptionError.value = "";
+      }
+    };
 
     const fortalezasRows = computed(() => {
       const rows = [];
@@ -82,9 +123,13 @@ export default {
       handleSubmit,
       fortalezasRows,
       toggleTag,
-      isSelected
+      isSelected,
+
+      validateDescription,
+      descriptionError,
+      fortalezasError
     };
-  }
+  },
 };
 </script>
 
@@ -105,7 +150,7 @@ export default {
 }
 
 .profile-title {
-  color: #6441A4;
+  color: #6441a4;
   font-size: 32px;
   font-weight: bold;
   margin-bottom: 20px;
@@ -115,7 +160,8 @@ export default {
   margin-bottom: 20px;
 }
 
-input, textarea {
+input,
+textarea {
   width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
@@ -123,7 +169,8 @@ input, textarea {
   font-size: 16px;
 }
 
-input::placeholder, textarea::placeholder {
+input::placeholder,
+textarea::placeholder {
   color: #999;
 }
 
@@ -154,7 +201,7 @@ textarea {
 }
 
 .continue-button {
-  background-color: #6F41E2;
+  background-color: #6f41e2;
   color: white;
   padding: 12px 20px;
   border: none;
@@ -163,7 +210,7 @@ textarea {
 }
 
 .continue-button:hover {
-  background-color: #5334B7;
+  background-color: #5334b7;
 }
 
 .back-button button {
@@ -194,7 +241,7 @@ textarea {
   width: 23%; /* Ancho fijo para que todos los tags tengan el mismo tamaño */
   display: block;
   color: black;
-  background-color: #F0F0FF;
+  background-color: #f0f0ff;
   border-radius: 20px;
   padding: 12px 20px;
   font-size: 16px;
@@ -205,12 +252,18 @@ textarea {
 }
 
 .tag.selected {
-  background-color: #6F41E2; /* Cambiar color si está seleccionada */
+  background-color: #6f41e2; /* Cambiar color si está seleccionada */
   color: white;
 }
 
 .tag:hover {
-  background-color: #5334B7;
+  background-color: #5334b7;
   color: white;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
 }
 </style>

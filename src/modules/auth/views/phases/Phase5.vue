@@ -15,6 +15,7 @@
             </select>
           </div>
         </div>
+        <span v-if="errorMessage" class="error-message">{{ errorMessage }}</span>
       </div>
       <button @click="handleContinue" class="register-button">REGISTRATE</button>
     </div>
@@ -33,6 +34,7 @@ export default {
     const { user: userInfo, createUser } = usePhase();
     const router = useRouter()
     const user = ref({});
+    const errorMessage = ref(""); 
 
     const questions = ref([
       {
@@ -94,6 +96,13 @@ export default {
     const answers = ref(Array(questions.value.length).fill(''));
 
     const handleContinue = async() => {
+      if (answers.value.some(answer => answer === '')) {
+        errorMessage.value = "Por favor, complete todos los hábitos.";
+        return;
+      } else {
+        errorMessage.value = "";
+      }
+  
       user.value.habits = answers.value.join(',');
       await createUser(user.value);
       router.push({ name: 'login' });
@@ -107,7 +116,8 @@ export default {
       questions,
       answers,
       user,
-      handleContinue    
+      handleContinue,
+      errorMessage
     };
   }
 }
@@ -206,4 +216,9 @@ button:hover {
   background-color: #7b1fa2;
 }
 
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+}
 </style>
