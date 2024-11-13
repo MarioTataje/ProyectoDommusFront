@@ -14,14 +14,13 @@
               </option>
             </select>
           </div>
+          <span v-if="questionErrors[qIndex]" class="error-message">{{ questionErrors[qIndex] }}</span>
         </div>
-        <span v-if="errorMessage" class="error-message">{{ errorMessage }}</span>
       </div>
       <button @click="handleContinue" class="register-button">REGISTRATE</button>
     </div>
   </div>
 </template>
-
 
 <script>
 import { ref, onMounted } from 'vue';
@@ -32,10 +31,8 @@ export default {
   name: 'Phase5',
   setup() {
     const { user: userInfo, createUser } = usePhase();
-    const router = useRouter()
+    const router = useRouter();
     const user = ref({});
-    const errorMessage = ref(""); 
-
     const questions = ref([
       {
         text: '“Me gusta vivir en un ...”',
@@ -94,15 +91,21 @@ export default {
     ]);
 
     const answers = ref(Array(questions.value.length).fill(''));
+    const questionErrors = ref(Array(questions.value.length).fill(""));
 
-    const handleContinue = async() => {
-      if (answers.value.some(answer => answer === '')) {
-        errorMessage.value = "Por favor, complete todos los hábitos.";
-        return;
-      } else {
-        errorMessage.value = "";
-      }
-  
+    const handleContinue = async () => {
+      let hasError = false;
+
+      questionErrors.value = questionErrors.value.map((_, index) => {
+        if (answers.value[index] === '') {
+          hasError = true;
+          return "Por favor, complete este hábito.";
+        }
+        return "";
+      });
+
+      if (hasError) return;
+
       user.value.habits = answers.value.join(',');
       await createUser(user.value);
       router.push({ name: 'login' });
@@ -117,7 +120,7 @@ export default {
       answers,
       user,
       handleContinue,
-      errorMessage
+      questionErrors
     };
   }
 }

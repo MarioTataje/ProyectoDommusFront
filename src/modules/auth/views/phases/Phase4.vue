@@ -7,7 +7,7 @@
         <form @submit.prevent="handleSubmit" class="centered-form">
           <div class="form-group">
             <select v-model="selectedDistrict" id="distrito" required>
-              <option disabled value="">Destino</option>
+              <option disabled value="">Distrito</option>
               <option v-for="district in districts" :key="district.id" :value="district">
                 {{ district.name }}
               </option>

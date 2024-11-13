@@ -91,7 +91,7 @@ export default {
 
     const validateDescription = async () => {
       if (!user.value.description || user.value.description.trim() === "") {
-        descriptionError.value = "Por favor, complete el campo de descripción.";
+        descriptionError.value = "Por favor, rellene este campo.";
       } else {
         descriptionError.value = "";
       }
