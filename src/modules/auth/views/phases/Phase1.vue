@@ -97,7 +97,7 @@ export default {
     const validateName = async () => {
       const namePattern = /^[A-Za-z\s\p{L}]+$/u;
       if (!namePattern.test(user.value.names)) {
-        nameError.value = 'Por favor, introduce un nombre válido.';
+        nameError.value = 'Por favor, introduce un Nombre válido.';
       } else {
         nameError.value = '';
       }
@@ -106,7 +106,7 @@ export default {
     const validateLastName = async () => {
       const lastNamePattern = /^[A-Za-z\s\p{L}]+$/u;
       if (!lastNamePattern.test(user.value.lastnames)) {
-        lastNameError.value = 'Por favor, introduce un apellido válido.';
+        lastNameError.value = 'Por favor, introduce un Apellido válido.';
       } else {
         lastNameError.value = '';
       }

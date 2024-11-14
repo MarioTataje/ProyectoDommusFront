@@ -34,7 +34,6 @@
             </div>
           </div>
         </div>
-        <span v-if="fortalezasError" class="error-message">{{ fortalezasError }}</span>
       </div>
 
       <div class="button-container">
@@ -55,19 +54,11 @@ export default {
     const user = ref({});
     const tagsSeleccionados = ref([]);
     const descriptionError = ref("");
-    const fortalezasError = ref("");
 
     const handleSubmit = () => {
       if (descriptionError.value || !user.value.description || user.value.description.trim() === "") {
-        descriptionError.value = "Por favor, complete el campo de descripción.";
+        descriptionError.value = "Rellena este campo";
         return;
-      }
-
-      if (tagsSeleccionados.value.length === 0) {
-        fortalezasError.value = "Debes seleccionar al menos una fortaleza.";
-        return;
-      } else {
-        fortalezasError.value = "";
       }
   
       updateUser({ ...user.value, fortalezas: tagsSeleccionados.value });
@@ -91,7 +82,7 @@ export default {
 
     const validateDescription = async () => {
       if (!user.value.description || user.value.description.trim() === "") {
-        descriptionError.value = "Por favor, rellene este campo.";
+        descriptionError.value = "Rellena este campo";
       } else {
         descriptionError.value = "";
       }
@@ -126,8 +117,7 @@ export default {
       isSelected,
 
       validateDescription,
-      descriptionError,
-      fortalezasError
+      descriptionError
     };
   },
 };

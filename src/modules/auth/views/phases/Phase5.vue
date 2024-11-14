@@ -99,7 +99,7 @@ export default {
       questionErrors.value = questionErrors.value.map((_, index) => {
         if (answers.value[index] === '') {
           hasError = true;
-          return "Por favor, complete este hábito.";
+          return "Selecciona un elemento de la lista";
         }
         return "";
       });

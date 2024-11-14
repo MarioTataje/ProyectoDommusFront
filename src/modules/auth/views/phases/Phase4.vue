@@ -3,7 +3,7 @@
     <div class="form-section">
       <h2 class="centered-title">Vivienda</h2>
       <div class="centered-content">
-        <p>Destino</p>
+        <p>Distrito</p>
         <form @submit.prevent="handleSubmit" class="centered-form">
           <div class="form-group">
             <select v-model="selectedDistrict" id="distrito" required>
